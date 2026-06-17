@@ -10,6 +10,11 @@ abstract class ClientBase implements Client {
   @override
   ClientBase setBearerAuth(value);
 
+  /// The tenant slug your requests are scoped to, sent as the
+  /// X-Revenexx-Tenant header on every request.
+  @override
+  ClientBase setTenant(String value);
+
   @override
   ClientBase setSelfSigned({bool status = true});
 

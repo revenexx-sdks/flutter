@@ -70,6 +70,15 @@ class ClientBrowser extends ClientBase with ClientMixin {
     return this;
   }
 
+  /// The tenant slug your requests are scoped to, sent as the
+  /// X-Revenexx-Tenant header on every request.
+  @override
+  ClientBrowser setTenant(String value) {
+    config['tenant'] = value;
+    addHeader('X-Revenexx-Tenant', value);
+    return this;
+  }
+
   @override
   ClientBrowser setSelfSigned({bool status = true}) {
     return this;

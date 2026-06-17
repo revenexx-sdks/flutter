@@ -96,6 +96,15 @@ class ClientIO extends ClientBase with ClientMixin {
     return this;
   }
 
+  /// The tenant slug your requests are scoped to, sent as the
+  /// X-Revenexx-Tenant header on every request.
+  @override
+  ClientIO setTenant(String value) {
+    config['tenant'] = value;
+    addHeader('X-Revenexx-Tenant', value);
+    return this;
+  }
+
   @override
   ClientIO setSelfSigned({bool status = true}) {
     selfSigned = status;
