@@ -1,0 +1,20 @@
+```dart
+import 'package:revenexx/revenexx.dart';
+
+Client client = Client()
+    .setEndpoint('https://api.revenexx.com') // Your API Endpoint
+    .setApiKeyAuth('<API_KEY>'); // A gateway-managed scoped API key (rvxk_…).
+
+Orders orders = Orders(client);
+
+ result = await orders.ordersShip(
+    id: '',
+    carrier: '', // optional
+    metadata: {}, // optional
+    number: '', // optional
+    positions: [], // optional
+    shippedAt: '', // optional
+    trackingCode: '', // optional
+    trackingUrl: '', // optional
+);
+```

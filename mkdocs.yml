@@ -1,0 +1,6 @@
+site_name: Revenexx Flutter
+site_description: "Revenexx Flutter SDK."
+docs_dir: docs
+
+theme:
+  name: material
