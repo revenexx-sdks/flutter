@@ -1,13 +1,11 @@
 part of '../../enums.dart';
 
 enum ValidationFailedResponseStatus {
-    invalid(value: 'invalid');
+  invalid(value: 'invalid');
 
-    const ValidationFailedResponseStatus({
-        required this.value
-    });
+  const ValidationFailedResponseStatus({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

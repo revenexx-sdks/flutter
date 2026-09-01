@@ -1,24 +1,24 @@
 part of '../revenexx.dart';
 
-  /// What actually happened to one buyer&#039;s money, and everything that moves it.
-  /// A payment is the record: an amount, a currency, the fee that was computed
-  /// for it, the method code it was made under, the PSP it went through, and
-  /// where it stands — created → requires_action → authorized →
-  /// captured, with failed, cancelled and refunded as the ends. Four transitions
-  /// move it and a lattice decides which is legal from where: a transition the
-  /// lattice forbids answers 400, one the merchant&#039;s own window forbids
-  /// (capture_expiry_days, refund_window_days) answers 422, and a provider that
-  /// is configured and refuses answers 502. `next_action` is the instruction the
-  /// storefront must follow next and is set exactly at requires_action. The
-  /// routes with no screen of their own are here because every row they touch is
-  /// a payment: the PSP webhook resolves one and moves its status, the
-  /// order-reference capture collects every payment behind one shipment, and the
-  /// one-off redaction rewrites `error_message` on rows written before the
-  /// failure taxonomy existed. The daily dunning scan belongs here for the same
-  /// reason and is not screenless at all — it writes the reminder clock onto
-  /// unpaid invoice and prepayment payments, and the Cockpit fires it from the
-  /// Payments list. The vocabularies sit here too — three of the four sets
-  /// they publish are columns of this row.
+/// What actually happened to one buyer&#039;s money, and everything that moves it.
+/// A payment is the record: an amount, a currency, the fee that was computed
+/// for it, the method code it was made under, the PSP it went through, and
+/// where it stands — created → requires_action → authorized →
+/// captured, with failed, cancelled and refunded as the ends. Four transitions
+/// move it and a lattice decides which is legal from where: a transition the
+/// lattice forbids answers 400, one the merchant&#039;s own window forbids
+/// (capture_expiry_days, refund_window_days) answers 422, and a provider that
+/// is configured and refuses answers 502. `next_action` is the instruction the
+/// storefront must follow next and is set exactly at requires_action. The
+/// routes with no screen of their own are here because every row they touch is
+/// a payment: the PSP webhook resolves one and moves its status, the
+/// order-reference capture collects every payment behind one shipment, and the
+/// one-off redaction rewrites `error_message` on rows written before the
+/// failure taxonomy existed. The daily dunning scan belongs here for the same
+/// reason and is not screenless at all — it writes the reminder clock onto
+/// unpaid invoice and prepayment payments, and the Cockpit fires it from the
+/// Payments list. The vocabularies sit here too — three of the four sets
+/// they publish are columns of this row.
 class PaymentsLedger extends Service {
   /// Initializes a [PaymentsLedger] service
   PaymentsLedger(super.client);
@@ -34,44 +34,42 @@ class PaymentsLedger extends Service {
   /// `error_message` is answered from the failure taxonomy rather than echoed
   /// out of the column, so what a driver or a PSP actually wrote is never
   /// serialized here.
-  Future paymentsList({int? limit, int? offset, String? order, String? cartId, String? contactId, enums.PaymentStatus? status, String? orderRef, String? methodCode, enums.PaymentMethodKind? kind, String? provider, enums.PaymentDunningStage? dunningStage, String? idempotencyKey}) async {
+  Future paymentsList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? cartId,
+      String? contactId,
+      enums.PaymentStatus? status,
+      String? orderRef,
+      String? methodCode,
+      enums.PaymentMethodKind? kind,
+      String? provider,
+      enums.PaymentDunningStage? dunningStage,
+      String? idempotencyKey}) async {
     const String apiPath = '/v1/payments';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (cartId != null) 'cart_id': cartId,
+      if (contactId != null) 'contact_id': contactId,
+      if (status != null) 'status': status.value,
+      if (orderRef != null) 'order_ref': orderRef,
+      if (methodCode != null) 'method_code': methodCode,
+      if (kind != null) 'kind': kind.value,
+      if (provider != null) 'provider': provider,
+      if (dunningStage != null) 'dunning_stage': dunningStage.value,
+      if (idempotencyKey != null) 'idempotency_key': idempotencyKey,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (cartId != null) 'cart_id': cartId,
-
-            if (contactId != null) 'contact_id': contactId,
-
-            if (status != null) 'status': status.value,
-
-            if (orderRef != null) 'order_ref': orderRef,
-
-            if (methodCode != null) 'method_code': methodCode,
-
-            if (kind != null) 'kind': kind.value,
-
-            if (provider != null) 'provider': provider,
-
-            if (dunningStage != null) 'dunning_stage': dunningStage.value,
-
-            if (idempotencyKey != null) 'idempotency_key': idempotencyKey,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// The checkout's write: it opens the ledger row and takes it as far as the
@@ -92,40 +90,40 @@ class PaymentsLedger extends Service {
   /// the payment that key already named, unchanged and not re-authorized. What
   /// is never stored: the `instrument`, `token` or `card` is handed to the
   /// driver in-process and no token or PAN is written to the row.
-  Future<models.Error> paymentsCreate({required double amount, required String methodCode, String? cartId, String? contactId, String? country, String? currency, String? idempotencyKey, Map? metadata, String? orderRef, String? returnUrl}) async {
+  Future<models.Error> paymentsCreate(
+      {required double amount,
+      required String methodCode,
+      String? cartId,
+      String? contactId,
+      String? country,
+      String? currency,
+      String? idempotencyKey,
+      Map? metadata,
+      String? orderRef,
+      String? returnUrl}) async {
     const String apiPath = '/v1/payments';
 
-        final Map<String, dynamic> apiParams = {
-            'amount': amount,
+    final Map<String, dynamic> apiParams = {
+      'amount': amount,
+      'cart_id': cartId,
+      'contact_id': contactId,
+      'country': country,
+      if (currency != null) 'currency': currency,
+      'idempotency_key': idempotencyKey,
+      'metadata': metadata,
+      'method_code': methodCode,
+      'order_ref': orderRef,
+      'return_url': returnUrl,
+    };
 
-            'cart_id': cartId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'contact_id': contactId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'country': country,
-
-            if (currency != null) 'currency': currency,
-
-            'idempotency_key': idempotencyKey,
-
-            'metadata': metadata,
-
-            'method_code': methodCode,
-
-            'order_ref': orderRef,
-
-            'return_url': returnUrl,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Classifies every unpaid self-managed payment (invoice, prepayment) as on
@@ -139,17 +137,14 @@ class PaymentsLedger extends Service {
   Future paymentsDunningScan() async {
     const String apiPath = '/v1/payments/dunning/scan';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Rows written before the failure taxonomy still store the
@@ -161,21 +156,19 @@ class PaymentsLedger extends Service {
   Future paymentsErrorsRedact({bool? apply, int? limit}) async {
     const String apiPath = '/v1/payments/errors/redact';
 
-        final Map<String, dynamic> apiParams = {
-            'apply': apply,
+    final Map<String, dynamic> apiParams = {
+      'apply': apply,
+      'limit': limit,
+    };
 
-            'limit': limit,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// This is the hook the tenant's `auto_capture_policy: 'on_ship'` was written
@@ -190,19 +183,17 @@ class PaymentsLedger extends Service {
   /// foreign key: this route is exactly as good as the reference the checkout
   /// writes onto the payment.
   Future<models.Error> paymentsOrdersCapture({required String orderRef}) async {
-    final String apiPath = '/v1/payments/orders/{order_ref}/capture'.replaceAll('{order_ref}', orderRef);
+    final String apiPath = '/v1/payments/orders/{order_ref}/capture'
+        .replaceAll('{order_ref}', orderRef);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The enums this app owns, four of them: statuses, method kinds, fee types
@@ -216,17 +207,14 @@ class PaymentsLedger extends Service {
   Future paymentsVocabulariesList() async {
     const String apiPath = '/v1/payments/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// One set in full: every value it permits, the label to show for each and the
@@ -237,20 +225,19 @@ class PaymentsLedger extends Service {
   /// permitted value nobody labelled still appears, titled from its own key,
   /// which is why `title` and `description` are a locale map on a labelled value
   /// and a plain string on an unlabelled one.
-  Future<models.Error> paymentsVocabulariesGet({required enums.PaymentsVocabulariesGetName name}) async {
-    final String apiPath = '/v1/payments/vocabularies/{name}'.replaceAll('{name}', name.value);
+  Future<models.Error> paymentsVocabulariesGet(
+      {required enums.PaymentsVocabulariesGetName name}) async {
+    final String apiPath =
+        '/v1/payments/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The sink a PSP callback ends up in, and an inbound ingress endpoint in the
@@ -266,26 +253,28 @@ class PaymentsLedger extends Service {
   /// by psp_payment_id or order_ref and moves the ledger. Facts only move
   /// forward — provider retries and redeliveries are idempotent no-ops;
   /// unverified envelopes are refused.
-  Future<models.Error> paymentsWebhooksIngest({required String provider, dynamic? id, Map? request, dynamic? verified}) async {
-    final String apiPath = '/v1/payments/webhooks/{provider}'.replaceAll('{provider}', provider);
+  Future<models.Error> paymentsWebhooksIngest(
+      {required String provider,
+      dynamic? id,
+      Map? request,
+      dynamic? verified}) async {
+    final String apiPath =
+        '/v1/payments/webhooks/{provider}'.replaceAll('{provider}', provider);
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (request != null) 'request': request,
+      if (verified != null) 'verified': verified,
+    };
 
-            if (request != null) 'request': request,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (verified != null) 'verified': verified,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One ledger row in full: the amount and the fee that were computed at
@@ -302,17 +291,14 @@ class PaymentsLedger extends Service {
   Future<models.Error> paymentsGet({required String id}) async {
     final String apiPath = '/v1/payments/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Drops the claim before any money has been taken — the abandoned basket,
@@ -328,22 +314,22 @@ class PaymentsLedger extends Service {
   /// to it, so it reaches the PSP's own cancellation-reason field as well as
   /// being stored under `metadata.cancel_reason`. Cancelling stops the dunning
   /// clock: the stage goes back to `none` and the due date is cleared.
-  Future<models.Error> paymentsCancel({required String id, String? reason}) async {
+  Future<models.Error> paymentsCancel(
+      {required String id, String? reason}) async {
     final String apiPath = '/v1/payments/{id}/cancel'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'reason': reason,
+    final Map<String, dynamic> apiParams = {
+      'reason': reason,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Collects money that is currently only reserved. It starts from `authorized`
@@ -363,17 +349,14 @@ class PaymentsLedger extends Service {
   Future<models.Error> paymentsCapture({required String id}) async {
     final String apiPath = '/v1/payments/{id}/capture'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The other half of a redirect. POST /payments answered `requires_action`
@@ -391,17 +374,14 @@ class PaymentsLedger extends Service {
   Future<models.Error> paymentsConfirm({required String id}) async {
     final String apiPath = '/v1/payments/{id}/confirm'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Gives captured money back. It starts from `captured` and from nothing else
@@ -418,21 +398,21 @@ class PaymentsLedger extends Service {
   /// capture is older than the tenant's `refund_window_days` (the message
   /// carries both numbers) — past that the provider stops accepting a refund
   /// against the transaction and it has to be made by bank transfer.
-  Future<models.Error> paymentsRefund({required String id, String? reason}) async {
+  Future<models.Error> paymentsRefund(
+      {required String id, String? reason}) async {
     final String apiPath = '/v1/payments/{id}/refund'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'reason': reason,
+    final Map<String, dynamic> apiParams = {
+      'reason': reason,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

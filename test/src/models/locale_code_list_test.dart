@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = LocaleCodeList.fromMap(map);
 
-            expect(result.localeCodes, []);
-                  expect(result.total, 0);
-          });
+      expect(result.localeCodes, []);
+      expect(result.total, 0);
+    });
   });
 }

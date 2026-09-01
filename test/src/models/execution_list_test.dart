@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = ExecutionList.fromMap(map);
 
-            expect(result.executions, []);
-                  expect(result.total, 0);
-          });
+      expect(result.executions, []);
+      expect(result.total, 0);
+    });
   });
 }

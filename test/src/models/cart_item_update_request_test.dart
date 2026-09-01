@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('CartItemUpdateRequest', () {
     test('model', () {
-      final model = CartItemUpdateRequest(
-      );
+      final model = CartItemUpdateRequest();
 
       final map = model.toMap();
       final result = CartItemUpdateRequest.fromMap(map);
-
     });
   });
 }

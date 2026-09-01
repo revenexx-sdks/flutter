@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('AttributeFieldStorage', () {
     test('model', () {
-      final model = AttributeFieldStorage(
-      );
+      final model = AttributeFieldStorage();
 
       final map = model.toMap();
       final result = AttributeFieldStorage.fromMap(map);
-
     });
   });
 }

@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum IoProfileResourceApplyMode {
-    upsert(value: 'upsert'),
-    fullSync(value: 'full-sync'),
-    append(value: 'append');
+  upsert(value: 'upsert'),
+  fullSync(value: 'full-sync'),
+  append(value: 'append');
 
-    const IoProfileResourceApplyMode({
-        required this.value
-    });
+  const IoProfileResourceApplyMode({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

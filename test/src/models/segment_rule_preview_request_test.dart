@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = SegmentRulePreviewRequest.fromMap(map);
 
-            expect(result.conditions, []);
-          });
+      expect(result.conditions, []);
+    });
   });
 }

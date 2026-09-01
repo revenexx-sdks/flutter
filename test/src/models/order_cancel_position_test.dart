@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = OrderCancelPosition.fromMap(map);
 
-            expect(result.order_item_id, '');
-          });
+      expect(result.order_item_id, '');
+    });
   });
 }

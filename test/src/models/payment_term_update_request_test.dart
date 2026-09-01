@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('PaymentTermUpdateRequest', () {
     test('model', () {
-      final model = PaymentTermUpdateRequest(
-      );
+      final model = PaymentTermUpdateRequest();
 
       final map = model.toMap();
       final result = PaymentTermUpdateRequest.fromMap(map);
-
     });
   });
 }

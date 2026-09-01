@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = AuthOtpRequest.fromMap(map);
 
-            expect(result.email, '');
-          });
+      expect(result.email, '');
+    });
   });
 }

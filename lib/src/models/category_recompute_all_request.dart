@@ -1,18 +1,15 @@
 part of '../../models.dart';
 
-/// 
+///
 class CategoryRecomputeAllRequest implements Model {
-    CategoryRecomputeAllRequest(
-    );
+  CategoryRecomputeAllRequest();
 
-    factory CategoryRecomputeAllRequest.fromMap(Map<String, dynamic> map) {
-        return CategoryRecomputeAllRequest(
-        );
-    }
+  factory CategoryRecomputeAllRequest.fromMap(Map<String, dynamic> map) {
+    return CategoryRecomputeAllRequest();
+  }
 
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-        };
-    }
+  @override
+  Map<String, dynamic> toMap() {
+    return {};
+  }
 }

@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = OrderCommentCreateRequest.fromMap(map);
 
-            expect(result.body, '');
-          });
+      expect(result.body, '');
+    });
   });
 }

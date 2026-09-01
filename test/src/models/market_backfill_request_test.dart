@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = MarketBackfillRequest.fromMap(map);
 
-            expect(result.source, '');
-          });
+      expect(result.source, '');
+    });
   });
 }

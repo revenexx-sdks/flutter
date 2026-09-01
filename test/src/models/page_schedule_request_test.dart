@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = PageScheduleRequest.fromMap(map);
 
-            expect(result.scheduledAt, '');
-          });
+      expect(result.scheduledAt, '');
+    });
   });
 }

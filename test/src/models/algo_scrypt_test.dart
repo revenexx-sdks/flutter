@@ -15,11 +15,11 @@ void main() {
       final map = model.toMap();
       final result = AlgoScrypt.fromMap(map);
 
-            expect(result.costCpu, 0);
-                  expect(result.costMemory, 0);
-                  expect(result.costParallel, 0);
-                  expect(result.length, 0);
-                  expect(result.type, '');
-          });
+      expect(result.costCpu, 0);
+      expect(result.costMemory, 0);
+      expect(result.costParallel, 0);
+      expect(result.length, 0);
+      expect(result.type, '');
+    });
   });
 }

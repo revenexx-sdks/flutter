@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum MarketReadinessSeverity {
-    blocking(value: 'blocking'),
-    warning(value: 'warning'),
-    info(value: 'info');
+  blocking(value: 'blocking'),
+  warning(value: 'warning'),
+  info(value: 'info');
 
-    const MarketReadinessSeverity({
-        required this.value
-    });
+  const MarketReadinessSeverity({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

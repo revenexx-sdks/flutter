@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = AuthMagicLinkRequest.fromMap(map);
 
-            expect(result.email, '');
-                  expect(result.url, '');
-          });
+      expect(result.email, '');
+      expect(result.url, '');
+    });
   });
 }

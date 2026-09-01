@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = SegmentRuleCondition.fromMap(map);
 
-            expect(result.field, '');
-                  expect(result.xoperator, SegmentRuleOperator.eq);
-          });
+      expect(result.field, '');
+      expect(result.xoperator, SegmentRuleOperator.eq);
+    });
   });
 }

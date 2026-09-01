@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,76 +40,69 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('PagesDelivery test', () {
-        late MockClient client;
-        late PagesDelivery pagesDelivery;
+  group('PagesDelivery test', () {
+    late MockClient client;
+    late PagesDelivery pagesDelivery;
 
-        setUp(() {
-            client = MockClient();
-            pagesDelivery = PagesDelivery(client);
-        });
-
-        test('test method pagesDeliveryMenus()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pagesDelivery.pagesDeliveryMenus(
-            );
-        });
-
-        test('test method pagesDeliveryPage()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pagesDelivery.pagesDeliveryPage(
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method pagesDeliveryPages()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pagesDelivery.pagesDeliveryPages(
-            );
-        });
-
-        test('test method pagesDeliveryPreview()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pagesDelivery.pagesDeliveryPreview(
-                token: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+    setUp(() {
+      client = MockClient();
+      pagesDelivery = PagesDelivery(client);
     });
+
+    test('test method pagesDeliveryMenus()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await pagesDelivery.pagesDeliveryMenus();
+    });
+
+    test('test method pagesDeliveryPage()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await pagesDelivery.pagesDeliveryPage();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method pagesDeliveryPages()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await pagesDelivery.pagesDeliveryPages();
+    });
+
+    test('test method pagesDeliveryPreview()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await pagesDelivery.pagesDeliveryPreview(
+        token: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

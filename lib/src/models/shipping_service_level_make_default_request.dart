@@ -2,17 +2,15 @@ part of '../../models.dart';
 
 /// No payload — send {}.
 class ShippingServiceLevelMakeDefaultRequest implements Model {
-    ShippingServiceLevelMakeDefaultRequest(
-    );
+  ShippingServiceLevelMakeDefaultRequest();
 
-    factory ShippingServiceLevelMakeDefaultRequest.fromMap(Map<String, dynamic> map) {
-        return ShippingServiceLevelMakeDefaultRequest(
-        );
-    }
+  factory ShippingServiceLevelMakeDefaultRequest.fromMap(
+      Map<String, dynamic> map) {
+    return ShippingServiceLevelMakeDefaultRequest();
+  }
 
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-        };
-    }
+  @override
+  Map<String, dynamic> toMap() {
+    return {};
+  }
 }

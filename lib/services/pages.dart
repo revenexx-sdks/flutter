@@ -1,13 +1,13 @@
 part of '../revenexx.dart';
 
-  /// The records this app stores, addressed by id and edited outside the visual
-  /// editor: pages and their publish history, the menus a theme renders as
-  /// navigation, the block templates a new page can start from, the library of
-  /// block subtrees many pages share, and the one seeding call a theme
-  /// activation hook fires. A page here is its METADATA — title, slug, status,
-  /// type — never its blocks; the blocks live in the editor group, because
-  /// changing one is a mutation and not a field update. The vocabularies that
-  /// name the permitted values of a status column are here too.
+/// The records this app stores, addressed by id and edited outside the visual
+/// editor: pages and their publish history, the menus a theme renders as
+/// navigation, the block templates a new page can start from, the library of
+/// block subtrees many pages share, and the one seeding call a theme
+/// activation hook fires. A page here is its METADATA — title, slug, status,
+/// type — never its blocks; the blocks live in the editor group, because
+/// changing one is a mutation and not a field update. The vocabularies that
+/// name the permitted values of a status column are here too.
 class Pages extends Service {
   /// Initializes a [Pages] service
   Pages(super.client);
@@ -19,30 +19,28 @@ class Pages extends Service {
   /// So the two filters are the two questions the picker asks: `bundles` narrows
   /// to the block types that fit the field being filled, `text` matches the
   /// label a person gave the item.
-  Future pagesLibraryList({int? limit, int? offset, String? order, String? bundles, String? text}) async {
+  Future pagesLibraryList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? bundles,
+      String? text}) async {
     const String apiPath = '/v1/pages/library';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (bundles != null) 'bundles': bundles,
+      if (text != null) 'text': text,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (bundles != null) 'bundles': bundles,
-
-            if (text != null) 'text': text,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Retires a reusable block. It leaves the picker and every list, but the
@@ -56,17 +54,14 @@ class Pages extends Service {
   Future<models.Error> pagesLibraryDelete({required String id}) async {
     final String apiPath = '/v1/pages/library/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The stored subtree behind one reusable block, so a picker can preview what
@@ -77,17 +72,14 @@ class Pages extends Service {
   Future<models.Error> pagesLibraryGet({required String id}) async {
     final String apiPath = '/v1/pages/library/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The one write in this app whose blast radius is not a single page. Delivery
@@ -99,26 +91,24 @@ class Pages extends Service {
   /// `bundle` only moves the item around the picker. Detaching one page from the
   /// item, so it keeps a copy of its own, is an editor mutation and not this
   /// route.
-  Future<models.Error> pagesLibraryUpdate({required String id, String? bundle, String? label, Map? tree}) async {
+  Future<models.Error> pagesLibraryUpdate(
+      {required String id, String? bundle, String? label, Map? tree}) async {
     final String apiPath = '/v1/pages/library/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (bundle != null) 'bundle': bundle,
+    final Map<String, dynamic> apiParams = {
+      if (bundle != null) 'bundle': bundle,
+      if (label != null) 'label': label,
+      if (tree != null) 'tree': tree,
+    };
 
-            if (label != null) 'label': label,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (tree != null) 'tree': tree,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The management view of the menus a tenant keeps — `main`, `footer`,
@@ -129,23 +119,18 @@ class Pages extends Service {
   Future pagesMenusList({int? limit, int? offset, String? order}) async {
     const String apiPath = '/v1/pages/menus';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Writes a menu by its KEY rather than by its id, which is what makes theme
@@ -157,26 +142,26 @@ class Pages extends Service {
   /// `menu_key` carries an index but no unique constraint — so a duplicate key
   /// created any other way leaves this route updating whichever row it finds
   /// first.
-  Future<models.Error> pagesMenusUpsert({required String label, required String menuKey, List<models.PageMenuItem>? items}) async {
+  Future<models.Error> pagesMenusUpsert(
+      {required String label,
+      required String menuKey,
+      List<models.PageMenuItem>? items}) async {
     const String apiPath = '/v1/pages/menus';
 
-        final Map<String, dynamic> apiParams = {
-            if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+      'label': label,
+      'menuKey': menuKey,
+    };
 
-            'label': label,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'menuKey': menuKey,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Writes the tombstone. The menu drops out of the management list and out of
@@ -188,17 +173,14 @@ class Pages extends Service {
   Future<models.Error> pagesMenusDelete({required String id}) async {
     final String apiPath = '/v1/pages/menus/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One menu and its whole item tree — the ordered links a theme renders as
@@ -209,17 +191,14 @@ class Pages extends Service {
   Future<models.Error> pagesMenusGet({required String id}) async {
     final String apiPath = '/v1/pages/menus/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The same write as the upsert, for a caller that already holds the row id
@@ -228,24 +207,25 @@ class Pages extends Service {
   /// editable here: the key is the handle every theme reads the menu by, so
   /// changing it would empty whatever is rendering that key without anything
   /// reporting an error.
-  Future<models.Error> pagesMenusUpdate({required String id, List<models.PageMenuItem>? items, String? label}) async {
+  Future<models.Error> pagesMenusUpdate(
+      {required String id,
+      List<models.PageMenuItem>? items,
+      String? label}) async {
     final String apiPath = '/v1/pages/menus/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+      if (label != null) 'label': label,
+    };
 
-            if (label != null) 'label': label,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The EDITORIAL index — every live page of the tenant, whatever its status,
@@ -256,32 +236,30 @@ class Pages extends Service {
   /// /pages/delivery/pages` instead, which answers only what is actually
   /// servable. Soft-deleted pages are never returned and the predicate is this
   /// route's own, not something a caller can switch off.
-  Future pagesPagesList({int? limit, int? offset, String? order, String? bundle, enums.PageStatus? status, String? q}) async {
+  Future pagesPagesList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? bundle,
+      enums.PageStatus? status,
+      String? q}) async {
     const String apiPath = '/v1/pages/pages';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (bundle != null) 'bundle': bundle,
+      if (status != null) 'status': status.value,
+      if (q != null) 'q': q,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (bundle != null) 'bundle': bundle,
-
-            if (status != null) 'status': status.value,
-
-            if (q != null) 'q': q,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Writes two rows, not one: the page itself and the translation row for its
@@ -292,32 +270,32 @@ class Pages extends Service {
   /// default_page_bundle, `sourceLanguage` from default_source_language
   /// (resolved for the request's market), and the status of both the page and
   /// its source translation from default_page_status (draft | published).
-  Future<models.Error> pagesPagesCreate({required String title, String? bundle, Map? hostOptions, Map? meta, String? slug, String? sourceLanguage}) async {
+  Future<models.Error> pagesPagesCreate(
+      {required String title,
+      String? bundle,
+      Map? hostOptions,
+      Map? meta,
+      String? slug,
+      String? sourceLanguage}) async {
     const String apiPath = '/v1/pages/pages';
 
-        final Map<String, dynamic> apiParams = {
-            'bundle': bundle,
+    final Map<String, dynamic> apiParams = {
+      'bundle': bundle,
+      'hostOptions': hostOptions,
+      'meta': meta,
+      'slug': slug,
+      'sourceLanguage': sourceLanguage,
+      'title': title,
+    };
 
-            'hostOptions': hostOptions,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'meta': meta,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'slug': slug,
-
-            'sourceLanguage': sourceLanguage,
-
-            'title': title,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Writes a tombstone. The page leaves every list, every read and all delivery
@@ -331,17 +309,14 @@ class Pages extends Service {
   Future<models.Error> pagesPagesDelete({required String id}) async {
     final String apiPath = '/v1/pages/pages/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One page RECORD: what it is called, where it routes, what type it is, which
@@ -353,17 +328,14 @@ class Pages extends Service {
   Future<models.Error> pagesPagesGet({required String id}) async {
     final String apiPath = '/v1/pages/pages/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Corrects the page RECORD — the five fields an editor changes without
@@ -376,30 +348,31 @@ class Pages extends Service {
   /// is held answers 409; and setting `status` to published does NOT put
   /// anything in front of a visitor — delivery needs a revision, which only
   /// `POST /pages/editor/{page_id}/publish` writes.
-  Future<models.Error> pagesPagesUpdate({required String id, String? bundle, Map? meta, String? slug, enums.PageStatus? status, String? title}) async {
+  Future<models.Error> pagesPagesUpdate(
+      {required String id,
+      String? bundle,
+      Map? meta,
+      String? slug,
+      enums.PageStatus? status,
+      String? title}) async {
     final String apiPath = '/v1/pages/pages/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (bundle != null) 'bundle': bundle,
+    final Map<String, dynamic> apiParams = {
+      if (bundle != null) 'bundle': bundle,
+      if (meta != null) 'meta': meta,
+      'slug': slug,
+      if (status != null) 'status': status.value,
+      if (title != null) 'title': title,
+    };
 
-            if (meta != null) 'meta': meta,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'slug': slug,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (status != null) 'status': status.value,
-
-            if (title != null) 'title': title,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One entry per publication, newest first, which is the order a history is
@@ -407,34 +380,34 @@ class Pages extends Service {
   /// `snapshot` — the whole published page, in every language — is
   /// deliberately not in the index: it is page-sized, and nothing that renders a
   /// history needs it.
-  Future<models.Error> pagesPagesRevisions({required String id, int? limit, int? offset, String? order, String? label, String? createdBy, String? createdByName, String? createdAt}) async {
-    final String apiPath = '/v1/pages/pages/{id}/revisions'.replaceAll('{id}', id);
+  Future<models.Error> pagesPagesRevisions(
+      {required String id,
+      int? limit,
+      int? offset,
+      String? order,
+      String? label,
+      String? createdBy,
+      String? createdByName,
+      String? createdAt}) async {
+    final String apiPath =
+        '/v1/pages/pages/{id}/revisions'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (label != null) 'label': label,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdByName != null) 'created_by_name': createdByName,
+      if (createdAt != null) 'created_at': createdAt,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (label != null) 'label': label,
-
-            if (createdBy != null) 'created_by': createdBy,
-
-            if (createdByName != null) 'created_by_name': createdByName,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The target of a theme activation hook: hand it the theme's default pages
@@ -445,68 +418,65 @@ class Pages extends Service {
   /// published on the spot, immediately servable by delivery: the
   /// default_page_status setting deliberately does not apply, because a theme
   /// that activates with invisible pages looks broken.
-  Future<models.SeedResult> pagesSeed({List<Map>? menus, List<Map>? pages}) async {
+  Future<models.SeedResult> pagesSeed(
+      {List<Map>? menus, List<Map>? pages}) async {
     const String apiPath = '/v1/pages/seed';
 
-        final Map<String, dynamic> apiParams = {
-            'menus': menus,
+    final Map<String, dynamic> apiParams = {
+      'menus': menus,
+      'pages': pages,
+    };
 
-            'pages': pages,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.SeedResult.fromMap(res.data);
-
+    return models.SeedResult.fromMap(res.data);
   }
 
   /// Every column of a template is an exact-match filter here:
   /// `?page_bundle=standard&field_name=content` is how a picker asks for the
   /// templates offered in one place, and `?is_default=true` is how a "new page"
   /// flow finds the one to start from.
-  Future pagesTemplatesList({int? limit, int? offset, String? order, String? id, String? label, String? description, String? pageBundle, String? fieldName, bool? isDefault, String? createdBy, String? createdAt, String? updatedAt}) async {
+  Future pagesTemplatesList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? id,
+      String? label,
+      String? description,
+      String? pageBundle,
+      String? fieldName,
+      bool? isDefault,
+      String? createdBy,
+      String? createdAt,
+      String? updatedAt}) async {
     const String apiPath = '/v1/pages/templates';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (id != null) 'id': id,
+      if (label != null) 'label': label,
+      if (description != null) 'description': description,
+      if (pageBundle != null) 'page_bundle': pageBundle,
+      if (fieldName != null) 'field_name': fieldName,
+      if (isDefault != null) 'is_default': isDefault,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (id != null) 'id': id,
-
-            if (label != null) 'label': label,
-
-            if (description != null) 'description': description,
-
-            if (pageBundle != null) 'page_bundle': pageBundle,
-
-            if (fieldName != null) 'field_name': fieldName,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            if (createdBy != null) 'created_by': createdBy,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Removes the template row outright. This is the one delete in the app that
@@ -517,17 +487,14 @@ class Pages extends Service {
   Future<models.Error> pagesTemplatesDelete({required String id}) async {
     final String apiPath = '/v1/pages/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The blocks a page would START from if an editor picked this template —
@@ -537,17 +504,14 @@ class Pages extends Service {
   Future<models.Error> pagesTemplatesGet({required String id}) async {
     final String apiPath = '/v1/pages/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Edits what a future page will start from. Because templates copy rather
@@ -558,32 +522,33 @@ class Pages extends Service {
   /// `page_bundle` starts with, and nothing here stops two templates of the same
   /// bundle from both claiming it, so which one wins is left to whoever reads
   /// the list.
-  Future<models.Error> pagesTemplatesUpdate({required String id, String? description, String? fieldName, bool? isDefault, String? label, String? pageBundle, List<models.PageBlockTree>? tree}) async {
+  Future<models.Error> pagesTemplatesUpdate(
+      {required String id,
+      String? description,
+      String? fieldName,
+      bool? isDefault,
+      String? label,
+      String? pageBundle,
+      List<models.PageBlockTree>? tree}) async {
     final String apiPath = '/v1/pages/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'description': description,
+    final Map<String, dynamic> apiParams = {
+      'description': description,
+      'field_name': fieldName,
+      if (isDefault != null) 'is_default': isDefault,
+      if (label != null) 'label': label,
+      'page_bundle': pageBundle,
+      if (tree != null) 'tree': tree.map((p) => p.toMap()).toList(),
+    };
 
-            'field_name': fieldName,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (label != null) 'label': label,
-
-            'page_bundle': pageBundle,
-
-            if (tree != null) 'tree': tree.map((p) => p.toMap()).toList(),
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Discovery for the vocabulary routes: the enums this app publishes, each
@@ -596,17 +561,14 @@ class Pages extends Service {
   Future<models.PagesVocabularyIndex> pagesVocabulariesList() async {
     const String apiPath = '/v1/pages/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.PagesVocabularyIndex.fromMap(res.data);
-
+    return models.PagesVocabularyIndex.fromMap(res.data);
   }
 
   /// One vocabulary unpacked: every value the column permits, each with the
@@ -620,19 +582,18 @@ class Pages extends Service {
   /// the set is exhaustive, so a value outside it is stale data rather than a
   /// missing label. Names: edit-state-statuses, page-statuses,
   /// translation-statuses.
-  Future<models.Error> pagesVocabulariesGet({required enums.PagesVocabulariesGetName name}) async {
-    final String apiPath = '/v1/pages/vocabularies/{name}'.replaceAll('{name}', name.value);
+  Future<models.Error> pagesVocabulariesGet(
+      {required enums.PagesVocabulariesGetName name}) async {
+    final String apiPath =
+        '/v1/pages/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

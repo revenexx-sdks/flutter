@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum Kind {
-    simple(value: 'simple'),
-    model(value: 'model'),
-    variant(value: 'variant');
+  simple(value: 'simple'),
+  model(value: 'model'),
+  variant(value: 'variant');
 
-    const Kind({
-        required this.value
-    });
+  const Kind({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

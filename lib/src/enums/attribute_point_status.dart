@@ -1,17 +1,15 @@
 part of '../../enums.dart';
 
 enum AttributePointStatus {
-    available(value: 'available'),
-    processing(value: 'processing'),
-    deleting(value: 'deleting'),
-    stuck(value: 'stuck'),
-    failed(value: 'failed');
+  available(value: 'available'),
+  processing(value: 'processing'),
+  deleting(value: 'deleting'),
+  stuck(value: 'stuck'),
+  failed(value: 'failed');
 
-    const AttributePointStatus({
-        required this.value
-    });
+  const AttributePointStatus({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

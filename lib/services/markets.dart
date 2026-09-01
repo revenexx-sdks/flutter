@@ -1,13 +1,13 @@
 part of '../revenexx.dart';
 
-  /// Commerce Studio Markets App — the market/region backbone of the Revenue
-  /// Cloud. A market is a distinct business context within a tenant (a country,
-  /// a region, a B2C storefront segment) with its own base currency, locales
-  /// (language + country), traded currencies and tax classes (standard, reduced,
-  /// …). Markets provides the &#039;market&#039; scope dimension to the Entity Scoping
-  /// Engine, so every other commerce app (products, orders, customers, …) can
-  /// slice its data per market. Storefronts resolve their full market context
-  /// (currency, locales, currencies, tax classes) in one call.
+/// Commerce Studio Markets App — the market/region backbone of the Revenue
+/// Cloud. A market is a distinct business context within a tenant (a country,
+/// a region, a B2C storefront segment) with its own base currency, locales
+/// (language + country), traded currencies and tax classes (standard, reduced,
+/// …). Markets provides the &#039;market&#039; scope dimension to the Entity Scoping
+/// Engine, so every other commerce app (products, orders, customers, …) can
+/// slice its data per market. Storefronts resolve their full market context
+/// (currency, locales, currencies, tax classes) in one call.
 class Markets extends Service {
   /// Initializes a [Markets] service
   Markets(super.client);
@@ -18,79 +18,77 @@ class Markets extends Service {
   /// — the call answers 200 with the unfiltered list — and `filter` echoes
   /// what was actually applied, which is the only way to tell that apart from a
   /// filter that matched nothing.
-  Future<models.Error> marketsList({String? id, String? code, String? name, String? labels, String? currency, enums.MarketsListStatus? status, bool? isDefault, int? position, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
+  Future<models.Error> marketsList(
+      {String? id,
+      String? code,
+      String? name,
+      String? labels,
+      String? currency,
+      enums.MarketsListStatus? status,
+      bool? isDefault,
+      int? position,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/markets';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (name != null) 'name': name,
+      if (labels != null) 'labels': labels,
+      if (currency != null) 'currency': currency,
+      if (status != null) 'status': status.value,
+      if (isDefault != null) 'is_default': isDefault,
+      if (position != null) 'position': position,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {};
 
-            if (name != null) 'name': name,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (labels != null) 'labels': labels,
-
-            if (currency != null) 'currency': currency,
-
-            if (status != null) 'status': status.value,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            if (position != null) 'position': position,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A market needs a 'code' and a 'name' — currency defaults to EUR, status
   /// to active. To get a market that can actually trade, clone an existing one
   /// instead: POST /markets/{id}/clone.
-  Future<models.Error> marketsCreate({required String code, required String name, String? currency, bool? isDefault, Map? labels, int? position, enums.MarketStatus? status}) async {
+  Future<models.Error> marketsCreate(
+      {required String code,
+      required String name,
+      String? currency,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      enums.MarketStatus? status}) async {
     const String apiPath = '/v1/markets';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      if (currency != null) 'currency': currency,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      'name': name,
+      if (position != null) 'position': position,
+      if (status != null) 'status': status.value,
+    };
 
-            if (currency != null) 'currency': currency,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            'name': name,
-
-            if (position != null) 'position': position,
-
-            if (status != null) 'status': status.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// How this tenant keys its translations, resolved for a surface that stands
@@ -106,17 +104,14 @@ class Markets extends Service {
   Future<models.TenantLocalePolicy> marketsLocalePolicy() async {
     const String apiPath = '/v1/markets/locale-policy';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.TenantLocalePolicy.fromMap(res.data);
-
+    return models.TenantLocalePolicy.fromMap(res.data);
   }
 
   /// Every closed value set this app owns, listed by name with its title and its
@@ -128,17 +123,14 @@ class Markets extends Service {
   Future<models.MarketsVocabularyIndex> marketsVocabularies() async {
     const String apiPath = '/v1/markets/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.MarketsVocabularyIndex.fromMap(res.data);
-
+    return models.MarketsVocabularyIndex.fromMap(res.data);
   }
 
   /// One value set in full: every value the column may hold, in the order it may
@@ -149,20 +141,19 @@ class Markets extends Service {
   /// offer a value the write would then refuse. A name outside the declared enum
   /// is a 404 rather than an empty list — an empty vocabulary and an unknown
   /// one mean different things to a select box.
-  Future<models.Error> marketsVocabulary({required enums.MarketsVocabularyName name}) async {
-    final String apiPath = '/v1/markets/vocabularies/{name}'.replaceAll('{name}', name.value);
+  Future<models.Error> marketsVocabulary(
+      {required enums.MarketsVocabularyName name}) async {
+    final String apiPath =
+        '/v1/markets/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Deleting a market takes its locales, currencies and tax classes with it:
@@ -171,17 +162,14 @@ class Markets extends Service {
   Future<models.Error> marketsDelete({required String id}) async {
     final String apiPath = '/v1/markets/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Resolved by uuid only — unlike /readiness, /clone, /backfill and
@@ -189,48 +177,46 @@ class Markets extends Service {
   Future<models.Error> marketsGet({required String id}) async {
     final String apiPath = '/v1/markets/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Partial: omitted fields keep their value.
-  Future<models.Error> marketsUpdate({required String id, String? code, String? currency, bool? isDefault, Map? labels, String? name, int? position, enums.MarketStatus? status}) async {
+  Future<models.Error> marketsUpdate(
+      {required String id,
+      String? code,
+      String? currency,
+      bool? isDefault,
+      Map? labels,
+      String? name,
+      int? position,
+      enums.MarketStatus? status}) async {
     final String apiPath = '/v1/markets/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (code != null) 'code': code,
+    final Map<String, dynamic> apiParams = {
+      if (code != null) 'code': code,
+      if (currency != null) 'currency': currency,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (name != null) 'name': name,
+      if (position != null) 'position': position,
+      if (status != null) 'status': status.value,
+    };
 
-            if (currency != null) 'currency': currency,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            if (name != null) 'name': name,
-
-            if (position != null) 'position': position,
-
-            if (status != null) 'status': status.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Repairs the market in the path out of a source market that is already
@@ -240,28 +226,29 @@ class Markets extends Service {
   /// left it, rate included, and is never overwritten. Both the path id and
   /// `source` are resolved by uuid OR by market code. Idempotent: running it
   /// twice adds nothing the second time.
-  Future<models.Error> marketsBackfill({required String id, required String source, bool? currencies, bool? locales, bool? taxClasses}) async {
+  Future<models.Error> marketsBackfill(
+      {required String id,
+      required String source,
+      bool? currencies,
+      bool? locales,
+      bool? taxClasses}) async {
     final String apiPath = '/v1/markets/{id}/backfill'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (currencies != null) 'currencies': currencies,
+    final Map<String, dynamic> apiParams = {
+      if (currencies != null) 'currencies': currencies,
+      if (locales != null) 'locales': locales,
+      'source': source,
+      if (taxClasses != null) 'tax_classes': taxClasses,
+    };
 
-            if (locales != null) 'locales': locales,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'source': source,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (taxClasses != null) 'tax_classes': taxClasses,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Creates a NEW market out of an existing one, taking its locales, its traded
@@ -270,34 +257,35 @@ class Markets extends Service {
   /// cannot serve anybody, while what comes back here is a market with a
   /// language to render in, a currency to price in and a rate to tax with. The
   /// path id is the SOURCE market, resolved by uuid OR by market code.
-  Future<models.Error> marketsClone({required String id, required String code, bool? copyCurrencies, bool? copyLocales, bool? copyTaxClasses, String? currency, String? name, enums.MarketStatus? status}) async {
+  Future<models.Error> marketsClone(
+      {required String id,
+      required String code,
+      bool? copyCurrencies,
+      bool? copyLocales,
+      bool? copyTaxClasses,
+      String? currency,
+      String? name,
+      enums.MarketStatus? status}) async {
     final String apiPath = '/v1/markets/{id}/clone'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      if (copyCurrencies != null) 'copy_currencies': copyCurrencies,
+      if (copyLocales != null) 'copy_locales': copyLocales,
+      if (copyTaxClasses != null) 'copy_tax_classes': copyTaxClasses,
+      if (currency != null) 'currency': currency,
+      if (name != null) 'name': name,
+      if (status != null) 'status': status.value,
+    };
 
-            if (copyCurrencies != null) 'copy_currencies': copyCurrencies,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (copyLocales != null) 'copy_locales': copyLocales,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (copyTaxClasses != null) 'copy_tax_classes': copyTaxClasses,
-
-            if (currency != null) 'currency': currency,
-
-            if (name != null) 'name': name,
-
-            if (status != null) 'status': status.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The storefront bootstrap: everything a frontend needs to render one market,
@@ -313,17 +301,14 @@ class Markets extends Service {
   Future<models.Error> marketsContext({required String id}) async {
     final String apiPath = '/v1/markets/{id}/context'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A tenant has ONE default market: it is what every call naming none falls
@@ -334,22 +319,23 @@ class Markets extends Service {
   /// per row that was actually wrong and not touching the rest. Accepts an id or
   /// a market CODE. Answers the market plus the codes it demoted; repeating the
   /// call writes nothing.
-  Future<models.Error> marketsMakeDefault({required String id, required Map data}) async {
-    final String apiPath = '/v1/markets/{id}/make-default'.replaceAll('{id}', id);
+  Future<models.Error> marketsMakeDefault(
+      {required String id, required Map data}) async {
+    final String apiPath =
+        '/v1/markets/{id}/make-default'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Whether this market can actually trade, and if not, what is missing. Every
@@ -364,17 +350,14 @@ class Markets extends Service {
   Future<models.Error> marketsReadiness({required String id}) async {
     final String apiPath = '/v1/markets/{id}/readiness'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Every column is an exact-match filter and they combine with AND
@@ -386,118 +369,124 @@ class Markets extends Service {
   /// market comes from the path and overwrites anything the query says. An
   /// unknown but well-formed market lists empty rather than 404 — the parent
   /// is filtered on, not verified.
-  Future<models.Error> marketsCurrenciesList({required String marketId, String? id, String? code, bool? isDefault, int? position, String? createdAt, int? limit, int? offset, String? order}) async {
-    final String apiPath = '/v1/markets/{market_id}/currencies'.replaceAll('{market_id}', marketId);
+  Future<models.Error> marketsCurrenciesList(
+      {required String marketId,
+      String? id,
+      String? code,
+      bool? isDefault,
+      int? position,
+      String? createdAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
+    final String apiPath = '/v1/markets/{market_id}/currencies'
+        .replaceAll('{market_id}', marketId);
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (isDefault != null) 'is_default': isDefault,
+      if (position != null) 'position': position,
+      if (createdAt != null) 'created_at': createdAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {};
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (position != null) 'position': position,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The owning market comes from the path and overrides anything in the body.
-  Future<models.Error> marketsCurrenciesCreate({required String marketId, required String code, bool? isDefault, int? position}) async {
-    final String apiPath = '/v1/markets/{market_id}/currencies'.replaceAll('{market_id}', marketId);
+  Future<models.Error> marketsCurrenciesCreate(
+      {required String marketId,
+      required String code,
+      bool? isDefault,
+      int? position}) async {
+    final String apiPath = '/v1/markets/{market_id}/currencies'
+        .replaceAll('{market_id}', marketId);
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      if (isDefault != null) 'is_default': isDefault,
+      if (position != null) 'position': position,
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (position != null) 'position': position,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Scoped to the market in the path — a row belonging to another market is a
   /// 404 here, and is never deleted.
-  Future<models.Error> marketsCurrenciesDelete({required String marketId, required String id}) async {
-    final String apiPath = '/v1/markets/{market_id}/currencies/{id}'.replaceAll('{market_id}', marketId).replaceAll('{id}', id);
+  Future<models.Error> marketsCurrenciesDelete(
+      {required String marketId, required String id}) async {
+    final String apiPath = '/v1/markets/{market_id}/currencies/{id}'
+        .replaceAll('{market_id}', marketId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Scoped strictly to the market in the path: a row belonging to another
   /// market is a 404 here, never a 200.
-  Future<models.Error> marketsCurrenciesGet({required String marketId, required String id}) async {
-    final String apiPath = '/v1/markets/{market_id}/currencies/{id}'.replaceAll('{market_id}', marketId).replaceAll('{id}', id);
+  Future<models.Error> marketsCurrenciesGet(
+      {required String marketId, required String id}) async {
+    final String apiPath = '/v1/markets/{market_id}/currencies/{id}'
+        .replaceAll('{market_id}', marketId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Partial: omitted fields keep their value.
-  Future<models.Error> marketsCurrenciesUpdate({required String marketId, required String id, String? code, bool? isDefault, int? position}) async {
-    final String apiPath = '/v1/markets/{market_id}/currencies/{id}'.replaceAll('{market_id}', marketId).replaceAll('{id}', id);
+  Future<models.Error> marketsCurrenciesUpdate(
+      {required String marketId,
+      required String id,
+      String? code,
+      bool? isDefault,
+      int? position}) async {
+    final String apiPath = '/v1/markets/{market_id}/currencies/{id}'
+        .replaceAll('{market_id}', marketId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (code != null) 'code': code,
+    final Map<String, dynamic> apiParams = {
+      if (code != null) 'code': code,
+      if (isDefault != null) 'is_default': isDefault,
+      if (position != null) 'position': position,
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (position != null) 'position': position,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Every column is an exact-match filter and they combine with AND
@@ -509,130 +498,136 @@ class Markets extends Service {
   /// market comes from the path and overwrites anything the query says. An
   /// unknown but well-formed market lists empty rather than 404 — the parent
   /// is filtered on, not verified.
-  Future<models.Error> marketsLocalesList({required String marketId, String? id, String? code, String? language, String? country, bool? isDefault, int? position, String? createdAt, int? limit, int? offset, String? order}) async {
-    final String apiPath = '/v1/markets/{market_id}/locales'.replaceAll('{market_id}', marketId);
+  Future<models.Error> marketsLocalesList(
+      {required String marketId,
+      String? id,
+      String? code,
+      String? language,
+      String? country,
+      bool? isDefault,
+      int? position,
+      String? createdAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
+    final String apiPath =
+        '/v1/markets/{market_id}/locales'.replaceAll('{market_id}', marketId);
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (language != null) 'language': language,
+      if (country != null) 'country': country,
+      if (isDefault != null) 'is_default': isDefault,
+      if (position != null) 'position': position,
+      if (createdAt != null) 'created_at': createdAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {};
 
-            if (language != null) 'language': language,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (country != null) 'country': country,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            if (position != null) 'position': position,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The owning market comes from the path and overrides anything in the body.
-  Future<models.Error> marketsLocalesCreate({required String marketId, required String code, required String country, required String language, bool? isDefault, int? position}) async {
-    final String apiPath = '/v1/markets/{market_id}/locales'.replaceAll('{market_id}', marketId);
+  Future<models.Error> marketsLocalesCreate(
+      {required String marketId,
+      required String code,
+      required String country,
+      required String language,
+      bool? isDefault,
+      int? position}) async {
+    final String apiPath =
+        '/v1/markets/{market_id}/locales'.replaceAll('{market_id}', marketId);
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'country': country,
+      if (isDefault != null) 'is_default': isDefault,
+      'language': language,
+      if (position != null) 'position': position,
+    };
 
-            'country': country,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'language': language,
-
-            if (position != null) 'position': position,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Scoped to the market in the path — a row belonging to another market is a
   /// 404 here, and is never deleted.
-  Future<models.Error> marketsLocalesDelete({required String marketId, required String id}) async {
-    final String apiPath = '/v1/markets/{market_id}/locales/{id}'.replaceAll('{market_id}', marketId).replaceAll('{id}', id);
+  Future<models.Error> marketsLocalesDelete(
+      {required String marketId, required String id}) async {
+    final String apiPath = '/v1/markets/{market_id}/locales/{id}'
+        .replaceAll('{market_id}', marketId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Scoped strictly to the market in the path: a row belonging to another
   /// market is a 404 here, never a 200.
-  Future<models.Error> marketsLocalesGet({required String marketId, required String id}) async {
-    final String apiPath = '/v1/markets/{market_id}/locales/{id}'.replaceAll('{market_id}', marketId).replaceAll('{id}', id);
+  Future<models.Error> marketsLocalesGet(
+      {required String marketId, required String id}) async {
+    final String apiPath = '/v1/markets/{market_id}/locales/{id}'
+        .replaceAll('{market_id}', marketId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Partial: omitted fields keep their value.
-  Future<models.Error> marketsLocalesUpdate({required String marketId, required String id, String? code, String? country, bool? isDefault, String? language, int? position}) async {
-    final String apiPath = '/v1/markets/{market_id}/locales/{id}'.replaceAll('{market_id}', marketId).replaceAll('{id}', id);
+  Future<models.Error> marketsLocalesUpdate(
+      {required String marketId,
+      required String id,
+      String? code,
+      String? country,
+      bool? isDefault,
+      String? language,
+      int? position}) async {
+    final String apiPath = '/v1/markets/{market_id}/locales/{id}'
+        .replaceAll('{market_id}', marketId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (code != null) 'code': code,
+    final Map<String, dynamic> apiParams = {
+      if (code != null) 'code': code,
+      if (country != null) 'country': country,
+      if (isDefault != null) 'is_default': isDefault,
+      if (language != null) 'language': language,
+      if (position != null) 'position': position,
+    };
 
-            if (country != null) 'country': country,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (language != null) 'language': language,
-
-            if (position != null) 'position': position,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Every column is an exact-match filter and they combine with AND
@@ -644,73 +639,75 @@ class Markets extends Service {
   /// market comes from the path and overwrites anything the query says. An
   /// unknown but well-formed market lists empty rather than 404 — the parent
   /// is filtered on, not verified.
-  Future<models.Error> marketsTaxClassesList({required String marketId, String? id, String? code, String? name, String? labels, double? rate, bool? isDefault, int? position, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
-    final String apiPath = '/v1/markets/{market_id}/tax_classes'.replaceAll('{market_id}', marketId);
+  Future<models.Error> marketsTaxClassesList(
+      {required String marketId,
+      String? id,
+      String? code,
+      String? name,
+      String? labels,
+      double? rate,
+      bool? isDefault,
+      int? position,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
+    final String apiPath = '/v1/markets/{market_id}/tax_classes'
+        .replaceAll('{market_id}', marketId);
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (name != null) 'name': name,
+      if (labels != null) 'labels': labels,
+      if (rate != null) 'rate': rate,
+      if (isDefault != null) 'is_default': isDefault,
+      if (position != null) 'position': position,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {};
 
-            if (name != null) 'name': name,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (labels != null) 'labels': labels,
-
-            if (rate != null) 'rate': rate,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            if (position != null) 'position': position,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The owning market comes from the path and overrides anything in the body.
-  Future<models.Error> marketsTaxClassesCreate({required String marketId, required String code, required String name, bool? isDefault, Map? labels, int? position, double? rate}) async {
-    final String apiPath = '/v1/markets/{market_id}/tax_classes'.replaceAll('{market_id}', marketId);
+  Future<models.Error> marketsTaxClassesCreate(
+      {required String marketId,
+      required String code,
+      required String name,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      double? rate}) async {
+    final String apiPath = '/v1/markets/{market_id}/tax_classes'
+        .replaceAll('{market_id}', marketId);
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      'name': name,
+      if (position != null) 'position': position,
+      if (rate != null) 'rate': rate,
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'labels': labels,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'name': name,
-
-            if (position != null) 'position': position,
-
-            if (rate != null) 'rate': rate,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Refused with a 409 for as long as another app still points at this tax
@@ -723,66 +720,70 @@ class Markets extends Service {
   /// one, deletes as before, and the answer says which happened in
   /// 'usage_checked'. Matched on the code, which is shared across markets —
   /// the refusal message says so.
-  Future<models.Error> marketsTaxClassesDelete({required String marketId, required String id}) async {
-    final String apiPath = '/v1/markets/{market_id}/tax_classes/{id}'.replaceAll('{market_id}', marketId).replaceAll('{id}', id);
+  Future<models.Error> marketsTaxClassesDelete(
+      {required String marketId, required String id}) async {
+    final String apiPath = '/v1/markets/{market_id}/tax_classes/{id}'
+        .replaceAll('{market_id}', marketId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Scoped strictly to the market in the path: a row belonging to another
   /// market is a 404 here, never a 200.
-  Future<models.Error> marketsTaxClassesGet({required String marketId, required String id}) async {
-    final String apiPath = '/v1/markets/{market_id}/tax_classes/{id}'.replaceAll('{market_id}', marketId).replaceAll('{id}', id);
+  Future<models.Error> marketsTaxClassesGet(
+      {required String marketId, required String id}) async {
+    final String apiPath = '/v1/markets/{market_id}/tax_classes/{id}'
+        .replaceAll('{market_id}', marketId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Partial: omitted fields keep their value.
-  Future<models.Error> marketsTaxClassesUpdate({required String marketId, required String id, String? code, bool? isDefault, Map? labels, String? name, int? position, double? rate}) async {
-    final String apiPath = '/v1/markets/{market_id}/tax_classes/{id}'.replaceAll('{market_id}', marketId).replaceAll('{id}', id);
+  Future<models.Error> marketsTaxClassesUpdate(
+      {required String marketId,
+      required String id,
+      String? code,
+      bool? isDefault,
+      Map? labels,
+      String? name,
+      int? position,
+      double? rate}) async {
+    final String apiPath = '/v1/markets/{market_id}/tax_classes/{id}'
+        .replaceAll('{market_id}', marketId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (code != null) 'code': code,
+    final Map<String, dynamic> apiParams = {
+      if (code != null) 'code': code,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (name != null) 'name': name,
+      if (position != null) 'position': position,
+      if (rate != null) 'rate': rate,
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'labels': labels,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (name != null) 'name': name,
-
-            if (position != null) 'position': position,
-
-            if (rate != null) 'rate': rate,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

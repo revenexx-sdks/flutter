@@ -11,7 +11,6 @@ void main() {
 
       final map = model.toMap();
       final result = FormSubmissionMetadata.fromMap(map);
-
     });
   });
 }

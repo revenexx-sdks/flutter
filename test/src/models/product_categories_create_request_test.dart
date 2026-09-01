@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = ProductCategoriesCreateRequest.fromMap(map);
 
-            expect(result.category_id, '');
-                  expect(result.product_id, '');
-          });
+      expect(result.category_id, '');
+      expect(result.product_id, '');
+    });
   });
 }

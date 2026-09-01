@@ -18,14 +18,14 @@ void main() {
       final map = model.toMap();
       final result = Target.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.expired, true);
-                  expect(result.identifier, '');
-                  expect(result.name, '');
-                  expect(result.providerType, '');
-                  expect(result.userId, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$updatedAt, '');
+      expect(result.expired, true);
+      expect(result.identifier, '');
+      expect(result.name, '');
+      expect(result.providerType, '');
+      expect(result.userId, '');
+    });
   });
 }

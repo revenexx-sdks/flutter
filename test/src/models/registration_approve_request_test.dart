@@ -4,12 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('RegistrationApproveRequest', () {
     test('model', () {
-      final model = RegistrationApproveRequest(
-      );
+      final model = RegistrationApproveRequest();
 
       final map = model.toMap();
       final result = RegistrationApproveRequest.fromMap(map);
-
     });
   });
 }

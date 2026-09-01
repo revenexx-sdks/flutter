@@ -1,17 +1,15 @@
 part of '../../enums.dart';
 
 enum ChannelTypeTone {
-    neutral(value: 'neutral'),
-    info(value: 'info'),
-    success(value: 'success'),
-    warning(value: 'warning'),
-    danger(value: 'danger');
+  neutral(value: 'neutral'),
+  info(value: 'info'),
+  success(value: 'success'),
+  warning(value: 'warning'),
+  danger(value: 'danger');
 
-    const ChannelTypeTone({
-        required this.value
-    });
+  const ChannelTypeTone({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

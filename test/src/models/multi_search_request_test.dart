@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = MultiSearchRequest.fromMap(map);
 
-            expect(result.searches, []);
-          });
+      expect(result.searches, []);
+    });
   });
 }

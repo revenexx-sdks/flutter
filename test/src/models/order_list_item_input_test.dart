@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = OrderListItemInput.fromMap(map);
 
-            expect(result.name, '');
-          });
+      expect(result.name, '');
+    });
   });
 }

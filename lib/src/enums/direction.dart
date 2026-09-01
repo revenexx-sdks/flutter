@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum Direction {
-    ximport(value: 'import'),
-    xexport(value: 'export');
+  ximport(value: 'import'),
+  xexport(value: 'export');
 
-    const Direction({
-        required this.value
-    });
+  const Direction({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

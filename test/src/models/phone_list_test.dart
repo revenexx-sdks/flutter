@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = PhoneList.fromMap(map);
 
-            expect(result.phones, []);
-                  expect(result.total, 0);
-          });
+      expect(result.phones, []);
+      expect(result.total, 0);
+    });
   });
 }

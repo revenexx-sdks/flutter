@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = InventoryReleaseRequest.fromMap(map);
 
-            expect(result.order_ref, '');
-          });
+      expect(result.order_ref, '');
+    });
   });
 }

@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = MultiSearchResult.fromMap(map);
 
-            expect(result.results, []);
-          });
+      expect(result.results, []);
+    });
   });
 }

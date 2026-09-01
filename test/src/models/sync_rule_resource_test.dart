@@ -20,16 +20,16 @@ void main() {
       final map = model.toMap();
       final result = SyncRuleResource.fromMap(map);
 
-            expect(result.created_at, '');
-                  expect(result.enabled, true);
-                  expect(result.id, '');
-                  expect(result.last_run_at, '');
-                  expect(result.options, []);
-                  expect(result.schedule, '');
-                  expect(result.sftp_account_id, '');
-                  expect(result.source_path, '');
-                  expect(result.target_folder_id, '');
-                  expect(result.tenant_id, '');
-          });
+      expect(result.created_at, '');
+      expect(result.enabled, true);
+      expect(result.id, '');
+      expect(result.last_run_at, '');
+      expect(result.options, []);
+      expect(result.schedule, '');
+      expect(result.sftp_account_id, '');
+      expect(result.source_path, '');
+      expect(result.target_folder_id, '');
+      expect(result.tenant_id, '');
+    });
   });
 }

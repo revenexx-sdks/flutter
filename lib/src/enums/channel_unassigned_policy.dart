@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum ChannelUnassignedPolicy {
-    all(value: 'all'),
-    assignedOnly(value: 'assigned_only');
+  all(value: 'all'),
+  assignedOnly(value: 'assigned_only');
 
-    const ChannelUnassignedPolicy({
-        required this.value
-    });
+  const ChannelUnassignedPolicy({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

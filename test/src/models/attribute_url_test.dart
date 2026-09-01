@@ -19,14 +19,14 @@ void main() {
       final map = model.toMap();
       final result = AttributeUrl.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.error, '');
-                  expect(result.format, '');
-                  expect(result.key, '');
-                  expect(result.xrequired, true);
-                  expect(result.status, AttributeUrlStatus.available);
-                  expect(result.type, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$updatedAt, '');
+      expect(result.error, '');
+      expect(result.format, '');
+      expect(result.key, '');
+      expect(result.xrequired, true);
+      expect(result.status, AttributeUrlStatus.available);
+      expect(result.type, '');
+    });
   });
 }

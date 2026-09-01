@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = ContactActivityRequest.fromMap(map);
 
-            expect(result.subject, '');
-          });
+      expect(result.subject, '');
+    });
   });
 }

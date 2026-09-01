@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum ChannelInactiveBehavior {
-    serve(value: 'serve'),
-    block(value: 'block');
+  serve(value: 'serve'),
+  block(value: 'block');
 
-    const ChannelInactiveBehavior({
-        required this.value
-    });
+  const ChannelInactiveBehavior({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

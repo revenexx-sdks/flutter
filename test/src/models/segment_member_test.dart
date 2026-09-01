@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('SegmentMember', () {
     test('model', () {
-      final model = SegmentMember(
-      );
+      final model = SegmentMember();
 
       final map = model.toMap();
       final result = SegmentMember.fromMap(map);
-
     });
   });
 }

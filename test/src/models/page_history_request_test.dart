@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = PageHistoryRequest.fromMap(map);
 
-            expect(result.index, 0);
-          });
+      expect(result.index, 0);
+    });
   });
 }

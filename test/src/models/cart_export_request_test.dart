@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('CartExportRequest', () {
     test('model', () {
-      final model = CartExportRequest(
-      );
+      final model = CartExportRequest();
 
       final map = model.toMap();
       final result = CartExportRequest.fromMap(map);
-
     });
   });
 }

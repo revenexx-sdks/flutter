@@ -14,10 +14,10 @@ void main() {
       final map = model.toMap();
       final result = AlgoArgon2.fromMap(map);
 
-            expect(result.memoryCost, 0);
-                  expect(result.threads, 0);
-                  expect(result.timeCost, 0);
-                  expect(result.type, '');
-          });
+      expect(result.memoryCost, 0);
+      expect(result.threads, 0);
+      expect(result.timeCost, 0);
+      expect(result.type, '');
+    });
   });
 }

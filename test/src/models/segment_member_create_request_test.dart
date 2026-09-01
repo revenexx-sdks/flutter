@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = SegmentMemberCreateRequest.fromMap(map);
 
-            expect(result.organization_id, '');
-                  expect(result.segment_id, '');
-          });
+      expect(result.organization_id, '');
+      expect(result.segment_id, '');
+    });
   });
 }

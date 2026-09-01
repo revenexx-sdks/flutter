@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = SpecificationList.fromMap(map);
 
-            expect(result.specifications, []);
-                  expect(result.total, 0);
-          });
+      expect(result.specifications, []);
+      expect(result.total, 0);
+    });
   });
 }

@@ -16,11 +16,11 @@ void main() {
       final map = model.toMap();
       final result = Team.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.name, '');
-                        expect(result.total, 0);
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$updatedAt, '');
+      expect(result.name, '');
+      expect(result.total, 0);
+    });
   });
 }

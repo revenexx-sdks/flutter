@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum PricingType {
-    fixed(value: 'fixed'),
-    free(value: 'free'),
-    matrix(value: 'matrix');
+  fixed(value: 'fixed'),
+  free(value: 'free'),
+  matrix(value: 'matrix');
 
-    const PricingType({
-        required this.value
-    });
+  const PricingType({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

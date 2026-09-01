@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = FormSubmissionCreateRequest.fromMap(map);
 
-            expect(result.data, {});
-                  expect(result.form_id, '');
-          });
+      expect(result.data, {});
+      expect(result.form_id, '');
+    });
   });
 }

@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,119 +40,109 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('InventoriesReservations test', () {
-        late MockClient client;
-        late InventoriesReservations inventoriesReservations;
+  group('InventoriesReservations test', () {
+    late MockClient client;
+    late InventoriesReservations inventoriesReservations;
 
-        setUp(() {
-            client = MockClient();
-            inventoriesReservations = InventoriesReservations(client);
-        });
-
-        test('test method inventoriesCommit()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesReservations.inventoriesCommit(
-                orderRef: 'SO-2026-000123',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method inventoriesRelease()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesReservations.inventoriesRelease(
-                orderRef: 'SO-2026-000123',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method inventoriesReservationsList()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesReservations.inventoriesReservationsList(
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method inventoriesReservationsSweep()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesReservations.inventoriesReservationsSweep(
-                data: {},
-            );
-            expect(response, isA<models.ReservationSweepResult>());
-
-        });
-
-        test('test method inventoriesReservationsGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesReservations.inventoriesReservationsGet(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method inventoriesReserve()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesReservations.inventoriesReserve(
-                orderRef: 'SO-2026-000123',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+    setUp(() {
+      client = MockClient();
+      inventoriesReservations = InventoriesReservations(client);
     });
+
+    test('test method inventoriesCommit()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await inventoriesReservations.inventoriesCommit(
+        orderRef: 'SO-2026-000123',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method inventoriesRelease()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await inventoriesReservations.inventoriesRelease(
+        orderRef: 'SO-2026-000123',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method inventoriesReservationsList()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await inventoriesReservations.inventoriesReservationsList();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method inventoriesReservationsSweep()', () async {
+      final Map<String, dynamic> data = {};
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await inventoriesReservations.inventoriesReservationsSweep(
+        data: {},
+      );
+      expect(response, isA<models.ReservationSweepResult>());
+    });
+
+    test('test method inventoriesReservationsGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await inventoriesReservations.inventoriesReservationsGet(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method inventoriesReserve()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await inventoriesReservations.inventoriesReserve(
+        orderRef: 'SO-2026-000123',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

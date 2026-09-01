@@ -1,13 +1,11 @@
 part of '../../enums.dart';
 
 enum SegmentRulePreviewRequestTarget {
-    organizations(value: 'organizations');
+  organizations(value: 'organizations');
 
-    const SegmentRulePreviewRequestTarget({
-        required this.value
-    });
+  const SegmentRulePreviewRequestTarget({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

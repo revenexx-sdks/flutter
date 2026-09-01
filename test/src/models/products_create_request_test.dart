@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = ProductsCreateRequest.fromMap(map);
 
-            expect(result.sku, '');
-          });
+      expect(result.sku, '');
+    });
   });
 }

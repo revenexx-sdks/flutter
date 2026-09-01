@@ -6,6 +6,7 @@ abstract class ClientBase implements Client {
   /// A gateway-managed scoped API key (rvxk_…).
   @override
   ClientBase setApiKeyAuth(value);
+
   /// A Zitadel-issued JWT (Cockpit / interactive callers).
   @override
   ClientBase setBearerAuth(value);

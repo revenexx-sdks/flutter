@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum PriceEntriesBulkMode {
-    upsert(value: 'upsert'),
-    append(value: 'append');
+  upsert(value: 'upsert'),
+  append(value: 'append');
 
-    const PriceEntriesBulkMode({
-        required this.value
-    });
+  const PriceEntriesBulkMode({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

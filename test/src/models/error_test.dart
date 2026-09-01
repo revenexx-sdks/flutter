@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = Error.fromMap(map);
 
-            expect(result.error, '');
-          });
+      expect(result.error, '');
+    });
   });
 }

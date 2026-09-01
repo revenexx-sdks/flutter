@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = ReorderScan.fromMap(map);
 
-            expect(result.emitted, []);
-                  expect(result.enabled, true);
-                  expect(result.scanned, 0);
-          });
+      expect(result.emitted, []);
+      expect(result.enabled, true);
+      expect(result.scanned, 0);
+    });
   });
 }

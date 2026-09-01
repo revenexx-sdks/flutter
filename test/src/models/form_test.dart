@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Form', () {
     test('model', () {
-      final model = Form(
-      );
+      final model = Form();
 
       final map = model.toMap();
       final result = Form.fromMap(map);
-
     });
   });
 }

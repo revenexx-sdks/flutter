@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = ReferenceEntityRecordsCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.reference_entity_id, '');
-          });
+      expect(result.code, '');
+      expect(result.reference_entity_id, '');
+    });
   });
 }

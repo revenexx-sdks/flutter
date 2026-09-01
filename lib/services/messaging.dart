@@ -1,7 +1,7 @@
 part of '../revenexx.dart';
 
-  /// Outbound multi-channel messaging (email/SMS/push): templates, event
-  /// bindings, sends (the sequencer service).
+/// Outbound multi-channel messaging (email/SMS/push): templates, event
+/// bindings, sends (the sequencer service).
 class Messaging extends Service {
   /// Initializes a [Messaging] service
   Messaging(super.client);
@@ -10,31 +10,29 @@ class Messaging extends Service {
   /// being the human-readable name a row was recorded under (a template's key,
   /// a layout's name), which is what an operator has to hand six weeks later
   /// when the id means nothing to them.
-  /// 
+  ///
   /// There is no write route and no delete route: an append-only log with an
   /// editor is a log that says whatever the last editor wanted.
-  Future<models.Error> auditIndex({enums.ResourceType? resourceType, String? resourceId, String? subject, int? limit}) async {
+  Future<models.Error> auditIndex(
+      {enums.ResourceType? resourceType,
+      String? resourceId,
+      String? subject,
+      int? limit}) async {
     const String apiPath = '/v1/messaging/audit';
 
-        final Map<String, dynamic> apiParams = {
-            if (resourceType != null) 'resource_type': resourceType.value,
+    final Map<String, dynamic> apiParams = {
+      if (resourceType != null) 'resource_type': resourceType.value,
+      if (resourceId != null) 'resource_id': resourceId,
+      if (subject != null) 'subject': subject,
+      if (limit != null) 'limit': limit,
+    };
 
-            if (resourceId != null) 'resource_id': resourceId,
+    final Map<String, String> apiHeaders = {};
 
-            if (subject != null) 'subject': subject,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (limit != null) 'limit': limit,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// `?event_topic=` narrows to one topic, which is the question worth asking
@@ -42,57 +40,54 @@ class Messaging extends Service {
   Future<models.Error> bindingIndex({String? eventTopic}) async {
     const String apiPath = '/v1/messaging/bindings';
 
-        final Map<String, dynamic> apiParams = {
-            if (eventTopic != null) 'event_topic': eventTopic,
+    final Map<String, dynamic> apiParams = {
+      if (eventTopic != null) 'event_topic': eventTopic,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {};
 
-        final Map<String, String> apiHeaders = {
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// `recipient` is a template, not an address: `{{ customer.email }}` is
   /// rendered against the event payload when the event arrives, which is the
   /// only way one binding can serve every customer. An event that renders it
   /// empty is skipped and logged rather than sent to nobody.
-  /// 
+  ///
   /// `locale` is what the OPERATOR said this route speaks, and it outranks the
   /// tenant's default. Leave it null when nobody has made that decision, so
   /// that the recipient's own language is still allowed to decide.
-  Future<models.Error> bindingStore({required String channel, required String eventTopic, required String recipient, required String templateKey, bool? enabled, int? fallbackOrder, String? locale}) async {
+  Future<models.Error> bindingStore(
+      {required String channel,
+      required String eventTopic,
+      required String recipient,
+      required String templateKey,
+      bool? enabled,
+      int? fallbackOrder,
+      String? locale}) async {
     const String apiPath = '/v1/messaging/bindings';
 
-        final Map<String, dynamic> apiParams = {
-            'channel': channel,
+    final Map<String, dynamic> apiParams = {
+      'channel': channel,
+      if (enabled != null) 'enabled': enabled,
+      'event_topic': eventTopic,
+      if (fallbackOrder != null) 'fallback_order': fallbackOrder,
+      'locale': locale,
+      'recipient': recipient,
+      'template_key': templateKey,
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'event_topic': eventTopic,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (fallbackOrder != null) 'fallback_order': fallbackOrder,
-
-            'locale': locale,
-
-            'recipient': recipient,
-
-            'template_key': templateKey,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The event it answered goes back to doing nothing. Prefer `enabled: false`
@@ -100,17 +95,14 @@ class Messaging extends Service {
   Future<models.Error> bindingDestroy({required String id}) async {
     final String apiPath = '/v1/messaging/bindings/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// 404 for a binding belonging to another tenant, not 403 — an id that
@@ -118,89 +110,88 @@ class Messaging extends Service {
   Future<models.Error> bindingShow({required String id}) async {
     final String apiPath = '/v1/messaging/bindings/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Every field is optional; only what is sent is written. `enabled: false`
   /// is how a binding is taken out of service without losing what it said —
   /// the alternative is deleting it and typing the payload path back in
   /// correctly from memory later.
-  /// 
+  ///
   /// This path answers on `PUT` and `PATCH`, both routed to the same action.
-  Future<models.Error> bindingUpdatePatch({required String id, String? channel, bool? enabled, String? eventTopic, int? fallbackOrder, String? locale, String? recipient, String? templateKey}) async {
+  Future<models.Error> bindingUpdatePatch(
+      {required String id,
+      String? channel,
+      bool? enabled,
+      String? eventTopic,
+      int? fallbackOrder,
+      String? locale,
+      String? recipient,
+      String? templateKey}) async {
     final String apiPath = '/v1/messaging/bindings/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (channel != null) 'channel': channel,
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (enabled != null) 'enabled': enabled,
+      if (eventTopic != null) 'event_topic': eventTopic,
+      if (fallbackOrder != null) 'fallback_order': fallbackOrder,
+      'locale': locale,
+      if (recipient != null) 'recipient': recipient,
+      if (templateKey != null) 'template_key': templateKey,
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (eventTopic != null) 'event_topic': eventTopic,
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (fallbackOrder != null) 'fallback_order': fallbackOrder,
-
-            'locale': locale,
-
-            if (recipient != null) 'recipient': recipient,
-
-            if (templateKey != null) 'template_key': templateKey,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Every field is optional; only what is sent is written. `enabled: false`
   /// is how a binding is taken out of service without losing what it said —
   /// the alternative is deleting it and typing the payload path back in
   /// correctly from memory later.
-  /// 
+  ///
   /// This path answers on `PUT` and `PATCH`, both routed to the same action.
-  Future<models.Error> bindingUpdate({required String id, String? channel, bool? enabled, String? eventTopic, int? fallbackOrder, String? locale, String? recipient, String? templateKey}) async {
+  Future<models.Error> bindingUpdate(
+      {required String id,
+      String? channel,
+      bool? enabled,
+      String? eventTopic,
+      int? fallbackOrder,
+      String? locale,
+      String? recipient,
+      String? templateKey}) async {
     final String apiPath = '/v1/messaging/bindings/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (channel != null) 'channel': channel,
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (enabled != null) 'enabled': enabled,
+      if (eventTopic != null) 'event_topic': eventTopic,
+      if (fallbackOrder != null) 'fallback_order': fallbackOrder,
+      'locale': locale,
+      if (recipient != null) 'recipient': recipient,
+      if (templateKey != null) 'template_key': templateKey,
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (eventTopic != null) 'event_topic': eventTopic,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (fallbackOrder != null) 'fallback_order': fallbackOrder,
-
-            'locale': locale,
-
-            if (recipient != null) 'recipient': recipient,
-
-            if (templateKey != null) 'template_key': templateKey,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Answers per channel with: which fields the chosen provider wants and
@@ -209,29 +200,26 @@ class Messaging extends Service {
   /// whether the deployment has the channel switched on at all, the URL to
   /// paste into the provider's own console so bounces and opens come back, and
   /// whether callbacks are actually arriving.
-  /// 
+  ///
   /// Admin tier on the read as well as the write: the identifiers alone —
   /// which Twilio account, which sender number — are more than a read-only
   /// operator has reason to see, and the webhook URL served here contains the
   /// tenant's callback token.
-  Future<models.Error> channelCredentialIndex({String? market, String? markets}) async {
+  Future<models.Error> channelCredentialIndex(
+      {String? market, String? markets}) async {
     const String apiPath = '/v1/messaging/channel-credentials';
 
-        final Map<String, dynamic> apiParams = {
-            if (market != null) 'market': market,
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+      if (markets != null) 'markets': markets,
+    };
 
-            if (markets != null) 'markets': markets,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// With `?market=`, only that market's override goes and the global
@@ -239,32 +227,31 @@ class Messaging extends Service {
   /// which is what it did before anybody configured it. Without a market the
   /// channel goes entirely, overrides and all: a caller asking for a channel
   /// to hold no credentials means all of them.
-  /// 
+  ///
   /// 204 whether or not anything was there. The caller wants this channel to
   /// hold no credentials, and it does.
-  Future<models.Error> channelCredentialDestroy({required String channel, String? market}) async {
-    final String apiPath = '/v1/messaging/channel-credentials/{channel}'.replaceAll('{channel}', channel);
+  Future<models.Error> channelCredentialDestroy(
+      {required String channel, String? market}) async {
+    final String apiPath = '/v1/messaging/channel-credentials/{channel}'
+        .replaceAll('{channel}', channel);
 
-        final Map<String, dynamic> apiParams = {
-            if (market != null) 'market': market,
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {};
 
-        final Map<String, String> apiHeaders = {
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A PATCH in spirit whichever verb is used: only the fields present in the
   /// body are written, and the answer says which of them actually CHANGED, so
   /// a form that resent everything it had on screen does not report a change
   /// that did not happen.
-  /// 
+  ///
   /// Three refusals, all 422 and all deliberate rather than ignored. A field
   /// the channel's provider does not have (`unknown_credential_field`) — a
   /// typo sitting in the bag looking like configuration fails later with a
@@ -274,38 +261,38 @@ class Messaging extends Service {
   /// configure (`channel_not_configurable`), which is push: its VAPID keypair
   /// is generated at provisioning, and pasting a new one would orphan every
   /// browser registration the tenant has collected.
-  /// 
+  ///
   /// Switching provider is `driver`, and the fields in the same request are
   /// validated against the provider being switched TO — validating Postmark's
   /// key against Mailgun's field list is how a switch loses everything the
   /// operator just typed.
-  /// 
+  ///
   /// This path answers on `PUT` and `PATCH`, both routed to the same action.
-  Future<models.Error> channelCredentialUpdatePatch({required String channel, String? market, String? driver}) async {
-    final String apiPath = '/v1/messaging/channel-credentials/{channel}'.replaceAll('{channel}', channel);
+  Future<models.Error> channelCredentialUpdatePatch(
+      {required String channel, String? market, String? driver}) async {
+    final String apiPath = '/v1/messaging/channel-credentials/{channel}'
+        .replaceAll('{channel}', channel);
 
-        final Map<String, dynamic> apiParams = {
-            if (market != null) 'market': market,
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+      'driver': driver,
+    };
 
-            'driver': driver,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A PATCH in spirit whichever verb is used: only the fields present in the
   /// body are written, and the answer says which of them actually CHANGED, so
   /// a form that resent everything it had on screen does not report a change
   /// that did not happen.
-  /// 
+  ///
   /// Three refusals, all 422 and all deliberate rather than ignored. A field
   /// the channel's provider does not have (`unknown_credential_field`) — a
   /// typo sitting in the bag looking like configuration fails later with a
@@ -315,38 +302,38 @@ class Messaging extends Service {
   /// configure (`channel_not_configurable`), which is push: its VAPID keypair
   /// is generated at provisioning, and pasting a new one would orphan every
   /// browser registration the tenant has collected.
-  /// 
+  ///
   /// Switching provider is `driver`, and the fields in the same request are
   /// validated against the provider being switched TO — validating Postmark's
   /// key against Mailgun's field list is how a switch loses everything the
   /// operator just typed.
-  /// 
+  ///
   /// This path answers on `PUT` and `PATCH`, both routed to the same action.
-  Future<models.Error> channelCredentialUpdate({required String channel, String? market, String? driver}) async {
-    final String apiPath = '/v1/messaging/channel-credentials/{channel}'.replaceAll('{channel}', channel);
+  Future<models.Error> channelCredentialUpdate(
+      {required String channel, String? market, String? driver}) async {
+    final String apiPath = '/v1/messaging/channel-credentials/{channel}'
+        .replaceAll('{channel}', channel);
 
-        final Map<String, dynamic> apiParams = {
-            if (market != null) 'market': market,
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+      'driver': driver,
+    };
 
-            'driver': driver,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The one thing that turns this screen from a form into a tool. Credentials
   /// that only fail at send time cost a customer their first order
   /// confirmation, and by then nobody connects the failure to the afternoon
   /// somebody pasted a key with a trailing space.
-  /// 
+  ///
   /// **Always 200.** The answer is `{ok, message}` in the body, including when
   /// the credentials are wrong: the REQUEST was fine, the credentials are not,
   /// and a 4xx here would have the cockpit's own error handling swallow the
@@ -354,22 +341,21 @@ class Messaging extends Service {
   /// (push, in-app) answers `ok: true` — "nothing to verify" is a finished
   /// check, not a failed one, and reporting it as an error painted a channel
   /// that has worked since provisioning in the same red as a wrong token.
-  Future<models.Error> channelCredentialVerify({required String channel, String? market}) async {
-    final String apiPath = '/v1/messaging/channel-credentials/{channel}/verify'.replaceAll('{channel}', channel);
+  Future<models.Error> channelCredentialVerify(
+      {required String channel, String? market}) async {
+    final String apiPath = '/v1/messaging/channel-credentials/{channel}/verify'
+        .replaceAll('{channel}', channel);
 
-        final Map<String, dynamic> apiParams = {
-            if (market != null) 'market': market,
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {};
 
-        final Map<String, String> apiHeaders = {
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Each entry says whether the channel is switched on and which provider
@@ -380,23 +366,20 @@ class Messaging extends Service {
   Future<models.Error> channelIndex() async {
     const String apiPath = '/v1/messaging/channels';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A tenant that was never provisioned has no row and still gets an answer:
   /// an empty shape rather than a 404, so the Cockpit's panels open on
   /// editable blanks instead of an error.
-  /// 
+  ///
   /// `meta.push_public_key` is the VAPID public key, and only the public one.
   /// A storefront cannot call `PushManager.subscribe()` without it, so it has
   /// to leave the service; the private half and every provider secret stay
@@ -405,24 +388,21 @@ class Messaging extends Service {
   Future<models.Error> configShow() async {
     const String apiPath = '/v1/messaging/config';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Reaches every message this tenant sends, including templates saved months
   /// ago — content placeholders resolve at send time, not at save time —
   /// which
   /// is why writing is admin tier while reading is not.
-  /// 
+  ///
   /// Two refusals worth knowing about. `defaults.brand` is 422, not ignored:
   /// the letterhead moved to /v1/layouts when a tenant gained more than one of
   /// them, and a letterhead edit that appears to save and changes nothing is
@@ -430,43 +410,43 @@ class Messaging extends Service {
   /// is 422 as well — a tenant that typed a start and forgot the end has an
   /// opinion about when not to message people, and silently sending through
   /// the night is the one answer that is definitely wrong.
-  /// 
+  ///
   /// Provider credentials cannot be written here. That path is
   /// /v1/channel-credentials, so the one route that handles secrets stays the
   /// one that was built for it.
-  /// 
+  ///
   /// This path answers on `PUT` and `PATCH`, both routed to the same action.
-  Future<models.Error> configUpdatePatch({String? defaultLocale, List<String>? defaults, String? product, List<String>? quietHours, String? supportEmail}) async {
+  Future<models.Error> configUpdatePatch(
+      {String? defaultLocale,
+      List<String>? defaults,
+      String? product,
+      List<String>? quietHours,
+      String? supportEmail}) async {
     const String apiPath = '/v1/messaging/config';
 
-        final Map<String, dynamic> apiParams = {
-            'default_locale': defaultLocale,
+    final Map<String, dynamic> apiParams = {
+      'default_locale': defaultLocale,
+      'defaults': defaults,
+      'product': product,
+      'quiet_hours': quietHours,
+      'support_email': supportEmail,
+    };
 
-            'defaults': defaults,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product': product,
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'quiet_hours': quietHours,
-
-            'support_email': supportEmail,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Reaches every message this tenant sends, including templates saved months
   /// ago — content placeholders resolve at send time, not at save time —
   /// which
   /// is why writing is admin tier while reading is not.
-  /// 
+  ///
   /// Two refusals worth knowing about. `defaults.brand` is 422, not ignored:
   /// the letterhead moved to /v1/layouts when a tenant gained more than one of
   /// them, and a letterhead edit that appears to save and changes nothing is
@@ -474,65 +454,62 @@ class Messaging extends Service {
   /// is 422 as well — a tenant that typed a start and forgot the end has an
   /// opinion about when not to message people, and silently sending through
   /// the night is the one answer that is definitely wrong.
-  /// 
+  ///
   /// Provider credentials cannot be written here. That path is
   /// /v1/channel-credentials, so the one route that handles secrets stays the
   /// one that was built for it.
-  /// 
+  ///
   /// This path answers on `PUT` and `PATCH`, both routed to the same action.
-  Future<models.Error> configUpdate({String? defaultLocale, List<String>? defaults, String? product, List<String>? quietHours, String? supportEmail}) async {
+  Future<models.Error> configUpdate(
+      {String? defaultLocale,
+      List<String>? defaults,
+      String? product,
+      List<String>? quietHours,
+      String? supportEmail}) async {
     const String apiPath = '/v1/messaging/config';
 
-        final Map<String, dynamic> apiParams = {
-            'default_locale': defaultLocale,
+    final Map<String, dynamic> apiParams = {
+      'default_locale': defaultLocale,
+      'defaults': defaults,
+      'product': product,
+      'quiet_hours': quietHours,
+      'support_email': supportEmail,
+    };
 
-            'defaults': defaults,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product': product,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'quiet_hours': quietHours,
-
-            'support_email': supportEmail,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The order is the list's purpose: it is a picker, and the entry most
   /// templates are actually on belongs at the top of it.
-  /// 
+  ///
   /// Market-scoped as a browsing filter — see the parameters. `GET
   /// /layouts/{id}`
   /// deliberately is not: somebody holding an id may read it.
   Future<models.Error> layoutIndex({String? markets}) async {
     const String apiPath = '/v1/messaging/layouts';
 
-        final Map<String, dynamic> apiParams = {
-            if (markets != null) 'markets': markets,
+    final Map<String, dynamic> apiParams = {
+      if (markets != null) 'markets': markets,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {};
 
-        final Map<String, String> apiHeaders = {
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A tenant's FIRST layout becomes the default whatever the request says: a
   /// tenant with no default cannot compile a template that does not name one.
-  /// 
+  ///
   /// The default may hold neither a validity window nor `enabled: false`, and
   /// asking for both in one request is refused with 422
   /// `layout_default_always_in_force`. There is no fallback behind the default
@@ -542,17 +519,14 @@ class Messaging extends Service {
   Future<models.Error> layoutStore() async {
     const String apiPath = '/v1/messaging/layouts';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Answers 200 with a body rather than the 204 the other resources use: the
@@ -562,17 +536,14 @@ class Messaging extends Service {
   Future<models.Error> layoutDestroy({required String id}) async {
     final String apiPath = '/v1/messaging/layouts/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Not market-filtered, deliberately: market scoping is a browsing concern,
@@ -581,17 +552,14 @@ class Messaging extends Service {
   Future<models.Error> layoutShow({required String id}) async {
     final String apiPath = '/v1/messaging/layouts/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The change reaches every template on this layout, including ones saved
@@ -599,7 +567,7 @@ class Messaging extends Service {
   /// remembers making when the mails start looking wrong. It is audited for
   /// that reason, and only when something actually changed: an audit line on
   /// every save teaches its readers to ignore the log.
-  /// 
+  ///
   /// Two 422s. Clearing `is_default` on the current default is
   /// `layout_default_required` — promoting another layout is the operation
   /// that exists for this, and it clears this one as a side effect, which is
@@ -607,24 +575,21 @@ class Messaging extends Service {
   /// validity window or switching it off is `layout_default_always_in_force`,
   /// and the check is made of the OUTCOME, so promoting a layout and dating it
   /// in the same request is caught.
-  /// 
+  ///
   /// The structural half of a layout — colours, width, font — is baked into
   /// each template's compiled body, so templates already on it keep the old
   /// one until they are recompiled.
   Future<models.Error> layoutUpdate({required String id}) async {
     final String apiPath = '/v1/messaging/layouts/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What the Cockpit's "start from a template" gallery is built from. These
@@ -633,47 +598,39 @@ class Messaging extends Service {
   Future<models.Error> libraryIndex({String? channel, String? locale}) async {
     const String apiPath = '/v1/messaging/library';
 
-        final Map<String, dynamic> apiParams = {
-            if (channel != null) 'channel': channel,
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (locale != null) 'locale': locale,
+    };
 
-            if (locale != null) 'locale': locale,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// `?channel=` and `?status=` narrow it; `?limit=` is clamped to 200 and
   /// defaults to 50. `?channel=inapp` is the tenant's in-app inbox — the
   /// Message row IS the inbox item, so there is no second store for it.
-  /// 
+  ///
   /// Rows are subject to the deployment's retention window and to erasure
   /// requests, so this is not an archive.
   Future<models.Error> messageIndex({String? channel, String? status}) async {
     const String apiPath = '/v1/messaging/messages';
 
-        final Map<String, dynamic> apiParams = {
-            if (channel != null) 'channel': channel,
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (status != null) 'status': status,
+    };
 
-            if (status != null) 'status': status,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Carries the render model it was sent with, so "why did this mail say
@@ -683,49 +640,46 @@ class Messaging extends Service {
   Future<models.Error> messageShow({required String id}) async {
     final String apiPath = '/v1/messaging/messages/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Answers with the resolved subject, HTML and text exactly as a real send
   /// would produce them, so an editor can show a faithful preview without a
   /// message row, a provider call or a suppression check.
-  /// 
+  ///
   /// Takes no `market`, deliberately: rendering picks no provider, so there is
   /// nothing here for a market to change. Nor `send_at`, `draft` or
   /// `attachments` — all of them are properties of a dispatch, not of a
   /// render.
-  Future<models.Error> sendPreview({required String channel, required String template, Map? data, String? locale}) async {
+  Future<models.Error> sendPreview(
+      {required String channel,
+      required String template,
+      Map? data,
+      String? locale}) async {
     const String apiPath = '/v1/messaging/preview';
 
-        final Map<String, dynamic> apiParams = {
-            'channel': channel,
+    final Map<String, dynamic> apiParams = {
+      'channel': channel,
+      if (data != null) 'data': data,
+      'locale': locale,
+      'template': template,
+    };
 
-            if (data != null) 'data': data,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'locale': locale,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'template': template,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Per (channel, address), because an address is channel-shaped and the rows
@@ -733,176 +687,171 @@ class Messaging extends Service {
   /// normalised form on both sides, so a request for `ada@acme.test` finds a
   /// log written for `Ada@Acme.test` — an erasure that misses on
   /// capitalisation is an erasure that did not happen and reports success.
-  /// 
+  ///
   /// Message rows and unsubscribe tokens are DELETED. Suppressions are KEPT
   /// with the clear-text address nulled: matching runs on a keyed hash, so the
   /// row can still block and can no longer identify. Deleting it instead is
   /// the obvious reading of "erase everything about them", and it is the
   /// reading that mails a dead address again next week — or mails somebody who
   /// complained, which is how a sending domain gets blocked.
-  /// 
+  ///
   /// Answers with the counts, `suppressions_kept` among them, so the design is
   /// stated in the response rather than only in this paragraph.
-  Future<models.Error> erasureStore({required String address, required String channel}) async {
+  Future<models.Error> erasureStore(
+      {required String address, required String channel}) async {
     const String apiPath = '/v1/messaging/privacy/erasures';
 
-        final Map<String, dynamic> apiParams = {
-            'address': address,
+    final Map<String, dynamic> apiParams = {
+      'address': address,
+      'channel': channel,
+    };
 
-            'channel': channel,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// By endpoint and not by id, because the browser knows its endpoint and has
   /// never seen our id — this is called from a service worker reacting to
   /// `pushsubscriptionchange`, or from a "turn off notifications" button.
-  Future<models.Error> pushSubscriptionDestroy({required String endpoint}) async {
+  Future<models.Error> pushSubscriptionDestroy(
+      {required String endpoint}) async {
     const String apiPath = '/v1/messaging/push/subscriptions';
 
-        final Map<String, dynamic> apiParams = {
-            'endpoint': endpoint,
+    final Map<String, dynamic> apiParams = {
+      'endpoint': endpoint,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {};
 
-        final Map<String, String> apiHeaders = {
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// `subscriber_id` is required: this is not a list of everybody, and there
   /// is no route that is. The caller is a storefront acting for one visitor
   /// and has no business enumerating the rest.
-  /// 
+  ///
   /// The client key material is never returned — see the `$hidden` list on the
   /// model. A registration that can be read back is a registration somebody
   /// else can push with.
-  Future<models.Error> pushSubscriptionIndex({required String subscriberId}) async {
+  Future<models.Error> pushSubscriptionIndex(
+      {required String subscriberId}) async {
     const String apiPath = '/v1/messaging/push/subscriptions';
 
-        final Map<String, dynamic> apiParams = {
-            'subscriber_id': subscriberId,
+    final Map<String, dynamic> apiParams = {
+      'subscriber_id': subscriberId,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {};
 
-        final Map<String, String> apiHeaders = {
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Send what `PushManager.subscribe()` handed back — the endpoint and the
   /// two keys — plus the id you know that person by. The VAPID public key the
   /// browser needs to produce it comes from `GET /v1/config`
   /// (`meta.push_public_key`).
-  /// 
+  ///
   /// **Idempotent by endpoint**, and the two statuses say which happened: 201
   /// for a browser seen for the first time, 200 for one already registered. A
   /// browser calls `subscribe()` on every page load and hands back the same
   /// endpoint each time; treating that as a new device would give one laptop a
   /// thousand rows and push to it a thousand times.
-  Future<models.Error> pushSubscriptionStore({required String endpoint, required Map keys, required String subscriberId, String? userAgent}) async {
+  Future<models.Error> pushSubscriptionStore(
+      {required String endpoint,
+      required Map keys,
+      required String subscriberId,
+      String? userAgent}) async {
     const String apiPath = '/v1/messaging/push/subscriptions';
 
-        final Map<String, dynamic> apiParams = {
-            'endpoint': endpoint,
+    final Map<String, dynamic> apiParams = {
+      'endpoint': endpoint,
+      'keys': keys,
+      'subscriber_id': subscriberId,
+      'user_agent': userAgent,
+    };
 
-            'keys': keys,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'subscriber_id': subscriberId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'user_agent': userAgent,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Renders a tenant template and dispatches it — now, at `send_at`, or at
   /// the end of the tenant's quiet hours.
-  /// 
+  ///
   /// The first line is deliberately a title, not a sentence about the
   /// mechanism: Scramble takes it as the operation's `summary`, and a summary
   /// is what an API explorer prints in its route list. The paragraph that used
   /// to be here ran to 119 characters across two lines, which the gateway's
   /// fragment tests reject for exactly that reason.
-  /// 
+  ///
   /// Retry-safe when the caller sends an `Idempotency-Key` header. The two
   /// answers are deliberately different:
-  /// 
+  ///
   ///   201 — a message was created by THIS call
   ///   200 — this key was already used; here is the message it produced
-  /// 
+  ///
   /// A caller has to be able to tell those apart. "Your mail went out" and
   /// "your mail had already gone out" are the same outcome and different
   /// facts, and a client reconciling its own records needs the second one.
   /// Same key with a different body is a 422 — see IdempotencyConflict.
-  /// 
+  ///
   /// A recipient on the tenant's suppression list is not sent to, and that is
   /// reported as a refusal rather than as a silent success.
-  Future<models.Error> sendSend({required String channel, required String template, required String to, List<Map>? attachments, Map? data, bool? draft, String? locale, String? market, String? sendAt}) async {
+  Future<models.Error> sendSend(
+      {required String channel,
+      required String template,
+      required String to,
+      List<Map>? attachments,
+      Map? data,
+      bool? draft,
+      String? locale,
+      String? market,
+      String? sendAt}) async {
     const String apiPath = '/v1/messaging/send';
 
-        final Map<String, dynamic> apiParams = {
-            if (attachments != null) 'attachments': attachments,
+    final Map<String, dynamic> apiParams = {
+      if (attachments != null) 'attachments': attachments,
+      'channel': channel,
+      if (data != null) 'data': data,
+      if (draft != null) 'draft': draft,
+      'locale': locale,
+      'market': market,
+      'send_at': sendAt,
+      'template': template,
+      'to': to,
+    };
 
-            'channel': channel,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (data != null) 'data': data,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (draft != null) 'draft': draft,
-
-            'locale': locale,
-
-            'market': market,
-
-            'send_at': sendAt,
-
-            'template': template,
-
-            'to': to,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Either `days` (a window ending now, default 30) or an explicit `from`/`to`
   /// span. Both ends of the span or neither: `from` alone would be an open
   /// range and the service would have to guess which end was meant.
-  /// 
+  ///
   /// Three numbers are deliberately not the naive ones, and the `window` block
   /// says so rather than leaving a chart to imply otherwise. The window is
   /// CLAMPED to the tenant's retention, and `clamped_by_retention` says when
@@ -914,36 +863,31 @@ class Messaging extends Service {
   /// The delivery rate is sent ÷ (sent + failed): suppressed is the service
   /// doing what it was told, and counting it as a failure would punish a
   /// tenant for having a working unsubscribe list.
-  /// 
+  ///
   /// `previous` is the same window again immediately before this one, which is
   /// what turns a figure into a direction. **It is null** whenever the
   /// preceding window is not entirely inside retention: the query would answer
   /// zero rather than fail, and zero against 1,337 renders as a triumphant
   /// +100 % beside every tile on the screen. Show no trend rather than a
   /// flattering one.
-  /// 
+  ///
   /// Nothing here names a recipient. That is the delivery log, which is a
   /// different endpoint with a different question.
   Future<models.Error> statsIndex({int? days, String? from, String? to}) async {
     const String apiPath = '/v1/messaging/stats';
 
-        final Map<String, dynamic> apiParams = {
-            if (days != null) 'days': days,
+    final Map<String, dynamic> apiParams = {
+      if (days != null) 'days': days,
+      'from': from,
+      'to': to,
+    };
 
-            'from': from,
+    final Map<String, String> apiHeaders = {};
 
-            'to': to,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Filterable by `channel`, `scope`, `reason` and `address`. The address
@@ -951,67 +895,65 @@ class Messaging extends Service {
   /// column, which is what makes "why did this person stop getting our mail"
   /// answerable for somebody who has since been erased: the row has no
   /// address left to match on, and the question is still the same question.
-  Future<models.Error> suppressionIndex({String? channel, enums.Scope? scope, enums.Reason? reason, String? address, int? limit}) async {
+  Future<models.Error> suppressionIndex(
+      {String? channel,
+      enums.Scope? scope,
+      enums.Reason? reason,
+      String? address,
+      int? limit}) async {
     const String apiPath = '/v1/messaging/suppressions';
 
-        final Map<String, dynamic> apiParams = {
-            if (channel != null) 'channel': channel,
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (scope != null) 'scope': scope.value,
+      if (reason != null) 'reason': reason.value,
+      if (address != null) 'address': address,
+      if (limit != null) 'limit': limit,
+    };
 
-            if (scope != null) 'scope': scope.value,
+    final Map<String, String> apiHeaders = {};
 
-            if (reason != null) 'reason': reason.value,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (address != null) 'address': address,
-
-            if (limit != null) 'limit': limit,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// 201 for a row this call created, 200 for an address that was already on
   /// the list — so a client can tell whether it changed anything.
-  /// 
+  ///
   /// The `scope` follows from the `reason` for every reason but `manual`, and
   /// asking for a different one is 422 `suppression_scope_fixed` rather than
   /// being quietly corrected: a caller who asked for `marketing` on a hard
   /// bounce has the model wrong, and a silent upgrade to `all` would leave
   /// them believing transactional mail still flows to an address that does not
   /// exist.
-  Future<models.Error> suppressionStore({required String address, required String channel, required enums.Reason reason, String? expiresAt, String? note, enums.Scope? scope}) async {
+  Future<models.Error> suppressionStore(
+      {required String address,
+      required String channel,
+      required enums.Reason reason,
+      String? expiresAt,
+      String? note,
+      enums.Scope? scope}) async {
     const String apiPath = '/v1/messaging/suppressions';
 
-        final Map<String, dynamic> apiParams = {
-            'address': address,
+    final Map<String, dynamic> apiParams = {
+      'address': address,
+      'channel': channel,
+      'expires_at': expiresAt,
+      'note': note,
+      'reason': reason.value,
+      if (scope != null) 'scope': scope.value,
+    };
 
-            'channel': channel,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'expires_at': expiresAt,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'note': note,
-
-            'reason': reason.value,
-
-            if (scope != null) 'scope': scope.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Audited, unlike most deletes in this service. Removing a row here is the
@@ -1019,38 +961,34 @@ class Messaging extends Service {
   /// not to mail — if a complaint turns into a spam report later, "who took
   ///      * this off the list, and when" is the whole investigation.
   Future<models.Error> suppressionDestroy({required String id}) async {
-    final String apiPath = '/v1/messaging/suppressions/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/messaging/suppressions/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// `address` may be null: that is a person who has been erased
   /// (POST /v1/privacy/erasures). The row survives as a hash, which is the
   /// point — the clear text is gone and the address is still blocked.
   Future<models.Error> suppressionShow({required String id}) async {
-    final String apiPath = '/v1/messaging/suppressions/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/messaging/suppressions/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// `?channel=` narrows to one channel. Market-scoped as a BROWSING filter:
@@ -1061,27 +999,23 @@ class Messaging extends Service {
   Future<models.Error> templateIndex({String? channel, String? markets}) async {
     const String apiPath = '/v1/messaging/templates';
 
-        final Map<String, dynamic> apiParams = {
-            if (channel != null) 'channel': channel,
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (markets != null) 'markets': markets,
+    };
 
-            if (markets != null) 'markets': markets,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Send a `design` document and the service compiles it against the
   /// template's layout — or send `body_html` and `body_text` yourself and skip
   /// compilation entirely.
-  /// 
+  ///
   /// A design that the compiler refuses is 422 and NOTHING is written, with
   /// `error.details` naming the offending block. That order is deliberate: a
   /// save whose compile failed must leave the row alone, because storing the
@@ -1089,60 +1023,60 @@ class Messaging extends Service {
   /// longer matches the document it claims to be built from, and nothing would
   /// ever surface it. A sidecar that is down is 503 `mjml_unavailable`, which
   /// is worth retrying; a rejected design is not.
-  /// 
+  ///
   /// The row this creates is a DRAFT and sends nothing until it is published.
-  Future<models.Error> templateStore({required String channel, required String key, String? bodyHtml, String? bodyText, String? contentSid, List<String>? design, bool? enabled, String? layoutId, String? locale, List<String>? markets, enums.MessageClass? messageClass, String? subject, bool? testMode, String? title, String? validFrom, String? validUntil, List<String>? variableDefaults, List<String>? variables, enums.WhatsappCategory? whatsappCategory}) async {
+  Future<models.Error> templateStore(
+      {required String channel,
+      required String key,
+      String? bodyHtml,
+      String? bodyText,
+      String? contentSid,
+      List<String>? design,
+      bool? enabled,
+      String? layoutId,
+      String? locale,
+      List<String>? markets,
+      enums.MessageClass? messageClass,
+      String? subject,
+      bool? testMode,
+      String? title,
+      String? validFrom,
+      String? validUntil,
+      List<String>? variableDefaults,
+      List<String>? variables,
+      enums.WhatsappCategory? whatsappCategory}) async {
     const String apiPath = '/v1/messaging/templates';
 
-        final Map<String, dynamic> apiParams = {
-            'body_html': bodyHtml,
+    final Map<String, dynamic> apiParams = {
+      'body_html': bodyHtml,
+      'body_text': bodyText,
+      'channel': channel,
+      'content_sid': contentSid,
+      'design': design,
+      if (enabled != null) 'enabled': enabled,
+      'key': key,
+      'layout_id': layoutId,
+      if (locale != null) 'locale': locale,
+      if (markets != null) 'markets': markets,
+      if (messageClass != null) 'message_class': messageClass.value,
+      'subject': subject,
+      if (testMode != null) 'test_mode': testMode,
+      'title': title,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+      'variable_defaults': variableDefaults,
+      'variables': variables,
+      'whatsapp_category': whatsappCategory?.value,
+    };
 
-            'body_text': bodyText,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'channel': channel,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'content_sid': contentSid,
-
-            'design': design,
-
-            if (enabled != null) 'enabled': enabled,
-
-            'key': key,
-
-            'layout_id': layoutId,
-
-            if (locale != null) 'locale': locale,
-
-            if (markets != null) 'markets': markets,
-
-            if (messageClass != null) 'message_class': messageClass.value,
-
-            'subject': subject,
-
-            if (testMode != null) 'test_mode': testMode,
-
-            'title': title,
-
-            'valid_from': validFrom,
-
-            'valid_until': validUntil,
-
-            'variable_defaults': variableDefaults,
-
-            'variables': variables,
-
-            'whatsapp_category': whatsappCategory?.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Any binding still naming this template's key will find nothing when its
@@ -1150,186 +1084,187 @@ class Messaging extends Service {
   /// delete the id resolves to nothing, and "deleted tmpl_01J…" is not
   /// something an operator can act on six weeks later.
   Future<models.Error> templateDestroy({required String id}) async {
-    final String apiPath = '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What customers are receiving is the published snapshot; see
   /// `GET /v1/templates/{id}/versions`, whose `meta.has_unpublished_changes`
   /// says whether the two differ.
-  /// 
+  ///
   /// Not market-filtered, deliberately: market scoping is a browsing concern
   /// and somebody holding an id may read the row.
   Future<models.Error> templateShow({required String id}) async {
-    final String apiPath = '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Only the fields sent are written, and the change is audited only when
   /// something actually changed — a PATCH that resent the same values records
   /// nothing, because an audit line on every save teaches its readers to
   /// ignore the log.
-  /// 
+  ///
   /// Moving a template to another layout recompiles it against the NEW one,
   /// even when nothing else changed: colours, width and font come from the
   /// layout and are already inlined, so a template that merely changed hands
   /// would otherwise keep showing the old letterhead until somebody happened
   /// to press save on it again.
-  /// 
+  ///
   /// Changes nothing customers receive until the template is published.
-  /// 
+  ///
   /// This path answers on `PUT` and `PATCH`, both routed to the same action.
-  Future<models.Error> templateUpdatePatch({required String id, String? bodyHtml, String? bodyText, String? contentSid, List<String>? design, bool? enabled, String? layoutId, List<String>? markets, enums.MessageClass? messageClass, String? subject, bool? testMode, String? title, String? validFrom, String? validUntil, List<String>? variableDefaults, List<String>? variables, enums.WhatsappCategory? whatsappCategory}) async {
-    final String apiPath = '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
+  Future<models.Error> templateUpdatePatch(
+      {required String id,
+      String? bodyHtml,
+      String? bodyText,
+      String? contentSid,
+      List<String>? design,
+      bool? enabled,
+      String? layoutId,
+      List<String>? markets,
+      enums.MessageClass? messageClass,
+      String? subject,
+      bool? testMode,
+      String? title,
+      String? validFrom,
+      String? validUntil,
+      List<String>? variableDefaults,
+      List<String>? variables,
+      enums.WhatsappCategory? whatsappCategory}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'body_html': bodyHtml,
+    final Map<String, dynamic> apiParams = {
+      'body_html': bodyHtml,
+      'body_text': bodyText,
+      'content_sid': contentSid,
+      'design': design,
+      if (enabled != null) 'enabled': enabled,
+      'layout_id': layoutId,
+      if (markets != null) 'markets': markets,
+      if (messageClass != null) 'message_class': messageClass.value,
+      'subject': subject,
+      if (testMode != null) 'test_mode': testMode,
+      'title': title,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+      'variable_defaults': variableDefaults,
+      'variables': variables,
+      'whatsapp_category': whatsappCategory?.value,
+    };
 
-            'body_text': bodyText,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'content_sid': contentSid,
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'design': design,
-
-            if (enabled != null) 'enabled': enabled,
-
-            'layout_id': layoutId,
-
-            if (markets != null) 'markets': markets,
-
-            if (messageClass != null) 'message_class': messageClass.value,
-
-            'subject': subject,
-
-            if (testMode != null) 'test_mode': testMode,
-
-            'title': title,
-
-            'valid_from': validFrom,
-
-            'valid_until': validUntil,
-
-            'variable_defaults': variableDefaults,
-
-            'variables': variables,
-
-            'whatsapp_category': whatsappCategory?.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Only the fields sent are written, and the change is audited only when
   /// something actually changed — a PATCH that resent the same values records
   /// nothing, because an audit line on every save teaches its readers to
   /// ignore the log.
-  /// 
+  ///
   /// Moving a template to another layout recompiles it against the NEW one,
   /// even when nothing else changed: colours, width and font come from the
   /// layout and are already inlined, so a template that merely changed hands
   /// would otherwise keep showing the old letterhead until somebody happened
   /// to press save on it again.
-  /// 
+  ///
   /// Changes nothing customers receive until the template is published.
-  /// 
+  ///
   /// This path answers on `PUT` and `PATCH`, both routed to the same action.
-  Future<models.Error> templateUpdate({required String id, String? bodyHtml, String? bodyText, String? contentSid, List<String>? design, bool? enabled, String? layoutId, List<String>? markets, enums.MessageClass? messageClass, String? subject, bool? testMode, String? title, String? validFrom, String? validUntil, List<String>? variableDefaults, List<String>? variables, enums.WhatsappCategory? whatsappCategory}) async {
-    final String apiPath = '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
+  Future<models.Error> templateUpdate(
+      {required String id,
+      String? bodyHtml,
+      String? bodyText,
+      String? contentSid,
+      List<String>? design,
+      bool? enabled,
+      String? layoutId,
+      List<String>? markets,
+      enums.MessageClass? messageClass,
+      String? subject,
+      bool? testMode,
+      String? title,
+      String? validFrom,
+      String? validUntil,
+      List<String>? variableDefaults,
+      List<String>? variables,
+      enums.WhatsappCategory? whatsappCategory}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'body_html': bodyHtml,
+    final Map<String, dynamic> apiParams = {
+      'body_html': bodyHtml,
+      'body_text': bodyText,
+      'content_sid': contentSid,
+      'design': design,
+      if (enabled != null) 'enabled': enabled,
+      'layout_id': layoutId,
+      if (markets != null) 'markets': markets,
+      if (messageClass != null) 'message_class': messageClass.value,
+      'subject': subject,
+      if (testMode != null) 'test_mode': testMode,
+      'title': title,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+      'variable_defaults': variableDefaults,
+      'variables': variables,
+      'whatsapp_category': whatsappCategory?.value,
+    };
 
-            'body_text': bodyText,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'content_sid': contentSid,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'design': design,
-
-            if (enabled != null) 'enabled': enabled,
-
-            'layout_id': layoutId,
-
-            if (markets != null) 'markets': markets,
-
-            if (messageClass != null) 'message_class': messageClass.value,
-
-            'subject': subject,
-
-            if (testMode != null) 'test_mode': testMode,
-
-            'title': title,
-
-            'valid_from': validFrom,
-
-            'valid_until': validUntil,
-
-            'variable_defaults': variableDefaults,
-
-            'variables': variables,
-
-            'whatsapp_category': whatsappCategory?.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Answers 200 with the version already live when there was nothing to
   /// publish, and 201 when a new one was written — so a client can tell
   /// whether its press did anything without diffing the payload.
-  Future<models.Error> templateVersionStore({required String templateId, String? note}) async {
-    final String apiPath = '/v1/messaging/templates/{templateId}/publish'.replaceAll('{templateId}', templateId);
+  Future<models.Error> templateVersionStore(
+      {required String templateId, String? note}) async {
+    final String apiPath = '/v1/messaging/templates/{templateId}/publish'
+        .replaceAll('{templateId}', templateId);
 
-        final Map<String, dynamic> apiParams = {
-            'note': note,
+    final Map<String, dynamic> apiParams = {
+      'note': note,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Summaries only: version, subject, message class, layout, who published it
@@ -1338,68 +1273,73 @@ class Messaging extends Service {
   /// would make this a several-megabyte download that nobody scrolls to the
   /// end of. `GET /v1/templates/{id}/versions/{version}` serves the full
   /// snapshot for the one somebody actually opened.
-  /// 
+  ///
   /// `meta.published_version_id` says which of them is live — a property of
   /// the template, said once, rather than a flag repeated on every row that
   /// two rows could then claim. `meta.has_unpublished_changes` says whether
   /// the draft has moved on since.
-  Future<models.Error> templateVersionIndex({required String templateId}) async {
-    final String apiPath = '/v1/messaging/templates/{templateId}/versions'.replaceAll('{templateId}', templateId);
+  Future<models.Error> templateVersionIndex(
+      {required String templateId}) async {
+    final String apiPath = '/v1/messaging/templates/{templateId}/versions'
+        .replaceAll('{templateId}', templateId);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Addressed by its VERSION NUMBER — the small integer on the history row,
   /// not the snapshot's id — because that is the number an author has in front
   /// of them.
-  /// 
+  ///
   /// This is what sends actually rendered while that version was live, so it
   /// is the thing to read when the question is "what did the mail we sent in
   ///      * March say".
-  Future<models.Error> templateVersionShow({required String templateId, required String version}) async {
-    final String apiPath = '/v1/messaging/templates/{templateId}/versions/{version}'.replaceAll('{templateId}', templateId).replaceAll('{version}', version);
+  Future<models.Error> templateVersionShow(
+      {required String templateId, required String version}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{templateId}/versions/{version}'
+            .replaceAll('{templateId}', templateId)
+            .replaceAll('{version}', version);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// `publish: true` makes it live in the same transaction — see
   /// TemplatePublisher::restore for why that flag exists rather than asking
   /// the caller for a second round trip.
-  Future<models.Error> templateVersionRestore({required String templateId, required String version, bool? publish}) async {
-    final String apiPath = '/v1/messaging/templates/{templateId}/versions/{version}/restore'.replaceAll('{templateId}', templateId).replaceAll('{version}', version);
+  Future<models.Error> templateVersionRestore(
+      {required String templateId,
+      required String version,
+      bool? publish}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{templateId}/versions/{version}/restore'
+            .replaceAll('{templateId}', templateId)
+            .replaceAll('{version}', version);
 
-        final Map<String, dynamic> apiParams = {
-            if (publish != null) 'publish': publish,
+    final Map<String, dynamic> apiParams = {
+      if (publish != null) 'publish': publish,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

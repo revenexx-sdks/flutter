@@ -1,17 +1,17 @@
 part of '../revenexx.dart';
 
-  /// Stock promised to an order, and the three ways that promise ends. A
-  /// reservation is order-scoped: POST /inventories/reserve creates it against
-  /// an `order_ref`, and nothing else does — there is no create, update or
-  /// delete route here, because the lifecycle IS the API. Reserving raises
-  /// `reserved` on a stock row and leaves `on_hand` alone (the goods are still
-  /// in the building); committing ships them and takes them out of both;
-  /// releasing gives them back; and the sweep is a release on a timer, for the
-  /// checkouts nobody finished. `reserved` is the only reason a stock row&#039;s two
-  /// numbers ever differ, which is what makes this a group and not a footnote to
-  /// the stock one. Which location a hold lands at is not decided here — that
-  /// is the tenant&#039;s allocation strategy choosing between locations, and it is
-  /// described with them.
+/// Stock promised to an order, and the three ways that promise ends. A
+/// reservation is order-scoped: POST /inventories/reserve creates it against
+/// an `order_ref`, and nothing else does — there is no create, update or
+/// delete route here, because the lifecycle IS the API. Reserving raises
+/// `reserved` on a stock row and leaves `on_hand` alone (the goods are still
+/// in the building); committing ships them and takes them out of both;
+/// releasing gives them back; and the sweep is a release on a timer, for the
+/// checkouts nobody finished. `reserved` is the only reason a stock row&#039;s two
+/// numbers ever differ, which is what makes this a group and not a footnote to
+/// the stock one. Which location a hold lands at is not decided here — that
+/// is the tenant&#039;s allocation strategy choosing between locations, and it is
+/// described with them.
 class InventoriesReservations extends Service {
   /// Initializes a [InventoriesReservations] service
   InventoriesReservations(super.client);
@@ -33,19 +33,18 @@ class InventoriesReservations extends Service {
   Future<models.Error> inventoriesCommit({required String orderRef}) async {
     const String apiPath = '/v1/inventories/commit';
 
-        final Map<String, dynamic> apiParams = {
-            'order_ref': orderRef,
+    final Map<String, dynamic> apiParams = {
+      'order_ref': orderRef,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The cancellation end of the reserve → commit | release lifecycle: it
@@ -56,19 +55,18 @@ class InventoriesReservations extends Service {
   Future<models.Error> inventoriesRelease({required String orderRef}) async {
     const String apiPath = '/v1/inventories/release';
 
-        final Map<String, dynamic> apiParams = {
-            'order_ref': orderRef,
+    final Map<String, dynamic> apiParams = {
+      'order_ref': orderRef,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A reservation is stock promised to an `order_ref`. It is created only by
@@ -83,48 +81,46 @@ class InventoriesReservations extends Service {
   /// and never who asked for it. `expires_at` filters on an exact timestamp and
   /// not a range, so this cannot answer "what expires today"; the deadline is
   /// acted on by POST /inventories/reservations/sweep, not by reading it here.
-  Future<models.Error> inventoriesReservationsList({int? limit, int? offset, String? order, String? id, String? locationId, String? productId, String? sku, double? quantity, String? orderRef, enums.InventoriesReservationsListStatus? status, String? expiresAt, String? metadata, String? createdAt, String? updatedAt}) async {
+  Future<models.Error> inventoriesReservationsList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? id,
+      String? locationId,
+      String? productId,
+      String? sku,
+      double? quantity,
+      String? orderRef,
+      enums.InventoriesReservationsListStatus? status,
+      String? expiresAt,
+      String? metadata,
+      String? createdAt,
+      String? updatedAt}) async {
     const String apiPath = '/v1/inventories/reservations';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (id != null) 'id': id,
+      if (locationId != null) 'location_id': locationId,
+      if (productId != null) 'product_id': productId,
+      if (sku != null) 'sku': sku,
+      if (quantity != null) 'quantity': quantity,
+      if (orderRef != null) 'order_ref': orderRef,
+      if (status != null) 'status': status.value,
+      if (expiresAt != null) 'expires_at': expiresAt,
+      if (metadata != null) 'metadata': metadata,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (id != null) 'id': id,
-
-            if (locationId != null) 'location_id': locationId,
-
-            if (productId != null) 'product_id': productId,
-
-            if (sku != null) 'sku': sku,
-
-            if (quantity != null) 'quantity': quantity,
-
-            if (orderRef != null) 'order_ref': orderRef,
-
-            if (status != null) 'status': status.value,
-
-            if (expiresAt != null) 'expires_at': expiresAt,
-
-            if (metadata != null) 'metadata': metadata,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The expiry sweeper, also run by the 'expire-reservations' schedule every 15
@@ -133,22 +129,22 @@ class InventoriesReservations extends Service {
   /// lifetime which never carried a deadline. Each release gives the stock back
   /// and writes a 'release' booking, exactly like a cancellation. Idempotent: a
   /// second run finds nothing.
-  Future<models.ReservationSweepResult> inventoriesReservationsSweep({required Map data}) async {
+  Future<models.ReservationSweepResult> inventoriesReservationsSweep(
+      {required Map data}) async {
     const String apiPath = '/v1/inventories/reservations/sweep';
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.ReservationSweepResult.fromMap(res.data);
-
+    return models.ReservationSweepResult.fromMap(res.data);
   }
 
   /// A reservation is stock promised to an `order_ref`. It is created only by
@@ -164,19 +160,17 @@ class InventoriesReservations extends Service {
   /// `order_ref` (/commit, /release, the sweep), so there is no route that takes
   /// this id and no way to release one line of an order on its own.
   Future<models.Error> inventoriesReservationsGet({required String id}) async {
-    final String apiPath = '/v1/inventories/reservations/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/inventories/reservations/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Takes a hold against an `order_ref`, and plans the whole call before
@@ -188,35 +182,35 @@ class InventoriesReservations extends Service {
   /// backorder_policy decides what happens when none can — refuse (422), or
   /// reserve anyway and let availability go negative. expires_at defaults from
   /// reservation_ttl_minutes and the sweeper enforces it.
-  Future<models.Error> inventoriesReserve({required String orderRef, String? expiresAt, List<models.InventoryStockItem>? items, String? locationCode, String? productId, double? quantity, Map? shipTo, String? sku}) async {
+  Future<models.Error> inventoriesReserve(
+      {required String orderRef,
+      String? expiresAt,
+      List<models.InventoryStockItem>? items,
+      String? locationCode,
+      String? productId,
+      double? quantity,
+      Map? shipTo,
+      String? sku}) async {
     const String apiPath = '/v1/inventories/reserve';
 
-        final Map<String, dynamic> apiParams = {
-            'expires_at': expiresAt,
+    final Map<String, dynamic> apiParams = {
+      'expires_at': expiresAt,
+      if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+      'location_code': locationCode,
+      'order_ref': orderRef,
+      'product_id': productId,
+      'quantity': quantity,
+      if (shipTo != null) 'ship_to': shipTo,
+      'sku': sku,
+    };
 
-            if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'location_code': locationCode,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'order_ref': orderRef,
-
-            'product_id': productId,
-
-            'quantity': quantity,
-
-            if (shipTo != null) 'ship_to': shipTo,
-
-            'sku': sku,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

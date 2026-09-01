@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ResolvedPrice', () {
     test('model', () {
-      final model = ResolvedPrice(
-      );
+      final model = ResolvedPrice();
 
       final map = model.toMap();
       final result = ResolvedPrice.fromMap(map);
-
     });
   });
 }

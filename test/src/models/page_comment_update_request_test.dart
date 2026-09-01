@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = PageCommentUpdateRequest.fromMap(map);
 
-            expect(result.body, '');
-          });
+      expect(result.body, '');
+    });
   });
 }

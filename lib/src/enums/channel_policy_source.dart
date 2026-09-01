@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum ChannelPolicySource {
-    tenant(value: 'tenant'),
-    channel(value: 'channel');
+  tenant(value: 'tenant'),
+  channel(value: 'channel');
 
-    const ChannelPolicySource({
-        required this.value
-    });
+  const ChannelPolicySource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

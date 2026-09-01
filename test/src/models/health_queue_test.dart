@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = HealthQueue.fromMap(map);
 
-            expect(result.size, 0);
-          });
+      expect(result.size, 0);
+    });
   });
 }

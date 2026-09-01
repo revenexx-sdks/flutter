@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = PriceEntriesLadderRequest.fromMap(map);
 
-            expect(result.base_price, 0);
-          });
+      expect(result.base_price, 0);
+    });
   });
 }

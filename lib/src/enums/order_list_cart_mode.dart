@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum OrderListCartMode {
-    append(value: 'append'),
-    replace(value: 'replace');
+  append(value: 'append'),
+  replace(value: 'replace');
 
-    const OrderListCartMode({
-        required this.value
-    });
+  const OrderListCartMode({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

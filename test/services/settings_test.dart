@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,32 +40,33 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('Settings test', () {
-        late MockClient client;
-        late Settings settings;
+  group('Settings test', () {
+    late MockClient client;
+    late Settings settings;
 
-        setUp(() {
-            client = MockClient();
-            settings = Settings(client);
-        });
-
-        test('test method settingsGetAppSettings()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await settings.settingsGetAppSettings(
-                app: '',
-            );
-        });
-
+    setUp(() {
+      client = MockClient();
+      settings = Settings(client);
     });
+
+    test('test method settingsGetAppSettings()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await settings.settingsGetAppSettings(
+        app: '',
+      );
+    });
+  });
 }

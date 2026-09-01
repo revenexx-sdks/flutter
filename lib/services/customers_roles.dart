@@ -1,13 +1,13 @@
 part of '../revenexx.dart';
 
-  /// The role catalogue and the tenant&#039;s own role-to-permission mapping. A role
-  /// is held by a CONTACT and applies inside that contact&#039;s organization; there
-  /// is no global customer role. Permissions are DERIVED from the role on every
-  /// read and never stored per contact, so a role change takes effect
-  /// immediately and can never leave a stale grant behind. Five built-in roles
-  /// answer for a tenant that has written none of its own down; seeding them and
-  /// replacing a role&#039;s permission set are the two writes. What one PERSON ends
-  /// up holding is read in Contacts.
+/// The role catalogue and the tenant&#039;s own role-to-permission mapping. A role
+/// is held by a CONTACT and applies inside that contact&#039;s organization; there
+/// is no global customer role. Permissions are DERIVED from the role on every
+/// read and never stored per contact, so a role change takes effect
+/// immediately and can never leave a stale grant behind. Five built-in roles
+/// answer for a tenant that has written none of its own down; seeding them and
+/// replacing a role&#039;s permission set are the two writes. What one PERSON ends
+/// up holding is read in Contacts.
 class CustomersRoles extends Service {
   /// Initializes a [CustomersRoles] service
   CustomersRoles(super.client);
@@ -29,17 +29,14 @@ class CustomersRoles extends Service {
   Future<models.RoleCatalogResponse> customersRolesList() async {
     const String apiPath = '/v1/customers/roles';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.RoleCatalogResponse.fromMap(res.data);
-
+    return models.RoleCatalogResponse.fromMap(res.data);
   }
 
   /// Idempotent: a role that already exists is left completely alone, its
@@ -50,19 +47,18 @@ class CustomersRoles extends Service {
   Future<models.Error> customersRolesDefaults({required Map data}) async {
     const String apiPath = '/v1/customers/roles/defaults';
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The whole new set in one call — the shape a role editor actually
@@ -71,21 +67,22 @@ class CustomersRoles extends Service {
   /// so editing works without calling /defaults. Permission keys are free text
   /// on purpose: they belong to whichever app declared them, and a grant for an
   /// app that is not installed simply has nothing to act on.
-  Future<models.Error> customersRolesPermissionsReplace({required String key, required List<String> permissions}) async {
-    final String apiPath = '/v1/customers/roles/{key}/permissions'.replaceAll('{key}', key);
+  Future<models.Error> customersRolesPermissionsReplace(
+      {required String key, required List<String> permissions}) async {
+    final String apiPath =
+        '/v1/customers/roles/{key}/permissions'.replaceAll('{key}', key);
 
-        final Map<String, dynamic> apiParams = {
-            'permissions': permissions,
+    final Map<String, dynamic> apiParams = {
+      'permissions': permissions,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = MenuUpsertRequest.fromMap(map);
 
-            expect(result.label, '');
-                  expect(result.menuKey, '');
-          });
+      expect(result.label, '');
+      expect(result.menuKey, '');
+    });
   });
 }

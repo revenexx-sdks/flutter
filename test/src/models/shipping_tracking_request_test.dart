@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = ShippingTrackingRequest.fromMap(map);
 
-            expect(result.carrier, '');
-          });
+      expect(result.carrier, '');
+    });
   });
 }

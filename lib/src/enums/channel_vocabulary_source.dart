@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum ChannelVocabularySource {
-    schema(value: 'schema'),
-    table(value: 'table');
+  schema(value: 'schema'),
+  table(value: 'table');
 
-    const ChannelVocabularySource({
-        required this.value
-    });
+  const ChannelVocabularySource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

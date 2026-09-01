@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum Source {
-    manual(value: 'manual'),
-    rule(value: 'rule');
+  manual(value: 'manual'),
+  rule(value: 'rule');
 
-    const Source({
-        required this.value
-    });
+  const Source({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

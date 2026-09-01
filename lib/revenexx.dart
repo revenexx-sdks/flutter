@@ -1,6 +1,6 @@
 /// Revenexx Revenexx Flutter SDK
 ///
-/// This SDK is compatible with Appwrite server version 1.0.x. 
+/// This SDK is compatible with Appwrite server version 1.0.x.
 /// For older versions, please check
 /// [previous releases](https://github.com/revenexx-sdks/flutter/releases).
 library revenexx;

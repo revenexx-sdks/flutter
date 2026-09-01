@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum CartPriceSnapshotMode {
-    snapshot(value: 'snapshot'),
-    live(value: 'live');
+  snapshot(value: 'snapshot'),
+  live(value: 'live');
 
-    const CartPriceSnapshotMode({
-        required this.value
-    });
+  const CartPriceSnapshotMode({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

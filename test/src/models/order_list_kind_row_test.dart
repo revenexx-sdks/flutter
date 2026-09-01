@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrderListKindRow', () {
     test('model', () {
-      final model = OrderListKindRow(
-      );
+      final model = OrderListKindRow();
 
       final map = model.toMap();
       final result = OrderListKindRow.fromMap(map);
-
     });
   });
 }

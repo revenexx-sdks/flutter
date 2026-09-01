@@ -1,14 +1,14 @@
 part of '../revenexx.dart';
 
-  /// The value sets a merchant owns, and the fixed ones they do not. Payment
-  /// terms, address types, lifecycle stages and activity types were CHECK
-  /// constraints until a wholesaler wanted net 45 and a pipeline step of their
-  /// own — they are the tenant&#039;s ROWS now, so adding one is a call rather than
-  /// a release of this app. Alongside them the vocabularies: the enums this app
-  /// really does fix (status, registration status, membership source), published
-  /// with the titles, descriptions and badge tones a client needs to render a
-  /// value it has never seen. Plus the one call that seeds a fresh tenant with
-  /// all four sets.
+/// The value sets a merchant owns, and the fixed ones they do not. Payment
+/// terms, address types, lifecycle stages and activity types were CHECK
+/// constraints until a wholesaler wanted net 45 and a pipeline step of their
+/// own — they are the tenant&#039;s ROWS now, so adding one is a call rather than
+/// a release of this app. Alongside them the vocabularies: the enums this app
+/// really does fix (status, registration status, membership source), published
+/// with the titles, descriptions and badge tones a client needs to render a
+/// value it has never seen. Plus the one call that seeds a fresh tenant with
+/// all four sets.
 class CustomersValueLists extends Service {
   /// Initializes a [CustomersValueLists] service
   CustomersValueLists(super.client);
@@ -23,17 +23,14 @@ class CustomersValueLists extends Service {
   Future customersAddressTypesList() async {
     const String apiPath = '/v1/customers/address-types';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Extends this tenant's address types set with a value of their own — the
@@ -42,36 +39,36 @@ class CustomersValueLists extends Service {
   /// or a central accounts office is the tenant's own. The code is lowercase and
   /// becomes what `addresses.type` stores; it cannot be changed afterwards,
   /// because every record carrying it would be orphaned.
-  Future<models.Error> customersAddressTypesCreate({required String code, required String title, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, enums.Tone? tone}) async {
+  Future<models.Error> customersAddressTypesCreate(
+      {required String code,
+      required String title,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      enums.Tone? tone}) async {
     const String apiPath = '/v1/customers/address-types';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'description': description,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'descriptions': descriptions,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Takes a value out of the address types set. There is no foreign key behind
@@ -81,19 +78,17 @@ class CustomersValueLists extends Service {
   /// the set. Retiring a value that is in use is therefore a two-step job: move
   /// the records onto another value first, then remove it.
   Future<models.Error> customersAddressTypesDelete({required String id}) async {
-    final String apiPath = '/v1/customers/address-types/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/customers/address-types/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One value of the address types set, by its id — its code, its fallback
@@ -104,19 +99,17 @@ class CustomersValueLists extends Service {
   /// /customers/address-types` answers the whole set in a single page, which is
   /// what a select needs.
   Future<models.Error> customersAddressTypesGet({required String id}) async {
-    final String apiPath = '/v1/customers/address-types/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/customers/address-types/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Everything about a value except the value itself: its titles, its help
@@ -126,34 +119,36 @@ class CustomersValueLists extends Service {
   /// wording of their own changes what people READ and nothing about what
   /// `addresses.type` stores. Seeded values (`is_system`) are renameable like
   /// any other, and re-seeding leaves the rename alone.
-  Future<models.Error> customersAddressTypesUpdate({required String id, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, String? title, enums.Tone? tone}) async {
-    final String apiPath = '/v1/customers/address-types/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersAddressTypesUpdate(
+      {required String id,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      String? title,
+      enums.Tone? tone}) async {
+    final String apiPath =
+        '/v1/customers/address-types/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'description': description,
+    final Map<String, dynamic> apiParams = {
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      if (title != null) 'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'descriptions': descriptions,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            if (title != null) 'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What kind of entry lands on a customer timeline. 'system' is the app's own
@@ -167,17 +162,14 @@ class CustomersValueLists extends Service {
   Future customersContactEventKindsList() async {
     const String apiPath = '/v1/customers/contact-event-kinds';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Extends this tenant's activity types set with a value of their own — the
@@ -186,36 +178,36 @@ class CustomersValueLists extends Service {
   /// a caller may not file one, whatever the set says. The code is lowercase and
   /// becomes what `contact_events.kind` stores; it cannot be changed afterwards,
   /// because every record carrying it would be orphaned.
-  Future<models.Error> customersContactEventKindsCreate({required String code, required String title, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, enums.Tone? tone}) async {
+  Future<models.Error> customersContactEventKindsCreate(
+      {required String code,
+      required String title,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      enums.Tone? tone}) async {
     const String apiPath = '/v1/customers/contact-event-kinds';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'description': description,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'descriptions': descriptions,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Takes a value out of the activity types set. There is no foreign key behind
@@ -224,20 +216,19 @@ class CustomersValueLists extends Service {
   /// refuses while any record still carries the code, and it refuses to empty
   /// the set. Retiring a value that is in use is therefore a two-step job: move
   /// the records onto another value first, then remove it.
-  Future<models.Error> customersContactEventKindsDelete({required String id}) async {
-    final String apiPath = '/v1/customers/contact-event-kinds/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersContactEventKindsDelete(
+      {required String id}) async {
+    final String apiPath =
+        '/v1/customers/contact-event-kinds/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One value of the activity types set, by its id — its code, its fallback
@@ -247,20 +238,19 @@ class CustomersValueLists extends Service {
   /// whatever the set says. Reading one value is the rare path: `GET
   /// /customers/contact-event-kinds` answers the whole set in a single page,
   /// which is what a select needs.
-  Future<models.Error> customersContactEventKindsGet({required String id}) async {
-    final String apiPath = '/v1/customers/contact-event-kinds/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersContactEventKindsGet(
+      {required String id}) async {
+    final String apiPath =
+        '/v1/customers/contact-event-kinds/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Everything about a value except the value itself: its titles, its help
@@ -270,34 +260,36 @@ class CustomersValueLists extends Service {
   /// of their own changes what people READ and nothing about what
   /// `contact_events.kind` stores. Seeded values (`is_system`) are renameable
   /// like any other, and re-seeding leaves the rename alone.
-  Future<models.Error> customersContactEventKindsUpdate({required String id, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, String? title, enums.Tone? tone}) async {
-    final String apiPath = '/v1/customers/contact-event-kinds/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersContactEventKindsUpdate(
+      {required String id,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      String? title,
+      enums.Tone? tone}) async {
+    final String apiPath =
+        '/v1/customers/contact-event-kinds/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'description': description,
+    final Map<String, dynamic> apiParams = {
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      if (title != null) 'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'descriptions': descriptions,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            if (title != null) 'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What the app.installed event runs. It fills all four of the value sets a
@@ -310,19 +302,18 @@ class CustomersValueLists extends Service {
   Future<models.Error> customersDefaults({required Map data}) async {
     const String apiPath = '/v1/customers/defaults';
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Where a company stands in the sales pipeline — a separate axis from
@@ -336,17 +327,14 @@ class CustomersValueLists extends Service {
   Future customersLifecycleStagesList() async {
     const String apiPath = '/v1/customers/lifecycle-stages';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Extends this tenant's lifecycle stages set with a value of their own —
@@ -355,36 +343,36 @@ class CustomersValueLists extends Service {
   /// one whose steps are a sales team's own. The code is lowercase and becomes
   /// what `organizations.lifecycle_stage` stores; it cannot be changed
   /// afterwards, because every record carrying it would be orphaned.
-  Future<models.Error> customersLifecycleStagesCreate({required String code, required String title, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, enums.Tone? tone}) async {
+  Future<models.Error> customersLifecycleStagesCreate(
+      {required String code,
+      required String title,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      enums.Tone? tone}) async {
     const String apiPath = '/v1/customers/lifecycle-stages';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'description': description,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'descriptions': descriptions,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Takes a value out of the lifecycle stages set. There is no foreign key
@@ -393,20 +381,19 @@ class CustomersValueLists extends Service {
   /// integrity: it refuses while any record still carries the code, and it
   /// refuses to empty the set. Retiring a value that is in use is therefore a
   /// two-step job: move the records onto another value first, then remove it.
-  Future<models.Error> customersLifecycleStagesDelete({required String id}) async {
-    final String apiPath = '/v1/customers/lifecycle-stages/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersLifecycleStagesDelete(
+      {required String id}) async {
+    final String apiPath =
+        '/v1/customers/lifecycle-stages/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One value of the lifecycle stages set, by its id — its code, its fallback
@@ -416,19 +403,17 @@ class CustomersValueLists extends Service {
   /// Reading one value is the rare path: `GET /customers/lifecycle-stages`
   /// answers the whole set in a single page, which is what a select needs.
   Future<models.Error> customersLifecycleStagesGet({required String id}) async {
-    final String apiPath = '/v1/customers/lifecycle-stages/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/customers/lifecycle-stages/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Everything about a value except the value itself: its titles, its help
@@ -438,34 +423,36 @@ class CustomersValueLists extends Service {
   /// wording of their own changes what people READ and nothing about what
   /// `organizations.lifecycle_stage` stores. Seeded values (`is_system`) are
   /// renameable like any other, and re-seeding leaves the rename alone.
-  Future<models.Error> customersLifecycleStagesUpdate({required String id, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, String? title, enums.Tone? tone}) async {
-    final String apiPath = '/v1/customers/lifecycle-stages/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersLifecycleStagesUpdate(
+      {required String id,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      String? title,
+      enums.Tone? tone}) async {
+    final String apiPath =
+        '/v1/customers/lifecycle-stages/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'description': description,
+    final Map<String, dynamic> apiParams = {
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      if (title != null) 'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'descriptions': descriptions,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            if (title != null) 'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// When a company has to pay. A wholesaler who agrees net 45 with one customer
@@ -479,17 +466,14 @@ class CustomersValueLists extends Service {
   Future customersPaymentTermsList() async {
     const String apiPath = '/v1/customers/payment-terms';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Extends this tenant's payment terms set with a value of their own — the
@@ -498,36 +482,36 @@ class CustomersValueLists extends Service {
   /// release of this app to say so. The code is lowercase and becomes what
   /// `organizations.payment_terms` stores; it cannot be changed afterwards,
   /// because every record carrying it would be orphaned.
-  Future<models.Error> customersPaymentTermsCreate({required String code, required String title, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, enums.Tone? tone}) async {
+  Future<models.Error> customersPaymentTermsCreate(
+      {required String code,
+      required String title,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      enums.Tone? tone}) async {
     const String apiPath = '/v1/customers/payment-terms';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'description': description,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'descriptions': descriptions,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Takes a value out of the payment terms set. There is no foreign key behind
@@ -537,19 +521,17 @@ class CustomersValueLists extends Service {
   /// refuses to empty the set. Retiring a value that is in use is therefore a
   /// two-step job: move the records onto another value first, then remove it.
   Future<models.Error> customersPaymentTermsDelete({required String id}) async {
-    final String apiPath = '/v1/customers/payment-terms/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/customers/payment-terms/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One value of the payment terms set, by its id — its code, its fallback
@@ -559,19 +541,17 @@ class CustomersValueLists extends Service {
   /// Reading one value is the rare path: `GET /customers/payment-terms` answers
   /// the whole set in a single page, which is what a select needs.
   Future<models.Error> customersPaymentTermsGet({required String id}) async {
-    final String apiPath = '/v1/customers/payment-terms/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/customers/payment-terms/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Everything about a value except the value itself: its titles, its help
@@ -581,34 +561,36 @@ class CustomersValueLists extends Service {
   /// wording of their own changes what people READ and nothing about what
   /// `organizations.payment_terms` stores. Seeded values (`is_system`) are
   /// renameable like any other, and re-seeding leaves the rename alone.
-  Future<models.Error> customersPaymentTermsUpdate({required String id, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, String? title, enums.Tone? tone}) async {
-    final String apiPath = '/v1/customers/payment-terms/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersPaymentTermsUpdate(
+      {required String id,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      String? title,
+      enums.Tone? tone}) async {
+    final String apiPath =
+        '/v1/customers/payment-terms/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'description': description,
+    final Map<String, dynamic> apiParams = {
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      if (title != null) 'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'descriptions': descriptions,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            if (title != null) 'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Discovery for the vocabulary routes: every enum this app publishes, each as
@@ -623,17 +605,14 @@ class CustomersValueLists extends Service {
   Future<models.VocabularyIndex> customersVocabulariesList() async {
     const String apiPath = '/v1/customers/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.VocabularyIndex.fromMap(res.data);
-
+    return models.VocabularyIndex.fromMap(res.data);
   }
 
   /// One vocabulary in full: every permitted value, each with its title, its
@@ -654,19 +633,18 @@ class CustomersValueLists extends Service {
   /// contact-event-kinds, contact-statuses, lifecycle-stages, locales,
   /// organization-statuses, payment-terms, registration-statuses, roles,
   /// rule-matches, segment-sources.
-  Future<models.Error> customersVocabulariesGet({required enums.CustomersVocabulariesGetName name}) async {
-    final String apiPath = '/v1/customers/vocabularies/{name}'.replaceAll('{name}', name.value);
+  Future<models.Error> customersVocabulariesGet(
+      {required enums.CustomersVocabulariesGetName name}) async {
+    final String apiPath =
+        '/v1/customers/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

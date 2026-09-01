@@ -1,14 +1,14 @@
 part of '../revenexx.dart';
 
-  /// The unpublished side: one page open in the visual editor, held as a
-  /// server-side mutation log rather than as edited rows. Load the whole editor
-  /// state in one call, append mutations, walk the undo/redo pointer, disable a
-  /// single step, then publish — which materializes the log into the canonical
-  /// blocks and writes a revision — or revert, which throws it away. An edit
-  /// state has ONE owner at a time and every write asks for it, so taking a page
-  /// over from a colleague is its own call. Scheduling, share-links for
-  /// unpublished previews, machine translation and a person&#039;s own editor
-  /// preferences hang off the same session.
+/// The unpublished side: one page open in the visual editor, held as a
+/// server-side mutation log rather than as edited rows. Load the whole editor
+/// state in one call, append mutations, walk the undo/redo pointer, disable a
+/// single step, then publish — which materializes the log into the canonical
+/// blocks and writes a revision — or revert, which throws it away. An edit
+/// state has ONE owner at a time and every write asks for it, so taking a page
+/// over from a colleague is its own call. Scheduling, share-links for
+/// unpublished previews, machine translation and a person&#039;s own editor
+/// preferences hang off the same session.
 class PagesEditor extends Service {
   /// Initializes a [PagesEditor] service
   PagesEditor(super.client);
@@ -18,26 +18,22 @@ class PagesEditor extends Service {
   /// Always newest-first — this route does not read `order`. An edit state
   /// whose page has been deleted is dropped from `items` but still counted in
   /// `total`.
-  Future pagesEditorEditStates({enums.PageEditStateStatus? status, int? limit, int? offset}) async {
+  Future pagesEditorEditStates(
+      {enums.PageEditStateStatus? status, int? limit, int? offset}) async {
     const String apiPath = '/v1/pages/editor/edit-states';
 
-        final Map<String, dynamic> apiParams = {
-            if (status != null) 'status': status.value,
+    final Map<String, dynamic> apiParams = {
+      if (status != null) 'status': status.value,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+    };
 
-            if (limit != null) 'limit': limit,
+    final Map<String, String> apiHeaders = {};
 
-            if (offset != null) 'offset': offset,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// The translation is the tenant's provider's, not this app's, and a tenant
@@ -51,19 +47,18 @@ class PagesEditor extends Service {
   Future<models.Error> pagesEditorTranslate({List<Map>? items}) async {
     const String apiPath = '/v1/pages/editor/translate';
 
-        final Map<String, dynamic> apiParams = {
-            'items': items,
+    final Map<String, dynamic> apiParams = {
+      'items': items,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Per-user editor preferences — one row per user, scoped to this app. Not
@@ -72,17 +67,14 @@ class PagesEditor extends Service {
   Future pagesEditorUserSettingsGet() async {
     const String apiPath = '/v1/pages/editor/user-settings';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Replaces the caller's preferences wholesale — this is not a merge, so
@@ -90,19 +82,18 @@ class PagesEditor extends Service {
   Future pagesEditorUserSettingsPut({Map? settings}) async {
     const String apiPath = '/v1/pages/editor/user-settings';
 
-        final Map<String, dynamic> apiParams = {
-            'settings': settings,
+    final Map<String, dynamic> apiParams = {
+      'settings': settings,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Undo and redo. The pointer is the edit state's `current_index`, the
@@ -111,24 +102,24 @@ class PagesEditor extends Service {
   /// position without going there. The log itself is never rewritten — only
   /// the pointer moves — so redo stays available until the next change is
   /// appended.
-  Future<models.MutationResponse> pagesEditorHistory({required String pageId, required int index, String? langcode}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/history'.replaceAll('{page_id}', pageId);
+  Future<models.MutationResponse> pagesEditorHistory(
+      {required String pageId, required int index, String? langcode}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/history'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-            'index': index,
+    final Map<String, dynamic> apiParams = {
+      'index': index,
+      'langcode': langcode,
+    };
 
-            'langcode': langcode,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.MutationResponse.fromMap(res.data);
-
+    return models.MutationResponse.fromMap(res.data);
   }
 
   /// The cheap poll behind "someone else is editing this page": one integer, the
@@ -136,44 +127,44 @@ class PagesEditor extends Service {
   /// timestamp so a comparison is a subtraction. Compare it with the `updatedAt`
   /// you last saw and re-fetch the state only when it moved.
   Future pagesEditorLastChanged({required String pageId}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/last-changed'.replaceAll('{page_id}', pageId);
+    final String apiPath = '/v1/pages/editor/{page_id}/last-changed'
+        .replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Take one change out of the replay without deleting it — "what would the
   /// page look like without this edit". The entry stays in the history and can
   /// be switched back on.
-  Future<models.MutationResponse> pagesEditorMutationStatus({required String pageId, required bool enabled, required int index, String? langcode}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/mutation-status'.replaceAll('{page_id}', pageId);
+  Future<models.MutationResponse> pagesEditorMutationStatus(
+      {required String pageId,
+      required bool enabled,
+      required int index,
+      String? langcode}) async {
+    final String apiPath = '/v1/pages/editor/{page_id}/mutation-status'
+        .replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-            'enabled': enabled,
+    final Map<String, dynamic> apiParams = {
+      'enabled': enabled,
+      'index': index,
+      'langcode': langcode,
+    };
 
-            'index': index,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'langcode': langcode,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.MutationResponse.fromMap(res.data);
-
+    return models.MutationResponse.fromMap(res.data);
   }
 
   /// The one way page CONTENT changes. Each call appends one entry to the
@@ -184,48 +175,51 @@ class PagesEditor extends Service {
   /// the same page is refused until they take it over. Appending while the
   /// pointer sits mid-history discards the redo branch, exactly as an editor
   /// expects.
-  Future<models.MutationResponse> pagesEditorMutate({required String pageId, required String plugin, String? langcode, Map? payload}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/mutations'.replaceAll('{page_id}', pageId);
+  Future<models.MutationResponse> pagesEditorMutate(
+      {required String pageId,
+      required String plugin,
+      String? langcode,
+      Map? payload}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/mutations'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-            'langcode': langcode,
+    final Map<String, dynamic> apiParams = {
+      'langcode': langcode,
+      'payload': payload,
+      'plugin': plugin,
+    };
 
-            'payload': payload,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'plugin': plugin,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.MutationResponse.fromMap(res.data);
-
+    return models.MutationResponse.fromMap(res.data);
   }
 
   /// Mints a link that shows this page's current edit state — the UNPUBLISHED
   /// one — to somebody without an editor account. The token is the whole
   /// credential — anyone holding it sees the page — so it expires, and a new
   /// one is cheap.
-  Future pagesEditorPreviewGrant({required String pageId, int? ttlHours}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/preview-grant'.replaceAll('{page_id}', pageId);
+  Future pagesEditorPreviewGrant(
+      {required String pageId, int? ttlHours}) async {
+    final String apiPath = '/v1/pages/editor/{page_id}/preview-grant'
+        .replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-            if (ttlHours != null) 'ttlHours': ttlHours,
+    final Map<String, dynamic> apiParams = {
+      if (ttlHours != null) 'ttlHours': ttlHours,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Four things in one call: the mutation log is replayed into a finished block
@@ -236,44 +230,43 @@ class PagesEditor extends Service {
   /// blocks replaced after, so a failure mid-way leaves the page recoverable.
   /// Block uuids survive, which is why comments anchored to a block outlive the
   /// publish.
-  Future<models.Error> pagesEditorPublish({required String pageId, bool? force, String? label}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/publish'.replaceAll('{page_id}', pageId);
+  Future<models.Error> pagesEditorPublish(
+      {required String pageId, bool? force, String? label}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/publish'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-            'force': force,
+    final Map<String, dynamic> apiParams = {
+      'force': force,
+      'label': label,
+    };
 
-            'label': label,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Throws the whole working copy away: the edit state row is deleted and its
   /// mutation log with it, so the history goes too — this is not an undo and
   /// cannot itself be undone. Unlike publishing, which archives the edit state,
   /// nothing of it survives to be reopened. The published page is untouched.
-  Future<models.MutationResponse> pagesEditorRevert({required String pageId}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/revert'.replaceAll('{page_id}', pageId);
+  Future<models.MutationResponse> pagesEditorRevert(
+      {required String pageId}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/revert'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.MutationResponse.fromMap(res.data);
-
+    return models.MutationResponse.fromMap(res.data);
   }
 
   /// Gated on the tenant setting `enable_scheduled_publishing`, which is off by
@@ -281,22 +274,23 @@ class PagesEditor extends Service {
   /// date accepted here would be a promise the app cannot keep. Every editor
   /// state carries `features.scheduledPublishing` so the control can be hidden
   /// rather than the refusal discovered.
-  Future<models.Error> pagesEditorSchedule({required String pageId, required String scheduledAt}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/schedule'.replaceAll('{page_id}', pageId);
+  Future<models.Error> pagesEditorSchedule(
+      {required String pageId, required String scheduledAt}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/schedule'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-            'scheduledAt': scheduledAt,
+    final Map<String, dynamic> apiParams = {
+      'scheduledAt': scheduledAt,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The one call the visual editor boots on, and the only place the UNPUBLISHED
@@ -310,42 +304,39 @@ class PagesEditor extends Service {
   /// is safe to call at any position. Reading this creates nothing either: a
   /// page nobody has opened answers with a null `editState`, an empty history,
   /// and the published blocks as they stand.
-  Future<models.EditorState> pagesEditorState({required String pageId, String? langcode, int? index}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/state'.replaceAll('{page_id}', pageId);
+  Future<models.EditorState> pagesEditorState(
+      {required String pageId, String? langcode, int? index}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/state'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-            if (langcode != null) 'langcode': langcode,
+    final Map<String, dynamic> apiParams = {
+      if (langcode != null) 'langcode': langcode,
+      if (index != null) 'index': index,
+    };
 
-            if (index != null) 'index': index,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.EditorState.fromMap(res.data);
-
+    return models.EditorState.fromMap(res.data);
   }
 
   /// One page has one writer. This is how the second person gets the pen — the
   /// previous owner is notified rather than silently locked out.
-  Future<models.MutationResponse> pagesEditorTakeOwnership({required String pageId}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/take-ownership'.replaceAll('{page_id}', pageId);
+  Future<models.MutationResponse> pagesEditorTakeOwnership(
+      {required String pageId}) async {
+    final String apiPath = '/v1/pages/editor/{page_id}/take-ownership'
+        .replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.MutationResponse.fromMap(res.data);
-
+    return models.MutationResponse.fromMap(res.data);
   }
 
   /// Freezes a selection into a reusable starting point. The blocks are read out
@@ -353,32 +344,34 @@ class PagesEditor extends Service {
   /// template can be cut from work in progress and the uuids you send are the
   /// ones the editor is showing. Unlike making a block reusable, this COPIES:
   /// pages later made from the template are independent of it and of each other.
-  Future<models.Error> pagesEditorTemplatesCreate({required String pageId, required String label, required List<String> uuids, String? description, String? fieldName, bool? isDefault, String? pageBundle}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/templates'.replaceAll('{page_id}', pageId);
+  Future<models.Error> pagesEditorTemplatesCreate(
+      {required String pageId,
+      required String label,
+      required List<String> uuids,
+      String? description,
+      String? fieldName,
+      bool? isDefault,
+      String? pageBundle}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/templates'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-            'description': description,
+    final Map<String, dynamic> apiParams = {
+      'description': description,
+      'fieldName': fieldName,
+      'isDefault': isDefault,
+      'label': label,
+      'pageBundle': pageBundle,
+      'uuids': uuids,
+    };
 
-            'fieldName': fieldName,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'isDefault': isDefault,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'label': label,
-
-            'pageBundle': pageBundle,
-
-            'uuids': uuids,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Takes a parked edit state back to `active` and clears its date, so the
@@ -389,18 +382,16 @@ class PagesEditor extends Service {
   /// ownership, and a page with no open edit state answers 404 rather than
   /// pretending to have cancelled something.
   Future pagesEditorUnschedule({required String pageId}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/unschedule'.replaceAll('{page_id}', pageId);
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/unschedule'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 }

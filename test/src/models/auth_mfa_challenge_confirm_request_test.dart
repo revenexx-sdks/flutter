@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = AuthMfaChallengeConfirmRequest.fromMap(map);
 
-            expect(result.challenge_id, '');
-                  expect(result.code, '');
-                  expect(result.session_secret, '');
-          });
+      expect(result.challenge_id, '');
+      expect(result.code, '');
+      expect(result.session_secret, '');
+    });
   });
 }

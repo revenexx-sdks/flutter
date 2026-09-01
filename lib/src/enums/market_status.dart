@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum MarketStatus {
-    active(value: 'active'),
-    inactive(value: 'inactive');
+  active(value: 'active'),
+  inactive(value: 'inactive');
 
-    const MarketStatus({
-        required this.value
-    });
+  const MarketStatus({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

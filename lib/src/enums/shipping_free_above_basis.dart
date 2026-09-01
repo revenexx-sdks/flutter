@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum ShippingFreeAboveBasis {
-    net(value: 'net'),
-    gross(value: 'gross');
+  net(value: 'net'),
+  gross(value: 'gross');
 
-    const ShippingFreeAboveBasis({
-        required this.value
-    });
+  const ShippingFreeAboveBasis({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

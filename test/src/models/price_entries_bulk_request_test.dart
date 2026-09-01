@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = PriceEntriesBulkRequest.fromMap(map);
 
-            expect(result.entries, []);
-          });
+      expect(result.entries, []);
+    });
   });
 }

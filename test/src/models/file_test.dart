@@ -23,19 +23,19 @@ void main() {
       final map = model.toMap();
       final result = File.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$permissions, []);
-                  expect(result.$updatedAt, '');
-                  expect(result.bucketId, '');
-                  expect(result.chunksTotal, 0);
-                  expect(result.chunksUploaded, 0);
-                  expect(result.compression, '');
-                  expect(result.encryption, true);
-                  expect(result.mimeType, '');
-                  expect(result.name, '');
-                  expect(result.signature, '');
-                  expect(result.sizeOriginal, 0);
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$permissions, []);
+      expect(result.$updatedAt, '');
+      expect(result.bucketId, '');
+      expect(result.chunksTotal, 0);
+      expect(result.chunksUploaded, 0);
+      expect(result.compression, '');
+      expect(result.encryption, true);
+      expect(result.mimeType, '');
+      expect(result.name, '');
+      expect(result.signature, '');
+      expect(result.sizeOriginal, 0);
+    });
   });
 }

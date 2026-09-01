@@ -14,9 +14,9 @@ void main() {
       final map = model.toMap();
       final result = ShippingWeightUnitCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.factor, 0);
-                  expect(result.title, '');
-          });
+      expect(result.code, '');
+      expect(result.factor, 0);
+      expect(result.title, '');
+    });
   });
 }

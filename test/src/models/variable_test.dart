@@ -18,14 +18,14 @@ void main() {
       final map = model.toMap();
       final result = Variable.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.key, '');
-                  expect(result.resourceId, '');
-                  expect(result.resourceType, '');
-                  expect(result.secret, true);
-                  expect(result.value, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$updatedAt, '');
+      expect(result.key, '');
+      expect(result.resourceId, '');
+      expect(result.resourceType, '');
+      expect(result.secret, true);
+      expect(result.value, '');
+    });
   });
 }

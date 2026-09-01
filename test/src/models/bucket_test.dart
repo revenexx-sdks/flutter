@@ -24,20 +24,20 @@ void main() {
       final map = model.toMap();
       final result = Bucket.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$permissions, []);
-                  expect(result.$updatedAt, '');
-                  expect(result.allowedFileExtensions, []);
-                  expect(result.antivirus, true);
-                  expect(result.compression, '');
-                  expect(result.enabled, true);
-                  expect(result.encryption, true);
-                  expect(result.fileSecurity, true);
-                  expect(result.maximumFileSize, 0);
-                  expect(result.name, '');
-                  expect(result.totalSize, 0);
-                  expect(result.transformations, true);
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$permissions, []);
+      expect(result.$updatedAt, '');
+      expect(result.allowedFileExtensions, []);
+      expect(result.antivirus, true);
+      expect(result.compression, '');
+      expect(result.enabled, true);
+      expect(result.encryption, true);
+      expect(result.fileSecurity, true);
+      expect(result.maximumFileSize, 0);
+      expect(result.name, '');
+      expect(result.totalSize, 0);
+      expect(result.transformations, true);
+    });
   });
 }

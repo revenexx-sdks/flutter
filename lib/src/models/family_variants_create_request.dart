@@ -1,42 +1,42 @@
 part of '../../models.dart';
 
-/// 
+///
 class FamilyVariantsCreateRequest implements Model {
-    /// The attribute codes a product model splits its variants on. Two shapes are in the wild and both are read: a bare list of codes, or one entry per level, outermost first — `[{"level": 1, "axes": ["colour"]}, {"level": 2, "axes": ["size"]}]`. An attribute named here is READ-ONLY on the model and set on each variant, which is what `AttributeField.readonly_reason` reports.
-    final Map? axes;
+  /// The attribute codes a product model splits its variants on. Two shapes are in the wild and both are read: a bare list of codes, or one entry per level, outermost first — `[{"level": 1, "axes": ["colour"]}, {"level": 2, "axes": ["size"]}]`. An attribute named here is READ-ONLY on the model and set on each variant, which is what `AttributeField.readonly_reason` reports.
+  final Map? axes;
 
-    /// The variant structure's stable identifier — how this family splits, not which product it splits. Unique per tenant.
-    final String code;
+  /// The variant structure's stable identifier — how this family splits, not which product it splits. Unique per tenant.
+  final String code;
 
-    /// The family this variant structure belongs to. A family may carry several, and a product names the one it follows through `family_variant_id`.
-    final String family_id;
+  /// The family this variant structure belongs to. A family may carry several, and a product names the one it follows through `family_variant_id`.
+  final String family_id;
 
-    /// What the variant structure is called, per language tag.
-    final Map? labels;
+  /// What the variant structure is called, per language tag.
+  final Map? labels;
 
-    FamilyVariantsCreateRequest({
-        this.axes,
-        required this.code,
-        required this.family_id,
-        this.labels,
-    });
+  FamilyVariantsCreateRequest({
+    this.axes,
+    required this.code,
+    required this.family_id,
+    this.labels,
+  });
 
-    factory FamilyVariantsCreateRequest.fromMap(Map<String, dynamic> map) {
-        return FamilyVariantsCreateRequest(
-            axes: map['axes'],
-            code: map['code'].toString(),
-            family_id: map['family_id'].toString(),
-            labels: map['labels'],
-        );
-    }
+  factory FamilyVariantsCreateRequest.fromMap(Map<String, dynamic> map) {
+    return FamilyVariantsCreateRequest(
+      axes: map['axes'],
+      code: map['code'].toString(),
+      family_id: map['family_id'].toString(),
+      labels: map['labels'],
+    );
+  }
 
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-            "axes": axes,
-            "code": code,
-            "family_id": family_id,
-            "labels": labels,
-        };
-    }
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      "axes": axes,
+      "code": code,
+      "family_id": family_id,
+      "labels": labels,
+    };
+  }
 }

@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,145 +40,130 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('ShippingCarriers test', () {
-        late MockClient client;
-        late ShippingCarriers shippingCarriers;
+  group('ShippingCarriers test', () {
+    late MockClient client;
+    late ShippingCarriers shippingCarriers;
 
-        setUp(() {
-            client = MockClient();
-            shippingCarriers = ShippingCarriers(client);
-        });
-
-        test('test method shippingCarriersList()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await shippingCarriers.shippingCarriersList(
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method shippingCarriersCreate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await shippingCarriers.shippingCarriersCreate(
-                code: 'acme-parcel',
-                name: 'Acme Parcel',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method shippingCarriersCatalog()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await shippingCarriers.shippingCarriersCatalog(
-            );
-        });
-
-        test('test method shippingCarriersDefaults()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await shippingCarriers.shippingCarriersDefaults(
-            );
-        });
-
-        test('test method shippingCarriersDelete()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await shippingCarriers.shippingCarriersDelete(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method shippingCarriersGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await shippingCarriers.shippingCarriersGet(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method shippingCarriersUpdate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await shippingCarriers.shippingCarriersUpdate(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method shippingTracking()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await shippingCarriers.shippingTracking(
-                carrier: 'acme-parcel',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+    setUp(() {
+      client = MockClient();
+      shippingCarriers = ShippingCarriers(client);
     });
+
+    test('test method shippingCarriersList()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await shippingCarriers.shippingCarriersList();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method shippingCarriersCreate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await shippingCarriers.shippingCarriersCreate(
+        code: 'acme-parcel',
+        name: 'Acme Parcel',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method shippingCarriersCatalog()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await shippingCarriers.shippingCarriersCatalog();
+    });
+
+    test('test method shippingCarriersDefaults()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await shippingCarriers.shippingCarriersDefaults();
+    });
+
+    test('test method shippingCarriersDelete()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await shippingCarriers.shippingCarriersDelete(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method shippingCarriersGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await shippingCarriers.shippingCarriersGet(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method shippingCarriersUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await shippingCarriers.shippingCarriersUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method shippingTracking()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await shippingCarriers.shippingTracking(
+        carrier: 'acme-parcel',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

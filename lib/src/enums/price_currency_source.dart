@@ -1,16 +1,14 @@
 part of '../../enums.dart';
 
 enum PriceCurrencySource {
-    request(value: 'request'),
-    market(value: 'market'),
-    tenant(value: 'tenant'),
-    fallback(value: 'fallback');
+  request(value: 'request'),
+  market(value: 'market'),
+  tenant(value: 'tenant'),
+  fallback(value: 'fallback');
 
-    const PriceCurrencySource({
-        required this.value
-    });
+  const PriceCurrencySource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

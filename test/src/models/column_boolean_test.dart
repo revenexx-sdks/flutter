@@ -18,13 +18,13 @@ void main() {
       final map = model.toMap();
       final result = ColumnBoolean.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.error, '');
-                  expect(result.key, '');
-                  expect(result.xrequired, true);
-                  expect(result.status, ColumnBooleanStatus.available);
-                  expect(result.type, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$updatedAt, '');
+      expect(result.error, '');
+      expect(result.key, '');
+      expect(result.xrequired, true);
+      expect(result.status, ColumnBooleanStatus.available);
+      expect(result.type, '');
+    });
   });
 }

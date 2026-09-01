@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = CollectionField.fromMap(map);
 
-            expect(result.name, '');
-                  expect(result.type, '');
-          });
+      expect(result.name, '');
+      expect(result.type, '');
+    });
   });
 }

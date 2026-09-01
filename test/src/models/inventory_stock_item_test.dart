@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = InventoryStockItem.fromMap(map);
 
-            expect(result.quantity, 0);
-          });
+      expect(result.quantity, 0);
+    });
   });
 }

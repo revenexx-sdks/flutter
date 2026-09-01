@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum SegmentMemberSource {
-    manual(value: 'manual'),
-    rule(value: 'rule');
+  manual(value: 'manual'),
+  rule(value: 'rule');
 
-    const SegmentMemberSource({
-        required this.value
-    });
+  const SegmentMemberSource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

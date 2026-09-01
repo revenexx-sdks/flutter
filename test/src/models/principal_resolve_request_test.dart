@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = PrincipalResolveRequest.fromMap(map);
 
-            expect(result.contact_id, '');
-          });
+      expect(result.contact_id, '');
+    });
   });
 }

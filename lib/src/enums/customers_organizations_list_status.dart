@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum CustomersOrganizationsListStatus {
-    active(value: 'active'),
-    blocked(value: 'blocked');
+  active(value: 'active'),
+  blocked(value: 'blocked');
 
-    const CustomersOrganizationsListStatus({
-        required this.value
-    });
+  const CustomersOrganizationsListStatus({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ShippingCarrier', () {
     test('model', () {
-      final model = ShippingCarrier(
-      );
+      final model = ShippingCarrier();
 
       final map = model.toMap();
       final result = ShippingCarrier.fromMap(map);
-
     });
   });
 }

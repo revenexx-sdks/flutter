@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('CartVocabularyValue', () {
     test('model', () {
-      final model = CartVocabularyValue(
-      );
+      final model = CartVocabularyValue();
 
       final map = model.toMap();
       final result = CartVocabularyValue.fromMap(map);
-
     });
   });
 }

@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = CollectionList.fromMap(map);
 
-            expect(result.collections, []);
-          });
+      expect(result.collections, []);
+    });
   });
 }

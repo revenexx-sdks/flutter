@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = ReorderScanEmit.fromMap(map);
 
-            expect(result.event_id, '');
-                  expect(result.stock_level_id, '');
-          });
+      expect(result.event_id, '');
+      expect(result.stock_level_id, '');
+    });
   });
 }

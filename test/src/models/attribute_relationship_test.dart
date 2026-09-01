@@ -24,19 +24,19 @@ void main() {
       final map = model.toMap();
       final result = AttributeRelationship.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.error, '');
-                  expect(result.key, '');
-                  expect(result.onDelete, '');
-                  expect(result.relatedCollection, '');
-                  expect(result.relationType, '');
-                  expect(result.xrequired, true);
-                  expect(result.side, '');
-                  expect(result.status, AttributeRelationshipStatus.available);
-                  expect(result.twoWay, true);
-                  expect(result.twoWayKey, '');
-                  expect(result.type, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$updatedAt, '');
+      expect(result.error, '');
+      expect(result.key, '');
+      expect(result.onDelete, '');
+      expect(result.relatedCollection, '');
+      expect(result.relationType, '');
+      expect(result.xrequired, true);
+      expect(result.side, '');
+      expect(result.status, AttributeRelationshipStatus.available);
+      expect(result.twoWay, true);
+      expect(result.twoWayKey, '');
+      expect(result.type, '');
+    });
   });
 }

@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = IoProfileCreateRequest.fromMap(map);
 
-            expect(result.direction, CartIoDirection.ximport);
-                  expect(result.name, '');
-          });
+      expect(result.direction, CartIoDirection.ximport);
+      expect(result.name, '');
+    });
   });
 }

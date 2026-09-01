@@ -1,7 +1,7 @@
 part of '../revenexx.dart';
 
-  /// Resolve an app&#039;s effective per-tenant / per-market settings (schema
-  /// defaults merged with stored values; sensitive values masked).
+/// Resolve an app&#039;s effective per-tenant / per-market settings (schema
+/// defaults merged with stored values; sensitive values masked).
 class Settings extends Service {
   /// Initializes a [Settings] service
   Settings(super.client);
@@ -12,18 +12,15 @@ class Settings extends Service {
   Future settingsGetAppSettings({required String app, String? market}) async {
     final String apiPath = '/v1/settings/apps/{app}'.replaceAll('{app}', app);
 
-        final Map<String, dynamic> apiParams = {
-            if (market != null) 'market': market,
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {};
 
-        final Map<String, String> apiHeaders = {
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 }

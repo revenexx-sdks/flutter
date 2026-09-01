@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = ProviderList.fromMap(map);
 
-            expect(result.providers, []);
-                  expect(result.total, 0);
-          });
+      expect(result.providers, []);
+      expect(result.total, 0);
+    });
   });
 }

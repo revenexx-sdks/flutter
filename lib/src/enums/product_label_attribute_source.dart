@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum ProductLabelAttributeSource {
-    family(value: 'family'),
-    setting(value: 'setting'),
-    convention(value: 'convention');
+  family(value: 'family'),
+  setting(value: 'setting'),
+  convention(value: 'convention');
 
-    const ProductLabelAttributeSource({
-        required this.value
-    });
+  const ProductLabelAttributeSource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

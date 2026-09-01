@@ -1,6 +1,6 @@
 part of '../revenexx.dart';
 
-  /// Gateway liveness and readiness probes. Public: no credential, no tenant.
+/// Gateway liveness and readiness probes. Public: no credential, no tenant.
 class Health extends Service {
   /// Initializes a [Health] service
   Health(super.client);
@@ -11,17 +11,14 @@ class Health extends Service {
   Future healthLive() async {
     const String apiPath = '/health/live';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Answers 200 once the gateway's registry source is reachable, 503 until
@@ -29,16 +26,13 @@ class Health extends Service {
   Future healthReady() async {
     const String apiPath = '/health/ready';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 }

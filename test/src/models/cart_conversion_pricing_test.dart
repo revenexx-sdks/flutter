@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('CartConversionPricing', () {
     test('model', () {
-      final model = CartConversionPricing(
-      );
+      final model = CartConversionPricing();
 
       final map = model.toMap();
       final result = CartConversionPricing.fromMap(map);
-
     });
   });
 }

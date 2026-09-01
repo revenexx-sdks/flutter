@@ -1,19 +1,19 @@
 part of '../revenexx.dart';
 
-  /// Commerce Studio Prices App — product prices as PRICE LISTS with the full
-  /// field repertoire: quantity tiers (Staffelpreise), per-entry validity
-  /// windows (promo prices), currency per list, priorities and buyer scoping
-  /// (contact, organization, channel — customer segments dock on later). Every
-  /// list states whether its amounts are NET or GROSS, and a list that does not
-  /// falls back to the tenant&#039;s declared basis instead of to a column default
-  /// nobody chose; the resolve answer names which of the two decided. Rounding
-  /// (decimals, mode, merchant price endings) is tenant policy, not a hardcoded
-  /// wire scale. A missing price is a first-class state: the resolve call
-  /// answers on_request instead of 0 — the storefront shows &#039;price on
-  /// request&#039;, never €0. POST /prices/resolve is THE live price call and the
-  /// designated override point: ERP-priced tenants replace exactly this one
-  /// capability with a custom app via the gateway capability override while the
-  /// configuration CRUD stays standard.
+/// Commerce Studio Prices App — product prices as PRICE LISTS with the full
+/// field repertoire: quantity tiers (Staffelpreise), per-entry validity
+/// windows (promo prices), currency per list, priorities and buyer scoping
+/// (contact, organization, channel — customer segments dock on later). Every
+/// list states whether its amounts are NET or GROSS, and a list that does not
+/// falls back to the tenant&#039;s declared basis instead of to a column default
+/// nobody chose; the resolve answer names which of the two decided. Rounding
+/// (decimals, mode, merchant price endings) is tenant policy, not a hardcoded
+/// wire scale. A missing price is a first-class state: the resolve call
+/// answers on_request instead of 0 — the storefront shows &#039;price on
+/// request&#039;, never €0. POST /prices/resolve is THE live price call and the
+/// designated override point: ERP-priced tenants replace exactly this one
+/// capability with a custom app via the gateway capability override while the
+/// configuration CRUD stays standard.
 class Prices extends Service {
   /// Initializes a [Prices] service
   Prices(super.client);
@@ -22,73 +22,71 @@ class Prices extends Service {
   /// status, priority, validity window, buyer scope and the default flag. Never
   /// the prices themselves: those are a separate page per list (`GET
   /// /prices/lists/{list_id}/entries`).
-  /// 
+  ///
   /// Every filter is an EXACT match on a column, ANDed together; a query key
   /// that is not a column is dropped in silence, which is why the answer echoes
   /// `filter`. The scope, currency and status filters are the useful ones,
   /// because between them they narrow the set to the candidates a resolve call
   /// in a given currency for a given buyer can draw on at all.
-  /// 
+  ///
   /// Market is deliberately not among them: a list is scoped to a market by an
   /// assignment, not a column, and the `X-Revenexx-Market` header is what
   /// narrows the set — this admin listing shows the tenant's lists whatever
   /// their market.
-  Future<models.Error> pricesListsList({String? id, String? code, String? name, String? description, String? currency, enums.PriceListStatus? status, int? priority, bool? isDefault, enums.PriceListTaxBasis? taxBasis, bool? taxIncluded, bool? requiresAuth, String? contactId, String? organizationId, String? channelId, String? validFrom, String? validUntil, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
+  Future<models.Error> pricesListsList(
+      {String? id,
+      String? code,
+      String? name,
+      String? description,
+      String? currency,
+      enums.PriceListStatus? status,
+      int? priority,
+      bool? isDefault,
+      enums.PriceListTaxBasis? taxBasis,
+      bool? taxIncluded,
+      bool? requiresAuth,
+      String? contactId,
+      String? organizationId,
+      String? channelId,
+      String? validFrom,
+      String? validUntil,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/prices/lists';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (currency != null) 'currency': currency,
+      if (status != null) 'status': status.value,
+      if (priority != null) 'priority': priority,
+      if (isDefault != null) 'is_default': isDefault,
+      if (taxBasis != null) 'tax_basis': taxBasis.value,
+      if (taxIncluded != null) 'tax_included': taxIncluded,
+      if (requiresAuth != null) 'requires_auth': requiresAuth,
+      if (contactId != null) 'contact_id': contactId,
+      if (organizationId != null) 'organization_id': organizationId,
+      if (channelId != null) 'channel_id': channelId,
+      if (validFrom != null) 'valid_from': validFrom,
+      if (validUntil != null) 'valid_until': validUntil,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {};
 
-            if (name != null) 'name': name,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (description != null) 'description': description,
-
-            if (currency != null) 'currency': currency,
-
-            if (status != null) 'status': status.value,
-
-            if (priority != null) 'priority': priority,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            if (taxBasis != null) 'tax_basis': taxBasis.value,
-
-            if (taxIncluded != null) 'tax_included': taxIncluded,
-
-            if (requiresAuth != null) 'requires_auth': requiresAuth,
-
-            if (contactId != null) 'contact_id': contactId,
-
-            if (organizationId != null) 'organization_id': organizationId,
-
-            if (channelId != null) 'channel_id': channelId,
-
-            if (validFrom != null) 'valid_from': validFrom,
-
-            if (validUntil != null) 'valid_until': validUntil,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Opens an empty book, and states in one row the four things that decide
@@ -96,11 +94,11 @@ class Prices extends Service {
   /// specificity group, its validity window, and its buyer scope (contact,
   /// organization or channel — leave all three empty for a list open to
   /// everyone).
-  /// 
+  ///
   /// `code` and `name` are the only fields required — they are the two columns
   /// with no default — and `code` is unique per tenant, so a code already in
   /// use is a 409 rather than an overwrite of prices somebody is selling on.
-  /// 
+  ///
   /// Everything else has a default, and two of them are worth choosing rather
   /// than accepting. `currency` defaults to EUR and is the currency of every
   /// amount in the list, since entries carry none; a resolve call only considers
@@ -108,63 +106,63 @@ class Prices extends Service {
   /// `tax_basis` defaults to NOTHING, which means the amounts inherit the
   /// tenant's `tax_inclusive_default` — state net or gross here and the answer
   /// stops depending on a tenant setting somebody may change later.
-  /// 
+  ///
   /// `is_default: true` here does NOT demote the list that currently holds the
   /// flag: you end up with two defaults, and which of them prices an item is
   /// left to the tenant's tie-break. Create the list, then move the flag with
   /// `POST /prices/lists/{list_id}/make-default`.
-  /// 
+  ///
   /// A new list prices nothing at all until it has entries, so it is inert until
   /// you add them — which makes it safe to create one ahead of the prices that
   /// will fill it.
-  Future<models.Error> pricesListsCreate({required String code, required String name, String? channelId, String? contactId, String? currency, String? description, bool? isDefault, Map? labels, Map? metadata, String? organizationId, int? priority, bool? requiresAuth, enums.PriceListStatus? status, enums.PriceListTaxBasis? taxBasis, bool? taxIncluded, String? validFrom, String? validUntil}) async {
+  Future<models.Error> pricesListsCreate(
+      {required String code,
+      required String name,
+      String? channelId,
+      String? contactId,
+      String? currency,
+      String? description,
+      bool? isDefault,
+      Map? labels,
+      Map? metadata,
+      String? organizationId,
+      int? priority,
+      bool? requiresAuth,
+      enums.PriceListStatus? status,
+      enums.PriceListTaxBasis? taxBasis,
+      bool? taxIncluded,
+      String? validFrom,
+      String? validUntil}) async {
     const String apiPath = '/v1/prices/lists';
 
-        final Map<String, dynamic> apiParams = {
-            'channel_id': channelId,
+    final Map<String, dynamic> apiParams = {
+      'channel_id': channelId,
+      'code': code,
+      'contact_id': contactId,
+      if (currency != null) 'currency': currency,
+      'description': description,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      'metadata': metadata,
+      'name': name,
+      'organization_id': organizationId,
+      if (priority != null) 'priority': priority,
+      if (requiresAuth != null) 'requires_auth': requiresAuth,
+      if (status != null) 'status': status.value,
+      'tax_basis': taxBasis?.value,
+      if (taxIncluded != null) 'tax_included': taxIncluded,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+    };
 
-            'code': code,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'contact_id': contactId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (currency != null) 'currency': currency,
-
-            'description': description,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            'metadata': metadata,
-
-            'name': name,
-
-            'organization_id': organizationId,
-
-            if (priority != null) 'priority': priority,
-
-            if (requiresAuth != null) 'requires_auth': requiresAuth,
-
-            if (status != null) 'status': status.value,
-
-            'tax_basis': taxBasis?.value,
-
-            if (taxIncluded != null) 'tax_included': taxIncluded,
-
-            'valid_from': validFrom,
-
-            'valid_until': validUntil,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Gives a tenant the one open list every tenant needs, so nothing has to
@@ -173,13 +171,13 @@ class Prices extends Service {
   /// re-run — for a tenant installed before that hook existed, or one whose
   /// standard list was deleted. Because it is idempotent it is also safe to call
   /// from a provisioning script that cannot know which of the two is the case.
-  /// 
+  ///
   /// What it writes comes from settings, not from constants: the code is the
   /// tenant's `default_price_list_code`, the currency its `default_currency`,
   /// and the seeded list STATES its tax basis from `tax_inclusive_default`
   /// instead of inheriting it, because the one list every tenant gets should not
   /// be the ambiguous one.
-  /// 
+  ///
   /// Idempotent twice over — by that code, and by the existence of ANY default
   /// list. So calling it repeatedly is free, changing `default_price_list_code`
   /// later never produces a second list, and a tenant that has made some other
@@ -189,17 +187,14 @@ class Prices extends Service {
   Future<models.PriceListDefaultsResponse> pricesListsDefaults() async {
     const String apiPath = '/v1/prices/lists/defaults';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.PriceListDefaultsResponse.fromMap(res.data);
-
+    return models.PriceListDefaultsResponse.fromMap(res.data);
   }
 
   /// Deletes the list AND every price in it. `price_entries.price_list_id`
@@ -207,7 +202,7 @@ class Prices extends Service {
   /// statement: nothing asks, nothing blocks, a book of 40 000 prices deletes
   /// exactly as fast as an empty one, and the answer is a bare `{deleted, id}`
   /// that never says how many prices went with it.
-  /// 
+  ///
   /// What that means while a storefront is quoting: from the next resolve call
   /// the items this list priced fall through to the next candidate list, and
   /// where there is none the answer is `on_request` — "price on request" for
@@ -215,7 +210,7 @@ class Prices extends Service {
   /// held the default flag the tenant has no default until one is moved onto
   /// another list; re-running `POST /prices/lists/defaults` recreates the
   /// standard list only while no other default exists.
-  /// 
+  ///
   /// This is not the way to take a list out of circulation. `status: "inactive"`
   /// does that immediately and reversibly and keeps the prices; deleting is for
   /// a list whose contents you are prepared to import again, because nothing
@@ -223,17 +218,14 @@ class Prices extends Service {
   Future<models.Error> pricesListsDelete({required String id}) async {
     final String apiPath = '/v1/prices/lists/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The list HEADER, never its prices: currency, tax basis, buyer scope,
@@ -247,24 +239,21 @@ class Prices extends Service {
   Future<models.Error> pricesListsGet({required String id}) async {
     final String apiPath = '/v1/prices/lists/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A partial update: send only what changes, omitted fields keep their value,
   /// and a payload with no updatable column at all is refused rather than
   /// answered with an unchanged row. There is no draft and no publish step —
   /// the next resolve call reads what this one wrote.
-  /// 
+  ///
   /// Three edits do more than their field names suggest. `currency`
   /// re-denominates without converting: entries carry no currency of their own,
   /// so 19.90 EUR becomes 19.90 CHF and the whole book is re-priced by one edit.
@@ -273,58 +262,59 @@ class Prices extends Service {
   /// the one to reach for instead of deleting it. `code` is the handle imports
   /// and integrations address the list by, and a code another list already holds
   /// is a 409.
-  /// 
+  ///
   /// `is_default` behaves here exactly as it does on create: setting it true
   /// leaves the incumbent default in place, so use `POST
   /// /prices/lists/{list_id}/make-default`, which demotes in the same call.
-  Future<models.Error> pricesListsUpdate({required String id, String? channelId, String? code, String? contactId, String? currency, String? description, bool? isDefault, Map? labels, Map? metadata, String? name, String? organizationId, int? priority, bool? requiresAuth, enums.PriceListStatus? status, enums.PriceListTaxBasis? taxBasis, bool? taxIncluded, String? validFrom, String? validUntil}) async {
+  Future<models.Error> pricesListsUpdate(
+      {required String id,
+      String? channelId,
+      String? code,
+      String? contactId,
+      String? currency,
+      String? description,
+      bool? isDefault,
+      Map? labels,
+      Map? metadata,
+      String? name,
+      String? organizationId,
+      int? priority,
+      bool? requiresAuth,
+      enums.PriceListStatus? status,
+      enums.PriceListTaxBasis? taxBasis,
+      bool? taxIncluded,
+      String? validFrom,
+      String? validUntil}) async {
     final String apiPath = '/v1/prices/lists/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'channel_id': channelId,
+    final Map<String, dynamic> apiParams = {
+      'channel_id': channelId,
+      if (code != null) 'code': code,
+      'contact_id': contactId,
+      if (currency != null) 'currency': currency,
+      'description': description,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      'metadata': metadata,
+      if (name != null) 'name': name,
+      'organization_id': organizationId,
+      if (priority != null) 'priority': priority,
+      if (requiresAuth != null) 'requires_auth': requiresAuth,
+      if (status != null) 'status': status.value,
+      'tax_basis': taxBasis?.value,
+      if (taxIncluded != null) 'tax_included': taxIncluded,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'contact_id': contactId,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (currency != null) 'currency': currency,
-
-            'description': description,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            'metadata': metadata,
-
-            if (name != null) 'name': name,
-
-            'organization_id': organizationId,
-
-            if (priority != null) 'priority': priority,
-
-            if (requiresAuth != null) 'requires_auth': requiresAuth,
-
-            if (status != null) 'status': status.value,
-
-            'tax_basis': taxBasis?.value,
-
-            if (taxIncluded != null) 'tax_included': taxIncluded,
-
-            'valid_from': validFrom,
-
-            'valid_until': validUntil,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The prices inside one list, a page at a time. An entry is a rung rather
@@ -333,62 +323,62 @@ class Prices extends Service {
   /// deliberately no number at all — an `on_request` marker instead of one. So
   /// this page is where the quantity tiers, the promo windows and the "ask us"
   /// markers of a book are read.
-  /// 
+  ///
   /// The ladder of one item is the set of entries sharing an identity, so
   /// `?product_id=…` (or `?sku=…`) is how a caller reads the Staffel a
   /// resolve answer was built from, and `?price_type=on_request` is how the
   /// markers are audited. The response also carries `page` and `filter` like
   /// every other list, and an unknown list_id answers 404 instead of an empty
   /// page.
-  Future<models.Error> pricesEntriesList({required String listId, String? id, String? productId, String? sku, enums.PriceEntryType? priceType, double? quantityMin, double? unitPrice, String? unit, String? validFrom, String? validUntil, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/entries'.replaceAll('{list_id}', listId);
+  Future<models.Error> pricesEntriesList(
+      {required String listId,
+      String? id,
+      String? productId,
+      String? sku,
+      enums.PriceEntryType? priceType,
+      double? quantityMin,
+      double? unitPrice,
+      String? unit,
+      String? validFrom,
+      String? validUntil,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
+    final String apiPath =
+        '/v1/prices/lists/{list_id}/entries'.replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (productId != null) 'product_id': productId,
+      if (sku != null) 'sku': sku,
+      if (priceType != null) 'price_type': priceType.value,
+      if (quantityMin != null) 'quantity_min': quantityMin,
+      if (unitPrice != null) 'unit_price': unitPrice,
+      if (unit != null) 'unit': unit,
+      if (validFrom != null) 'valid_from': validFrom,
+      if (validUntil != null) 'valid_until': validUntil,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (productId != null) 'product_id': productId,
+    final Map<String, String> apiHeaders = {};
 
-            if (sku != null) 'sku': sku,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (priceType != null) 'price_type': priceType.value,
-
-            if (quantityMin != null) 'quantity_min': quantityMin,
-
-            if (unitPrice != null) 'unit_price': unitPrice,
-
-            if (unit != null) 'unit': unit,
-
-            if (validFrom != null) 'valid_from': validFrom,
-
-            if (validUntil != null) 'valid_until': validUntil,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Adds ONE rung to one item's quantity ladder in this list. The only thing an
   /// entry must have is an identity — `product_id` or `sku`, which the row
   /// CHECK enforces; everything else defaults, and one of those defaults
   /// deserves a warning.
-  /// 
+  ///
   /// `unit_price` defaults to **0**. That is the one door through which a zero
   /// price enters an app whose whole doctrine is that a missing price is
   /// `on_request` and never €0: a create that forgets the amount publishes a
@@ -397,48 +387,50 @@ class Prices extends Service {
   /// is none. The amount is per ONE unit of `unit`, in the LIST's currency
   /// (entries carry none) and on the LIST's tax basis, as a decimal in major
   /// units — 19.90, never 1990.
-  /// 
+  ///
   /// Nothing enforces one rung per (item, quantity): create the same
   /// `quantity_min` twice and both rows come back in the resolved `tiers`, with
   /// the last of them setting the price — an ambiguous ladder no error ever
   /// mentions. `quantity_min` defaults to 1 and `price_type` to `standard`.
-  /// 
+  ///
   /// This route is for a rung at a time. A whole ladder in one call is `POST
   /// …/entries/ladder`, an import is `POST …/entries/bulk`, and a complete
   /// rewrite of the book is `PUT …/entries`. An unknown `list_id` answers 404
   /// rather than attaching a price to nothing.
-  Future<models.Error> pricesEntriesCreate({required String listId, Map? metadata, enums.PriceEntryType? priceType, String? productId, double? quantityMin, String? sku, String? unit, double? unitPrice, String? validFrom, String? validUntil}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/entries'.replaceAll('{list_id}', listId);
+  Future<models.Error> pricesEntriesCreate(
+      {required String listId,
+      Map? metadata,
+      enums.PriceEntryType? priceType,
+      String? productId,
+      double? quantityMin,
+      String? sku,
+      String? unit,
+      double? unitPrice,
+      String? validFrom,
+      String? validUntil}) async {
+    final String apiPath =
+        '/v1/prices/lists/{list_id}/entries'.replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            'metadata': metadata,
+    final Map<String, dynamic> apiParams = {
+      'metadata': metadata,
+      if (priceType != null) 'price_type': priceType.value,
+      'product_id': productId,
+      if (quantityMin != null) 'quantity_min': quantityMin,
+      'sku': sku,
+      'unit': unit,
+      if (unitPrice != null) 'unit_price': unitPrice,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+    };
 
-            if (priceType != null) 'price_type': priceType.value,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product_id': productId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (quantityMin != null) 'quantity_min': quantityMin,
-
-            'sku': sku,
-
-            'unit': unit,
-
-            if (unitPrice != null) 'unit_price': unitPrice,
-
-            'valid_from': validFrom,
-
-            'valid_until': validUntil,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Set semantics over the WHOLE list, not over one item: every entry of the
@@ -448,7 +440,7 @@ class Prices extends Service {
   /// `entries: []` is a legal payload and empties the list — the items it
   /// priced then resolve from the next candidate list, or come back
   /// `on_request`.
-  /// 
+  ///
   /// Two consequences of "delete, then insert". Every row is inserted fresh, so
   /// all entry ids change and anything holding one is stale afterwards. And it
   /// is not a transaction: the deletes go out before the inserts, so a payload
@@ -456,25 +448,27 @@ class Prices extends Service {
   /// and none of the ones it had. What protects you is that the whole payload is
   /// normalized and validated BEFORE the first delete — a malformed row is a
   /// 400 with the list untouched.
-  /// 
+  ///
   /// For a book of any size, or for adding to one you want to keep, use `POST
   /// …/entries/bulk`: it upserts in chunks and never wipes.
-  Future<models.Error> pricesEntriesReplace({required String listId, required List<models.PriceEntryReplaceItem> entries}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/entries'.replaceAll('{list_id}', listId);
+  Future<models.Error> pricesEntriesReplace(
+      {required String listId,
+      required List<models.PriceEntryReplaceItem> entries}) async {
+    final String apiPath =
+        '/v1/prices/lists/{list_id}/entries'.replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            'entries': entries.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      'entries': entries.map((p) => p.toMap()).toList(),
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Moves every priced entry of the list at once, in whichever of the two ways
@@ -483,7 +477,7 @@ class Prices extends Service {
   /// price. One or the other, never both, and `sku_prefix` narrows the change to
   /// part of the book. On-request entries are never touched, because a
   /// percentage of "ask us" is not a number.
-  /// 
+  ///
   /// The other half of a bulk change is what the arithmetic leaves behind: a 7 %
   /// increase turns 19.90 into 21.293, which no merchant prints. Results are
   /// therefore rounded to the tenant's price_precision/rounding_mode and then
@@ -491,30 +485,32 @@ class Prices extends Service {
   /// — either the one this call names or the tenant's `bulk_adjust_rounding`.
   /// dry_run answers the same preview and writes nothing, which is what the
   /// Cockpit dialog shows before it commits.
-  Future<models.Error> pricesEntriesAdjust({required String listId, double? amount, bool? dryRun, double? percent, enums.PriceEndingRule? rounding, String? skuPrefix}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/entries/adjust'.replaceAll('{list_id}', listId);
+  Future<models.Error> pricesEntriesAdjust(
+      {required String listId,
+      double? amount,
+      bool? dryRun,
+      double? percent,
+      enums.PriceEndingRule? rounding,
+      String? skuPrefix}) async {
+    final String apiPath = '/v1/prices/lists/{list_id}/entries/adjust'
+        .replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            'amount': amount,
+    final Map<String, dynamic> apiParams = {
+      'amount': amount,
+      'dry_run': dryRun,
+      'percent': percent,
+      'rounding': rounding?.value,
+      'sku_prefix': skuPrefix,
+    };
 
-            'dry_run': dryRun,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'percent': percent,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'rounding': rounding?.value,
-
-            'sku_prefix': skuPrefix,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Adds entries to a list without wiping it, and UPSERTS rather than inserts:
@@ -523,31 +519,33 @@ class Prices extends Service {
   /// instead of duplicating the ladder. `mode: 'append'` keeps the old
   /// insert-everything behaviour. Inserts go out as one PostgREST bulk write per
   /// 1000 rows.
-  /// 
+  ///
   /// This is the route for a large price book, and a large book arrives in
   /// chunks: a call carries at most 5000 entries and a longer payload is refused
   /// with 400 rather than truncated, so an importer of 200 000 prices sends
   /// forty calls. Because the upsert is keyed on the rung rather than on a row
   /// id, the chunks may be re-sent and re-ordered freely — a chunk that lands
   /// twice writes the same prices twice.
-  Future<models.Error> pricesEntriesBulk({required String listId, required List<models.PriceEntryReplaceItem> entries, enums.PriceEntriesBulkMode? mode}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/entries/bulk'.replaceAll('{list_id}', listId);
+  Future<models.Error> pricesEntriesBulk(
+      {required String listId,
+      required List<models.PriceEntryReplaceItem> entries,
+      enums.PriceEntriesBulkMode? mode}) async {
+    final String apiPath = '/v1/prices/lists/{list_id}/entries/bulk'
+        .replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            'entries': entries.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      'entries': entries.map((p) => p.toMap()).toList(),
+      'mode': mode?.value,
+    };
 
-            'mode': mode?.value,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Writes a whole quantity-tier ladder (Staffelpreise) for ONE item in one
@@ -556,68 +554,70 @@ class Prices extends Service {
   /// and resolve returns it sorted as one array. What was missing was the
   /// gesture: "19.90 from 1, 5 % off per tier at 10 and 50". Prices are rounded
   /// and snapped exactly as a bulk adjust is.
-  Future<models.Error> pricesEntriesLadder({required String listId, required double basePrice, double? discountPercent, String? productId, List<double>? quantities, bool? replace, enums.PriceEndingRule? rounding, String? sku, String? unit}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/entries/ladder'.replaceAll('{list_id}', listId);
+  Future<models.Error> pricesEntriesLadder(
+      {required String listId,
+      required double basePrice,
+      double? discountPercent,
+      String? productId,
+      List<double>? quantities,
+      bool? replace,
+      enums.PriceEndingRule? rounding,
+      String? sku,
+      String? unit}) async {
+    final String apiPath = '/v1/prices/lists/{list_id}/entries/ladder'
+        .replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            'base_price': basePrice,
+    final Map<String, dynamic> apiParams = {
+      'base_price': basePrice,
+      'discount_percent': discountPercent,
+      'product_id': productId,
+      'quantities': quantities,
+      'replace': replace,
+      'rounding': rounding?.value,
+      'sku': sku,
+      'unit': unit,
+    };
 
-            'discount_percent': discountPercent,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product_id': productId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'quantities': quantities,
-
-            'replace': replace,
-
-            'rounding': rounding?.value,
-
-            'sku': sku,
-
-            'unit': unit,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Removes ONE rung. The item keeps its other rungs and stays priced — which
   /// is exactly what makes the lowest rung the dangerous one to delete.
-  /// 
+  ///
   /// Below the first threshold the FIRST rung's price applies (a minimum
   /// quantity belongs to the catalog, not to the price ladder). So deleting the
   /// "from 1" rung of a 1/10/50 ladder does not make single units unpriced: it
   /// sells them at the 10-up volume price, silently, from the next resolve call
   /// onwards. Nothing in the answer marks that the ladder no longer starts where
   /// it used to.
-  /// 
+  ///
   /// Delete an item's LAST rung and this list stops pricing it altogether: the
   /// item falls through to the next candidate list, or comes back `on_request`
   /// — never €0. To retire a price without losing it, set the rung's
   /// `price_type` to `on_request` instead, or deactivate the list. An entry
   /// belonging to another list answers 404 rather than being deleted through the
   /// wrong parent.
-  Future<models.Error> pricesEntriesDelete({required String listId, required String id}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/entries/{id}'.replaceAll('{list_id}', listId).replaceAll('{id}', id);
+  Future<models.Error> pricesEntriesDelete(
+      {required String listId, required String id}) async {
+    final String apiPath = '/v1/prices/lists/{list_id}/entries/{id}'
+        .replaceAll('{list_id}', listId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One rung of one ladder, exactly as stored — nothing is rounded, converted
@@ -629,26 +629,26 @@ class Prices extends Service {
   /// net/gross pair and the tax rate. The id is checked against the list in the
   /// path, so an entry belonging to another list answers 404 rather than being
   /// read through the wrong parent.
-  Future<models.Error> pricesEntriesGet({required String listId, required String id}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/entries/{id}'.replaceAll('{list_id}', listId).replaceAll('{id}', id);
+  Future<models.Error> pricesEntriesGet(
+      {required String listId, required String id}) async {
+    final String apiPath = '/v1/prices/lists/{list_id}/entries/{id}'
+        .replaceAll('{list_id}', listId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A partial update of one rung: send only what changes, a payload with no
   /// updatable column at all is refused, and the next resolve call reads what
   /// this one wrote.
-  /// 
+  ///
   /// Two edits reach further than the field they touch. Moving `quantity_min`
   /// moves the rung within the ladder and may land on a threshold the item
   /// already has — nothing stops it, and both rows then sit in the resolved
@@ -657,42 +657,46 @@ class Prices extends Service {
   /// request" even though the other rungs still carry amounts, and even where a
   /// less specific list would have priced it. That is the intended way to say
   /// "ask us" for an item, and a surprise if you meant to retire a single tier.
-  /// 
+  ///
   /// What this route cannot change is what the amount MEANS: currency and tax
   /// basis belong to the list, so re-denominating or switching net/gross is a
   /// list edit, not an entry edit. An entry of another list answers 404.
-  Future<models.Error> pricesEntriesUpdate({required String listId, required String id, Map? metadata, enums.PriceEntryType? priceType, String? productId, double? quantityMin, String? sku, String? unit, double? unitPrice, String? validFrom, String? validUntil}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/entries/{id}'.replaceAll('{list_id}', listId).replaceAll('{id}', id);
+  Future<models.Error> pricesEntriesUpdate(
+      {required String listId,
+      required String id,
+      Map? metadata,
+      enums.PriceEntryType? priceType,
+      String? productId,
+      double? quantityMin,
+      String? sku,
+      String? unit,
+      double? unitPrice,
+      String? validFrom,
+      String? validUntil}) async {
+    final String apiPath = '/v1/prices/lists/{list_id}/entries/{id}'
+        .replaceAll('{list_id}', listId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'metadata': metadata,
+    final Map<String, dynamic> apiParams = {
+      'metadata': metadata,
+      if (priceType != null) 'price_type': priceType.value,
+      'product_id': productId,
+      if (quantityMin != null) 'quantity_min': quantityMin,
+      'sku': sku,
+      'unit': unit,
+      if (unitPrice != null) 'unit_price': unitPrice,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+    };
 
-            if (priceType != null) 'price_type': priceType.value,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product_id': productId,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (quantityMin != null) 'quantity_min': quantityMin,
-
-            'sku': sku,
-
-            'unit': unit,
-
-            if (unitPrice != null) 'unit_price': unitPrice,
-
-            'valid_from': validFrom,
-
-            'valid_until': validUntil,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Promotes this list AND demotes whoever held the flag, in one call. The flag
@@ -700,28 +704,29 @@ class Prices extends Service {
   /// tie-break, so two defaults leave the winner to row order and none leaves a
   /// tie unsettled. Promote-then-demote as two PATCHes from a client produces
   /// exactly those two states whenever the second call does not land.
-  /// 
+  ///
   /// The write is as small as the change: exactly one write per row whose flag
   /// was wrong, and none at all for the rows that were already right. A tenant
   /// already in this state is therefore not written to, which is what makes
   /// repeating the call free. The answer is this list as it now stands plus the
   /// codes it demoted — empty when it already held the flag.
-  Future<models.Error> pricesListsMakeDefault({required String listId, required Map data}) async {
-    final String apiPath = '/v1/prices/lists/{list_id}/make-default'.replaceAll('{list_id}', listId);
+  Future<models.Error> pricesListsMakeDefault(
+      {required String listId, required Map data}) async {
+    final String apiPath = '/v1/prices/lists/{list_id}/make-default'
+        .replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The live price call. Everything else in this app configures prices; this is
@@ -731,10 +736,10 @@ class Prices extends Service {
   /// — and get back, per item, the unit price this buyer pays, the net/gross
   /// pair, the tax rate, the list that decided it and that item's full quantity
   /// ladder.
-  /// 
+  ///
   /// Which price wins when several match is the whole value of this app, and it
   /// is not guessable from the field types. The order, in full:
-  /// 
+  ///
   /// 1. **Candidates.** A list is a candidate when it is `active`, its currency
   /// EQUALS the currency of the call (nothing is ever converted — a list in
   /// another currency simply does not price the item), the instant `at` falls
@@ -767,7 +772,7 @@ class Prices extends Service {
   /// 7. **Nothing found → `on_request`, never 0**, with a reason
   /// (`not_priced`, `on_request_entry`, `anonymous_denied`, `no_identity`). A
   /// storefront shows "price on request"; it must never show €0.
-  /// 
+  ///
   /// Amounts: `unit_price` is per ONE unit of the entry’s `unit`, in
   /// `currency`, as a decimal in MAJOR units (19.90) — never minor units/cents
   /// — and on the basis `tax_basis` names. `tax_basis` comes from the list’s
@@ -775,17 +780,17 @@ class Prices extends Service {
   /// tenant’s `tax_inclusive_default`; `tax_basis_source` says which of the
   /// three. Read `unit_price_net`/`unit_price_gross` where you need an
   /// unambiguous number.
-  /// 
+  ///
   /// Tax is never guessed. The market comes from the `X-Revenexx-Market` header
   /// (a market CODE) or from `market_id` in the body; with several markets whose
   /// rates differ and no signal, the answer is `tax.resolved: false`, `reason:
   /// market_required` rather than another market’s VAT. `tax_rate: null` means
   /// UNKNOWN, not 0 %.
-  /// 
+  ///
   /// An item that cannot be priced never fails the call: it comes back
   /// on_request with its reason, so one bad line in a cart does not cost the
   /// other lines their prices.
-  /// 
+  ///
   /// One last thing worth knowing before you build on it. This is the most
   /// customised surface this app has in the field: pricing is where a tenant's
   /// ERP usually has the last word, and a tenant whose prices are computed there
@@ -799,34 +804,34 @@ class Prices extends Service {
   /// bulk changes, vocabularies) stays standard and keeps working. That is why
   /// the contract below is smaller than the machinery behind it, and why it
   /// changes reluctantly.
-  Future<models.Error> pricesResolve({required List<models.PriceResolveItem> items, String? at, String? channelId, String? contactId, String? currency, String? marketId, String? organizationId}) async {
+  Future<models.Error> pricesResolve(
+      {required List<models.PriceResolveItem> items,
+      String? at,
+      String? channelId,
+      String? contactId,
+      String? currency,
+      String? marketId,
+      String? organizationId}) async {
     const String apiPath = '/v1/prices/resolve';
 
-        final Map<String, dynamic> apiParams = {
-            'at': at,
+    final Map<String, dynamic> apiParams = {
+      'at': at,
+      'channel_id': channelId,
+      'contact_id': contactId,
+      'currency': currency,
+      'items': items.map((p) => p.toMap()).toList(),
+      'market_id': marketId,
+      'organization_id': organizationId,
+    };
 
-            'channel_id': channelId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'contact_id': contactId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'currency': currency,
-
-            'items': items.map((p) => p.toMap()).toList(),
-
-            'market_id': marketId,
-
-            'organization_id': organizationId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Discovery for the vocabulary routes: the enums this app enforces, each with
@@ -838,17 +843,14 @@ class Prices extends Service {
   Future<models.PriceVocabularyIndex> pricesVocabulariesList() async {
     const String apiPath = '/v1/prices/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.PriceVocabularyIndex.fromMap(res.data);
-
+    return models.PriceVocabularyIndex.fromMap(res.data);
   }
 
   /// One vocabulary in full: every permitted value, each with the title and
@@ -862,19 +864,18 @@ class Prices extends Service {
   /// exhaustive, so a value outside it is stale data rather than a missing
   /// label. Answers 404 for an unknown name. Names: list-statuses, price-types,
   /// tax-bases.
-  Future<models.Error> pricesVocabulariesGet({required enums.PricesVocabulariesGetName name}) async {
-    final String apiPath = '/v1/prices/vocabularies/{name}'.replaceAll('{name}', name.value);
+  Future<models.Error> pricesVocabulariesGet(
+      {required enums.PricesVocabulariesGetName name}) async {
+    final String apiPath =
+        '/v1/prices/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

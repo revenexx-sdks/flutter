@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = PaymentMethodCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.name, '');
-          });
+      expect(result.code, '');
+      expect(result.name, '');
+    });
   });
 }

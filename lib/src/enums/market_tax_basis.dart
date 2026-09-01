@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum MarketTaxBasis {
-    net(value: 'net'),
-    gross(value: 'gross');
+  net(value: 'net'),
+  gross(value: 'gross');
 
-    const MarketTaxBasis({
-        required this.value
-    });
+  const MarketTaxBasis({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

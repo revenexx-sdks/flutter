@@ -4,12 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrderCustomerRollupRequest', () {
     test('model', () {
-      final model = OrderCustomerRollupRequest(
-      );
+      final model = OrderCustomerRollupRequest();
 
       final map = model.toMap();
       final result = OrderCustomerRollupRequest.fromMap(map);
-
     });
   });
 }

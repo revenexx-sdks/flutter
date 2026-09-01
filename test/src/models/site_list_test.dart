@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = SiteList.fromMap(map);
 
-            expect(result.sites, []);
-                  expect(result.total, 0);
-          });
+      expect(result.sites, []);
+      expect(result.total, 0);
+    });
   });
 }

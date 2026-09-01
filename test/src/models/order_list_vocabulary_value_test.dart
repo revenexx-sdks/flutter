@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrderListVocabularyValue', () {
     test('model', () {
-      final model = OrderListVocabularyValue(
-      );
+      final model = OrderListVocabularyValue();
 
       final map = model.toMap();
       final result = OrderListVocabularyValue.fromMap(map);
-
     });
   });
 }

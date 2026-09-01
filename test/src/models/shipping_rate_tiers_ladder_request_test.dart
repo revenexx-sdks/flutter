@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = ShippingRateTiersLadderRequest.fromMap(map);
 
-            expect(result.base_price, 0);
-                  expect(result.step, 0);
-                  expect(result.to_value, 0);
-          });
+      expect(result.base_price, 0);
+      expect(result.step, 0);
+      expect(result.to_value, 0);
+    });
   });
 }

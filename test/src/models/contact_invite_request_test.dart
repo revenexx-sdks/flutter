@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = ContactInviteRequest.fromMap(map);
 
-            expect(result.url, '');
-          });
+      expect(result.url, '');
+    });
   });
 }

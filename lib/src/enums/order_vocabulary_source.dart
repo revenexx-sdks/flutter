@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum OrderVocabularySource {
-    schema(value: 'schema'),
-    app(value: 'app');
+  schema(value: 'schema'),
+  app(value: 'app');
 
-    const OrderVocabularySource({
-        required this.value
-    });
+  const OrderVocabularySource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

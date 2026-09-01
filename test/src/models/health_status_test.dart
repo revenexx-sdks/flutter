@@ -14,9 +14,9 @@ void main() {
       final map = model.toMap();
       final result = HealthStatus.fromMap(map);
 
-            expect(result.name, '');
-                  expect(result.ping, 0);
-                  expect(result.status, HealthStatusStatus.pass);
-          });
+      expect(result.name, '');
+      expect(result.ping, 0);
+      expect(result.status, HealthStatusStatus.pass);
+    });
   });
 }

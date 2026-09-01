@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('MarketUpdateRequest', () {
     test('model', () {
-      final model = MarketUpdateRequest(
-      );
+      final model = MarketUpdateRequest();
 
       final map = model.toMap();
       final result = MarketUpdateRequest.fromMap(map);
-
     });
   });
 }

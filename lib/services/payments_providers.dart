@@ -1,17 +1,17 @@
 part of '../revenexx.dart';
 
-  /// WHO moves the money, and what this app needs in order to talk to it. A
-  /// provider row is one PSP account of this tenant: a catalog code, the
-  /// credentials its auth scheme expects, whether it is live or in sandbox, and
-  /// the switches the driver reads. GET /payments/providers/catalog is the
-  /// closed set of codes a create accepts — roughly thirty connectors, shipped
-  /// with the app and identical for every tenant, each saying which auth scheme
-  /// and which credential FIELD NAMES it wants; the logo route serves the SVG
-  /// that catalog entry&#039;s `logo_url` points at, which is why it is the one route
-  /// in this app that needs no tenant identity. Nothing configured here is ever
-  /// read back: `credentials` and `webhook_secret` are write-only, so rotating a
-  /// secret means writing the new value. What a payment method COSTS or when it
-  /// is offered is never here — that belongs to the method.
+/// WHO moves the money, and what this app needs in order to talk to it. A
+/// provider row is one PSP account of this tenant: a catalog code, the
+/// credentials its auth scheme expects, whether it is live or in sandbox, and
+/// the switches the driver reads. GET /payments/providers/catalog is the
+/// closed set of codes a create accepts — roughly thirty connectors, shipped
+/// with the app and identical for every tenant, each saying which auth scheme
+/// and which credential FIELD NAMES it wants; the logo route serves the SVG
+/// that catalog entry&#039;s `logo_url` points at, which is why it is the one route
+/// in this app that needs no tenant identity. Nothing configured here is ever
+/// read back: `credentials` and `webhook_secret` are write-only, so rotating a
+/// secret means writing the new value. What a payment method COSTS or when it
+/// is offered is never here — that belongs to the method.
 class PaymentsProviders extends Service {
   /// Initializes a [PaymentsProviders] service
   PaymentsProviders(super.client);
@@ -29,19 +29,17 @@ class PaymentsProviders extends Service {
   /// passed through but labelled application/json, so use the app domain for
   /// <img> sources.
   Future<models.Error> paymentsLogosGet({required String slug}) async {
-    final String apiPath = '/v1/payments/logos/{slug}'.replaceAll('{slug}', slug);
+    final String apiPath =
+        '/v1/payments/logos/{slug}'.replaceAll('{slug}', slug);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// PSP secrets are write-only: 'credentials' and 'webhook_secret' are accepted
@@ -49,32 +47,30 @@ class PaymentsProviders extends Service {
   /// — the responses carry the public columns only (id, provider, name,
   /// enabled, test_mode, options, timestamps). To rotate a secret, write the new
   /// value; there is no way to read the current one back.
-  Future paymentsProvidersList({int? limit, int? offset, String? order, String? provider, bool? enabled, bool? testMode}) async {
+  Future paymentsProvidersList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? provider,
+      bool? enabled,
+      bool? testMode}) async {
     const String apiPath = '/v1/payments/providers';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (provider != null) 'provider': provider,
+      if (enabled != null) 'enabled': enabled,
+      if (testMode != null) 'test_mode': testMode,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (provider != null) 'provider': provider,
-
-            if (enabled != null) 'enabled': enabled,
-
-            if (testMode != null) 'test_mode': testMode,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Activates one PSP account of this tenant. The `provider` code is not free
@@ -87,34 +83,34 @@ class PaymentsProviders extends Service {
   /// the responses carry the public columns only (id, provider, name, enabled,
   /// test_mode, options, timestamps). To rotate a secret, write the new value;
   /// there is no way to read the current one back.
-  Future<models.Error> paymentsProvidersCreate({required String provider, Map? credentials, bool? enabled, String? name, Map? options, bool? testMode, String? webhookSecret}) async {
+  Future<models.Error> paymentsProvidersCreate(
+      {required String provider,
+      Map? credentials,
+      bool? enabled,
+      String? name,
+      Map? options,
+      bool? testMode,
+      String? webhookSecret}) async {
     const String apiPath = '/v1/payments/providers';
 
-        final Map<String, dynamic> apiParams = {
-            'credentials': credentials,
+    final Map<String, dynamic> apiParams = {
+      'credentials': credentials,
+      'enabled': enabled,
+      'name': name,
+      'options': options,
+      'provider': provider,
+      'test_mode': testMode,
+      'webhook_secret': webhookSecret,
+    };
 
-            'enabled': enabled,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'name': name,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'options': options,
-
-            'provider': provider,
-
-            'test_mode': testMode,
-
-            'webhook_secret': webhookSecret,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The closed set of `provider` codes POST /payments/providers accepts —
@@ -135,17 +131,14 @@ class PaymentsProviders extends Service {
   Future paymentsProvidersCatalog() async {
     const String apiPath = '/v1/payments/providers/catalog';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Removes the PSP account row and its stored secrets, once nothing depends on
@@ -177,17 +170,14 @@ class PaymentsProviders extends Service {
   Future<models.Error> paymentsProvidersDelete({required String id}) async {
     final String apiPath = '/v1/payments/providers/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// PSP secrets are write-only: 'credentials' and 'webhook_secret' are accepted
@@ -198,17 +188,14 @@ class PaymentsProviders extends Service {
   Future<models.Error> paymentsProvidersGet({required String id}) async {
     final String apiPath = '/v1/payments/providers/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A partial write: omitted fields keep their value. Three things are changed
@@ -225,33 +212,34 @@ class PaymentsProviders extends Service {
   /// is refused with the same 409 while anything still names the current code.
   /// Switching acquirer is a second configuration plus `enabled: false` on this
   /// one, never a rename.
-  Future<models.Error> paymentsProvidersUpdate({required String id, Map? credentials, bool? enabled, String? name, Map? options, String? provider, bool? testMode, String? webhookSecret}) async {
+  Future<models.Error> paymentsProvidersUpdate(
+      {required String id,
+      Map? credentials,
+      bool? enabled,
+      String? name,
+      Map? options,
+      String? provider,
+      bool? testMode,
+      String? webhookSecret}) async {
     final String apiPath = '/v1/payments/providers/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'credentials': credentials,
+    final Map<String, dynamic> apiParams = {
+      'credentials': credentials,
+      if (enabled != null) 'enabled': enabled,
+      if (name != null) 'name': name,
+      'options': options,
+      if (provider != null) 'provider': provider,
+      if (testMode != null) 'test_mode': testMode,
+      'webhook_secret': webhookSecret,
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (name != null) 'name': name,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'options': options,
-
-            if (provider != null) 'provider': provider,
-
-            if (testMode != null) 'test_mode': testMode,
-
-            'webhook_secret': webhookSecret,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

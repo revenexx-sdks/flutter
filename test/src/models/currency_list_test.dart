@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = CurrencyList.fromMap(map);
 
-            expect(result.currencies, []);
-                  expect(result.total, 0);
-          });
+      expect(result.currencies, []);
+      expect(result.total, 0);
+    });
   });
 }

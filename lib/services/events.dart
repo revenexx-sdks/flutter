@@ -1,7 +1,7 @@
 part of '../revenexx.dart';
 
-  /// The tenant&#039;s event catalog: every event type its installed apps and
-  /// platform services declare, what causes each one, and what it carries.
+/// The tenant&#039;s event catalog: every event type its installed apps and
+/// platform services declare, what causes each one, and what it carries.
 class Events extends Service {
   /// Initializes a [Events] service
   Events(super.client);
@@ -13,18 +13,15 @@ class Events extends Service {
   Future eventsGetCatalog({String? fields}) async {
     const String apiPath = '/v1/events/catalog';
 
-        final Map<String, dynamic> apiParams = {
-            if (fields != null) 'fields': fields,
+    final Map<String, dynamic> apiParams = {
+      if (fields != null) 'fields': fields,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {};
 
-        final Map<String, String> apiHeaders = {
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 }

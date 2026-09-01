@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = SessionList.fromMap(map);
 
-            expect(result.sessions, []);
-                  expect(result.total, 0);
-          });
+      expect(result.sessions, []);
+      expect(result.total, 0);
+    });
   });
 }

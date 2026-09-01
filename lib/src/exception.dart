@@ -13,7 +13,7 @@ class RevenexxException implements Exception {
 
   /// Initializes an Revenexx Exception.
   RevenexxException([this.message = "", this.code, this.type, this.response]);
-  
+
   /// Returns the error type, message, and code.
   @override
   String toString() {

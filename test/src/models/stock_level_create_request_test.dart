@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = StockLevelCreateRequest.fromMap(map);
 
-            expect(result.location_id, '');
-          });
+      expect(result.location_id, '');
+    });
   });
 }

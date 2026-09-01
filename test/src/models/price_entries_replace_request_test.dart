@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = PriceEntriesReplaceRequest.fromMap(map);
 
-            expect(result.entries, []);
-          });
+      expect(result.entries, []);
+    });
   });
 }

@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ValidationFailedResponse', () {
     test('model', () {
-      final model = ValidationFailedResponse(
-      );
+      final model = ValidationFailedResponse();
 
       final map = model.toMap();
       final result = ValidationFailedResponse.fromMap(map);
-
     });
   });
 }

@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = CategoriesCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-          });
+      expect(result.code, '');
+    });
   });
 }

@@ -1,13 +1,11 @@
 part of '../../enums.dart';
 
 enum OrderListVocabularyName {
-    kinds(value: 'kinds');
+  kinds(value: 'kinds');
 
-    const OrderListVocabularyName({
-        required this.value
-    });
+  const OrderListVocabularyName({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

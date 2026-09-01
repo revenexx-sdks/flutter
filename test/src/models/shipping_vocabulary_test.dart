@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ShippingVocabulary', () {
     test('model', () {
-      final model = ShippingVocabulary(
-      );
+      final model = ShippingVocabulary();
 
       final map = model.toMap();
       final result = ShippingVocabulary.fromMap(map);
-
     });
   });
 }

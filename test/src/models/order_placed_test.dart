@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrderPlaced', () {
     test('model', () {
-      final model = OrderPlaced(
-      );
+      final model = OrderPlaced();
 
       final map = model.toMap();
       final result = OrderPlaced.fromMap(map);
-
     });
   });
 }

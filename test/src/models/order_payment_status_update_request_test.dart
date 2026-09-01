@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = OrderPaymentStatusUpdateRequest.fromMap(map);
 
-            expect(result.status, OrderPaymentStatus.open);
-          });
+      expect(result.status, OrderPaymentStatus.open);
+    });
   });
 }

@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('PriceVocabularyRef', () {
     test('model', () {
-      final model = PriceVocabularyRef(
-      );
+      final model = PriceVocabularyRef();
 
       final map = model.toMap();
       final result = PriceVocabularyRef.fromMap(map);
-
     });
   });
 }

@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('FormSubmissionPruneRequest', () {
     test('model', () {
-      final model = FormSubmissionPruneRequest(
-      );
+      final model = FormSubmissionPruneRequest();
 
       final map = model.toMap();
       final result = FormSubmissionPruneRequest.fromMap(map);
-
     });
   });
 }

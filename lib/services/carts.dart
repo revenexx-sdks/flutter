@@ -1,15 +1,15 @@
 part of '../revenexx.dart';
 
-  /// The cart itself and every move it makes. Who owns one — a customer as
-  /// `contact_id`, or a guest as the storefront&#039;s own `session_key`, never
-  /// neither — how it is opened, read, renamed and thrown away, which of an
-  /// owner&#039;s carts is THE current one, and the lifecycle a cart travels:
-  /// abandoned and taken back, handed to order management, folded into another
-  /// cart, or claimed for a contact on login. The scheduled sweep that abandons
-  /// and deletes on a clock is the same lifecycle without a human, so it lives
-  /// here too, as do the vocabularies behind the enums these routes enforce. The
-  /// LINES inside a cart are their own group, and so is moving carts in and out
-  /// as files.
+/// The cart itself and every move it makes. Who owns one — a customer as
+/// `contact_id`, or a guest as the storefront&#039;s own `session_key`, never
+/// neither — how it is opened, read, renamed and thrown away, which of an
+/// owner&#039;s carts is THE current one, and the lifecycle a cart travels:
+/// abandoned and taken back, handed to order management, folded into another
+/// cart, or claimed for a contact on login. The scheduled sweep that abandons
+/// and deletes on a clock is the same lifecycle without a human, so it lives
+/// here too, as do the vocabularies behind the enums these routes enforce. The
+/// LINES inside a cart are their own group, and so is moving carts in and out
+/// as files.
 class Carts extends Service {
   /// Initializes a [Carts] service
   Carts(super.client);
@@ -25,58 +25,56 @@ class Carts extends Service {
   /// QUANTITIES, not the number of lines — but never its lines: those are one
   /// call per cart. With no filter at all this is every cart the tenant holds,
   /// paged, which is a report rather than a session lookup.
-  Future<models.Error> cartsList({String? id, String? name, enums.CartStatus? status, String? contactId, String? sessionKey, String? channelId, String? currency, bool? isCurrent, int? itemCount, double? subtotal, String? abandonedAt, String? orderedAt, String? orderRef, String? mergedIntoCartId, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
+  Future<models.Error> cartsList(
+      {String? id,
+      String? name,
+      enums.CartStatus? status,
+      String? contactId,
+      String? sessionKey,
+      String? channelId,
+      String? currency,
+      bool? isCurrent,
+      int? itemCount,
+      double? subtotal,
+      String? abandonedAt,
+      String? orderedAt,
+      String? orderRef,
+      String? mergedIntoCartId,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/carts';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (status != null) 'status': status.value,
+      if (contactId != null) 'contact_id': contactId,
+      if (sessionKey != null) 'session_key': sessionKey,
+      if (channelId != null) 'channel_id': channelId,
+      if (currency != null) 'currency': currency,
+      if (isCurrent != null) 'is_current': isCurrent,
+      if (itemCount != null) 'item_count': itemCount,
+      if (subtotal != null) 'subtotal': subtotal,
+      if (abandonedAt != null) 'abandoned_at': abandonedAt,
+      if (orderedAt != null) 'ordered_at': orderedAt,
+      if (orderRef != null) 'order_ref': orderRef,
+      if (mergedIntoCartId != null) 'merged_into_cart_id': mergedIntoCartId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (name != null) 'name': name,
+    final Map<String, String> apiHeaders = {};
 
-            if (status != null) 'status': status.value,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (contactId != null) 'contact_id': contactId,
-
-            if (sessionKey != null) 'session_key': sessionKey,
-
-            if (channelId != null) 'channel_id': channelId,
-
-            if (currency != null) 'currency': currency,
-
-            if (isCurrent != null) 'is_current': isCurrent,
-
-            if (itemCount != null) 'item_count': itemCount,
-
-            if (subtotal != null) 'subtotal': subtotal,
-
-            if (abandonedAt != null) 'abandoned_at': abandonedAt,
-
-            if (orderedAt != null) 'ordered_at': orderedAt,
-
-            if (orderRef != null) 'order_ref': orderRef,
-
-            if (mergedIntoCartId != null) 'merged_into_cart_id': mergedIntoCartId,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Opens an empty cart. The one thing it requires is an OWNER — `contact_id`
@@ -91,34 +89,34 @@ class Carts extends Service {
   /// THAT cart. Send `is_current: true` to have the new cart made current in the
   /// same call, which clears the flag on every sibling of the same owner. Lines
   /// are added afterwards, one call each or one bulk replace.
-  Future<models.Error> cartsCreate({String? channelId, String? contactId, String? currency, bool? isCurrent, Map? metadata, String? name, String? sessionKey}) async {
+  Future<models.Error> cartsCreate(
+      {String? channelId,
+      String? contactId,
+      String? currency,
+      bool? isCurrent,
+      Map? metadata,
+      String? name,
+      String? sessionKey}) async {
     const String apiPath = '/v1/carts';
 
-        final Map<String, dynamic> apiParams = {
-            'channel_id': channelId,
+    final Map<String, dynamic> apiParams = {
+      'channel_id': channelId,
+      'contact_id': contactId,
+      'currency': currency,
+      'is_current': isCurrent,
+      'metadata': metadata,
+      'name': name,
+      'session_key': sessionKey,
+    };
 
-            'contact_id': contactId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'currency': currency,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'is_current': isCurrent,
-
-            'metadata': metadata,
-
-            'name': name,
-
-            'session_key': sessionKey,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The login call, and the one route that turns a guest into a customer: every
@@ -135,28 +133,28 @@ class Carts extends Service {
   /// 'replace' clears them first. 'strategy' overrides it for one call (merge |
   /// replace); the answer always echoes which one ran and how many lines a
   /// replace removed.
-  Future<models.Error> cartsClaim({required String contactId, required String sessionKey, enums.CartMergeStrategy? strategy, String? targetCartId}) async {
+  Future<models.Error> cartsClaim(
+      {required String contactId,
+      required String sessionKey,
+      enums.CartMergeStrategy? strategy,
+      String? targetCartId}) async {
     const String apiPath = '/v1/carts/claim';
 
-        final Map<String, dynamic> apiParams = {
-            'contact_id': contactId,
+    final Map<String, dynamic> apiParams = {
+      'contact_id': contactId,
+      'session_key': sessionKey,
+      'strategy': strategy?.value,
+      'target_cart_id': targetCartId,
+    };
 
-            'session_key': sessionKey,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'strategy': strategy?.value,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'target_cart_id': targetCartId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Two sweeps in one pass. abandon_after_minutes marks active carts that have
@@ -169,22 +167,22 @@ class Carts extends Service {
   /// sale. Send dry_run to get the same counts and cart ids while writing
   /// nothing. The platform runs this per installed tenant on the schedule; it is
   /// idempotent, so calling it by hand between ticks is safe.
-  Future<models.CartMaintenanceResult> cartsMaintenanceRun({bool? dryRun}) async {
+  Future<models.CartMaintenanceResult> cartsMaintenanceRun(
+      {bool? dryRun}) async {
     const String apiPath = '/v1/carts/maintenance/run';
 
-        final Map<String, dynamic> apiParams = {
-            'dry_run': dryRun,
+    final Map<String, dynamic> apiParams = {
+      'dry_run': dryRun,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.CartMaintenanceResult.fromMap(res.data);
-
+    return models.CartMaintenanceResult.fromMap(res.data);
   }
 
   /// Which of the two carts survives is the whole question, and the answer is
@@ -199,24 +197,23 @@ class Carts extends Service {
   /// always land as new ones. Both carts must be active and must differ, and the
   /// tenant's line limits are enforced on the target as the copies land (422).
   /// Reach for carts.merge_into where the caller holds one cart id and not two.
-  Future<models.Error> cartsMerge({required String sourceCartId, required String targetCartId}) async {
+  Future<models.Error> cartsMerge(
+      {required String sourceCartId, required String targetCartId}) async {
     const String apiPath = '/v1/carts/merge';
 
-        final Map<String, dynamic> apiParams = {
-            'source_cart_id': sourceCartId,
+    final Map<String, dynamic> apiParams = {
+      'source_cart_id': sourceCartId,
+      'target_cart_id': targetCartId,
+    };
 
-            'target_cart_id': targetCartId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Discovery for the vocabulary routes: every enum this app publishes, each as
@@ -229,17 +226,14 @@ class Carts extends Service {
   Future<models.CartVocabularyIndex> cartsVocabulariesList() async {
     const String apiPath = '/v1/carts/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.CartVocabularyIndex.fromMap(res.data);
-
+    return models.CartVocabularyIndex.fromMap(res.data);
   }
 
   /// One vocabulary with its values filled in — every value permitted by the
@@ -254,19 +248,17 @@ class Carts extends Service {
   /// stale data rather than a missing label. Names: io-apply-modes,
   /// io-directions, io-entities, io-formats, item-types, statuses.
   Future<models.Error> cartsVocabulariesGet({required enums.Name name}) async {
-    final String apiPath = '/v1/carts/vocabularies/{name}'.replaceAll('{name}', name.value);
+    final String apiPath =
+        '/v1/carts/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Removes the cart row and, through the `on delete cascade` on
@@ -292,17 +284,14 @@ class Carts extends Service {
   Future<models.Error> cartsDelete({required String id}) async {
     final String apiPath = '/v1/carts/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One cart with its owner, its totals and its lifecycle stamps — and none
@@ -319,17 +308,14 @@ class Carts extends Service {
   Future<models.Error> cartsGet({required String id}) async {
     final String apiPath = '/v1/carts/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The four columns a cart's own editing screen owns, and only those: `name`,
@@ -342,28 +328,29 @@ class Carts extends Service {
   /// carrying none of the four answers 400 rather than storing nothing quietly,
   /// so a caller never believes an ignored field was saved. The owner is not
   /// updatable either: a guest cart becomes a customer's through carts.claim.
-  Future<models.Error> cartsUpdate({required String id, String? channelId, String? currency, Map? metadata, String? name}) async {
+  Future<models.Error> cartsUpdate(
+      {required String id,
+      String? channelId,
+      String? currency,
+      Map? metadata,
+      String? name}) async {
     final String apiPath = '/v1/carts/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'channel_id': channelId,
+    final Map<String, dynamic> apiParams = {
+      'channel_id': channelId,
+      'currency': currency,
+      'metadata': metadata,
+      if (name != null) 'name': name,
+    };
 
-            'currency': currency,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'metadata': metadata,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (name != null) 'name': name,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The by-hand half of the abandonment funnel: an active cart becomes
@@ -379,17 +366,14 @@ class Carts extends Service {
   Future<models.Error> cartsAbandon({required String id}) async {
     final String apiPath = '/v1/carts/{id}/abandon'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Activate writes exactly one thing: `is_current` on this cart, cleared on
@@ -403,17 +387,14 @@ class Carts extends Service {
   Future<models.Error> cartsActivate({required String id}) async {
     final String apiPath = '/v1/carts/{id}/activate'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Identical to carts.merge, with the SOURCE taken from the path — which is
@@ -425,22 +406,22 @@ class Carts extends Service {
   /// `merged_into_cart_id` pointing at it. Getting the two the wrong way round
   /// is the mistake this route exists to make hard, so read the path id as "the
   /// cart I am giving away". Both carts must be active and must differ.
-  Future<models.Error> cartsMergeInto({required String id, required String targetCartId}) async {
+  Future<models.Error> cartsMergeInto(
+      {required String id, required String targetCartId}) async {
     final String apiPath = '/v1/carts/{id}/merge-into'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'target_cart_id': targetCartId,
+    final Map<String, dynamic> apiParams = {
+      'target_cart_id': targetCartId,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The hand-over to order management, and the end of the cart as a workspace:
@@ -458,22 +439,22 @@ class Carts extends Service {
   /// inventories is asked to hold the lines; at 'require' a refusal answers 409
   /// and the cart stays active and unchanged. The reservation is attempted
   /// BEFORE anything is written.
-  Future<models.Error> cartsOrder({required String id, String? orderRef}) async {
+  Future<models.Error> cartsOrder(
+      {required String id, String? orderRef}) async {
     final String apiPath = '/v1/carts/{id}/order'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'order_ref': orderRef,
+    final Map<String, dynamic> apiParams = {
+      'order_ref': orderRef,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Takes an abandoned cart back to 'active' with its lines exactly as they
@@ -489,16 +470,13 @@ class Carts extends Service {
   Future<models.Error> cartsReopen({required String id}) async {
     final String apiPath = '/v1/carts/{id}/reopen'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

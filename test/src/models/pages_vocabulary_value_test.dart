@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('PagesVocabularyValue', () {
     test('model', () {
-      final model = PagesVocabularyValue(
-      );
+      final model = PagesVocabularyValue();
 
       final map = model.toMap();
       final result = PagesVocabularyValue.fromMap(map);
-
     });
   });
 }

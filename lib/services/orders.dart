@@ -1,35 +1,35 @@
 part of '../revenexx.dart';
 
-  /// Commerce Studio Orders App — the Order Management core. Orders are
-  /// snapshots (items, addresses, buyer, payment, shipping frozen at place-time)
-  /// with three independent status dimensions: lifecycle
-  /// (pending→placed→in_fulfillment→completed|cancelled, plus an
-  /// orthogonal on_hold flag), payment_status (fed from payments), and a
-  /// fulfillment_status DERIVED from quantity-based position bookkeeping
-  /// (quantity_shipped/cancelled/returned per item — partial everything).
-  /// Shipments with carrier/tracking, quantity-based cancellations, a FULL
-  /// returns lifecycle (registered→received→completed|rejected with
-  /// per-position restock flags), internal/customer comments, configurable
-  /// number ranges (format {prefix}{counter:padding}{suffix}, configurable
-  /// position numbering) and the order_events table: audit trail AND domain
-  /// event feed in one — every action writes an event row, the manifest emits
-  /// order_event.created on insert and the row name (order.placed,
-  /// order.shipment.created, order.return.completed, …) is the domain event.
-  /// Beside that raw feed the app fires 14 NAMED topics —
-  /// order.placed/requested, acknowledged, cancelled, item_cancelled,
-  /// shipment_created, completed, payment_status_changed, held/unheld and the
-  /// four return topics — each keyed to the order id, so one realtime
-  /// subscription hears an order&#039;s whole life. Subscribe to those OR to
-  /// order_event.created, never to both. order.placed is the event to act on
-  /// rather than the entity event order.created: that one fires on the orders
-  /// INSERT, before any position row exists, and fires for a quote request too.
-  /// Integration boundary: the event lands on the bus — ERP workflows live in
-  /// Integration Studio. Revenue leaves the app only as an ANSWER:
-  /// orders.reports.customer-rollup aggregates per-organization order count,
-  /// revenue, first/last order date and 30/90/365-day windows in additive form
-  /// (count/sum/min/max, so partial answers merge) — the customers app
-  /// materializes it into a local projection its segment rules can query,
-  /// because a cross-app join is forbidden (ADR-0055).
+/// Commerce Studio Orders App — the Order Management core. Orders are
+/// snapshots (items, addresses, buyer, payment, shipping frozen at place-time)
+/// with three independent status dimensions: lifecycle
+/// (pending→placed→in_fulfillment→completed|cancelled, plus an
+/// orthogonal on_hold flag), payment_status (fed from payments), and a
+/// fulfillment_status DERIVED from quantity-based position bookkeeping
+/// (quantity_shipped/cancelled/returned per item — partial everything).
+/// Shipments with carrier/tracking, quantity-based cancellations, a FULL
+/// returns lifecycle (registered→received→completed|rejected with
+/// per-position restock flags), internal/customer comments, configurable
+/// number ranges (format {prefix}{counter:padding}{suffix}, configurable
+/// position numbering) and the order_events table: audit trail AND domain
+/// event feed in one — every action writes an event row, the manifest emits
+/// order_event.created on insert and the row name (order.placed,
+/// order.shipment.created, order.return.completed, …) is the domain event.
+/// Beside that raw feed the app fires 14 NAMED topics —
+/// order.placed/requested, acknowledged, cancelled, item_cancelled,
+/// shipment_created, completed, payment_status_changed, held/unheld and the
+/// four return topics — each keyed to the order id, so one realtime
+/// subscription hears an order&#039;s whole life. Subscribe to those OR to
+/// order_event.created, never to both. order.placed is the event to act on
+/// rather than the entity event order.created: that one fires on the orders
+/// INSERT, before any position row exists, and fires for a quote request too.
+/// Integration boundary: the event lands on the bus — ERP workflows live in
+/// Integration Studio. Revenue leaves the app only as an ANSWER:
+/// orders.reports.customer-rollup aggregates per-organization order count,
+/// revenue, first/last order date and 30/90/365-day windows in additive form
+/// (count/sum/min/max, so partial answers merge) — the customers app
+/// materializes it into a local projection its segment rules can query,
+/// because a cross-app join is forbidden (ADR-0055).
 class Orders extends Service {
   /// Initializes a [Orders] service
   Orders(super.client);
@@ -47,76 +47,76 @@ class Orders extends Service {
   /// jsonb columns buyer, billing_address, shipping_address, payment, shipping,
   /// user_data and metadata reach the database as a text comparison and answer
   /// 400 invalid_value for anything that is not a whole JSON document.
-  Future ordersList({String? id, String? number, String? customerOrderNumber, String? externalRef, String? acknowledgedAt, String? cartId, String? contactId, String? organizationId, String? channelId, String? currency, enums.OrderStatus? status, enums.OrderPaymentStatus? paymentStatus, enums.OrderFulfillmentStatus? fulfillmentStatus, bool? onHold, String? holdReason, int? itemCount, double? subtotal, double? shippingTotal, double? taxTotal, double? grandTotal, String? placedAt, String? completedAt, String? cancelledAt, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
+  Future ordersList(
+      {String? id,
+      String? number,
+      String? customerOrderNumber,
+      String? externalRef,
+      String? acknowledgedAt,
+      String? cartId,
+      String? contactId,
+      String? organizationId,
+      String? channelId,
+      String? currency,
+      enums.OrderStatus? status,
+      enums.OrderPaymentStatus? paymentStatus,
+      enums.OrderFulfillmentStatus? fulfillmentStatus,
+      bool? onHold,
+      String? holdReason,
+      int? itemCount,
+      double? subtotal,
+      double? shippingTotal,
+      double? taxTotal,
+      double? grandTotal,
+      String? placedAt,
+      String? completedAt,
+      String? cancelledAt,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/orders';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (number != null) 'number': number,
+      if (customerOrderNumber != null)
+        'customer_order_number': customerOrderNumber,
+      if (externalRef != null) 'external_ref': externalRef,
+      if (acknowledgedAt != null) 'acknowledged_at': acknowledgedAt,
+      if (cartId != null) 'cart_id': cartId,
+      if (contactId != null) 'contact_id': contactId,
+      if (organizationId != null) 'organization_id': organizationId,
+      if (channelId != null) 'channel_id': channelId,
+      if (currency != null) 'currency': currency,
+      if (status != null) 'status': status.value,
+      if (paymentStatus != null) 'payment_status': paymentStatus.value,
+      if (fulfillmentStatus != null)
+        'fulfillment_status': fulfillmentStatus.value,
+      if (onHold != null) 'on_hold': onHold,
+      if (holdReason != null) 'hold_reason': holdReason,
+      if (itemCount != null) 'item_count': itemCount,
+      if (subtotal != null) 'subtotal': subtotal,
+      if (shippingTotal != null) 'shipping_total': shippingTotal,
+      if (taxTotal != null) 'tax_total': taxTotal,
+      if (grandTotal != null) 'grand_total': grandTotal,
+      if (placedAt != null) 'placed_at': placedAt,
+      if (completedAt != null) 'completed_at': completedAt,
+      if (cancelledAt != null) 'cancelled_at': cancelledAt,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (number != null) 'number': number,
+    final Map<String, String> apiHeaders = {};
 
-            if (customerOrderNumber != null) 'customer_order_number': customerOrderNumber,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (externalRef != null) 'external_ref': externalRef,
-
-            if (acknowledgedAt != null) 'acknowledged_at': acknowledgedAt,
-
-            if (cartId != null) 'cart_id': cartId,
-
-            if (contactId != null) 'contact_id': contactId,
-
-            if (organizationId != null) 'organization_id': organizationId,
-
-            if (channelId != null) 'channel_id': channelId,
-
-            if (currency != null) 'currency': currency,
-
-            if (status != null) 'status': status.value,
-
-            if (paymentStatus != null) 'payment_status': paymentStatus.value,
-
-            if (fulfillmentStatus != null) 'fulfillment_status': fulfillmentStatus.value,
-
-            if (onHold != null) 'on_hold': onHold,
-
-            if (holdReason != null) 'hold_reason': holdReason,
-
-            if (itemCount != null) 'item_count': itemCount,
-
-            if (subtotal != null) 'subtotal': subtotal,
-
-            if (shippingTotal != null) 'shipping_total': shippingTotal,
-
-            if (taxTotal != null) 'tax_total': taxTotal,
-
-            if (grandTotal != null) 'grand_total': grandTotal,
-
-            if (placedAt != null) 'placed_at': placedAt,
-
-            if (completedAt != null) 'completed_at': completedAt,
-
-            if (cancelledAt != null) 'cancelled_at': cancelledAt,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// The counters this tenant numbers its orders, delivery notes and returns
@@ -131,48 +131,46 @@ class Orders extends Service {
   /// which is why it is not offered here. It does not draw a number: `counter`
   /// is the last number DRAWN, and only placing an order, a shipment or a return
   /// moves it.
-  Future ordersNumberRangesList({String? id, String? code, String? prefix, String? suffix, int? padding, int? counter, int? step, int? positionStep, String? channelId, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
+  Future ordersNumberRangesList(
+      {String? id,
+      String? code,
+      String? prefix,
+      String? suffix,
+      int? padding,
+      int? counter,
+      int? step,
+      int? positionStep,
+      String? channelId,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/orders/number-ranges';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (prefix != null) 'prefix': prefix,
+      if (suffix != null) 'suffix': suffix,
+      if (padding != null) 'padding': padding,
+      if (counter != null) 'counter': counter,
+      if (step != null) 'step': step,
+      if (positionStep != null) 'position_step': positionStep,
+      if (channelId != null) 'channel_id': channelId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {};
 
-            if (prefix != null) 'prefix': prefix,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (suffix != null) 'suffix': suffix,
-
-            if (padding != null) 'padding': padding,
-
-            if (counter != null) 'counter': counter,
-
-            if (step != null) 'step': step,
-
-            if (positionStep != null) 'position_step': positionStep,
-
-            if (channelId != null) 'channel_id': channelId,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Add a counter beyond the three a tenant is seeded with, and give it the
@@ -186,38 +184,38 @@ class Orders extends Service {
   /// name. It does not renumber anything that already exists, and setting
   /// `counter` to a value already issued re-issues those numbers, which the
   /// unique index on the order number then refuses.
-  Future<models.Error> ordersNumberRangesCreate({required String code, String? channelId, int? counter, Map? metadata, int? padding, int? positionStep, String? prefix, int? step, String? suffix}) async {
+  Future<models.Error> ordersNumberRangesCreate(
+      {required String code,
+      String? channelId,
+      int? counter,
+      Map? metadata,
+      int? padding,
+      int? positionStep,
+      String? prefix,
+      int? step,
+      String? suffix}) async {
     const String apiPath = '/v1/orders/number-ranges';
 
-        final Map<String, dynamic> apiParams = {
-            if (channelId != null) 'channel_id': channelId,
+    final Map<String, dynamic> apiParams = {
+      if (channelId != null) 'channel_id': channelId,
+      'code': code,
+      if (counter != null) 'counter': counter,
+      if (metadata != null) 'metadata': metadata,
+      if (padding != null) 'padding': padding,
+      if (positionStep != null) 'position_step': positionStep,
+      if (prefix != null) 'prefix': prefix,
+      if (step != null) 'step': step,
+      if (suffix != null) 'suffix': suffix,
+    };
 
-            'code': code,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (counter != null) 'counter': counter,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (metadata != null) 'metadata': metadata,
-
-            if (padding != null) 'padding': padding,
-
-            if (positionStep != null) 'position_step': positionStep,
-
-            if (prefix != null) 'prefix': prefix,
-
-            if (step != null) 'step': step,
-
-            if (suffix != null) 'suffix': suffix,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Make sure the three codes this app draws from exist: 'order' (ORD-),
@@ -232,17 +230,14 @@ class Orders extends Service {
   Future<models.OrderNumberRangesSeeded> ordersNumberRangesDefaults() async {
     const String apiPath = '/v1/orders/number-ranges/defaults';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.OrderNumberRangesSeeded.fromMap(res.data);
-
+    return models.OrderNumberRangesSeeded.fromMap(res.data);
   }
 
   /// Remove a counter a tenant no longer numbers anything from. It touches
@@ -254,19 +249,17 @@ class Orders extends Service {
   /// /orders/number-ranges/defaults or a reinstall seeds it again, which starts
   /// its counter back at 0.
   Future<models.Error> ordersNumberRangesDelete({required String id}) async {
-    final String apiPath = '/v1/orders/number-ranges/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/orders/number-ranges/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One counter with its whole configuration: the prefix and suffix around the
@@ -278,19 +271,17 @@ class Orders extends Service {
   /// `code`, and a code is turned into a range through GET
   /// /orders/number-ranges?code=order.
   Future<models.Error> ordersNumberRangesGet({required String id}) async {
-    final String apiPath = '/v1/orders/number-ranges/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/orders/number-ranges/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Change the format or the state of an existing counter: a new prefix or
@@ -302,38 +293,40 @@ class Orders extends Service {
   /// numbers, and moving it back re-issues numbers that exist, which the unique
   /// index on the order number answers 409 for at place-time rather than here.
   /// Renaming `code` to one another range of this tenant already holds is a 409.
-  Future<models.Error> ordersNumberRangesUpdate({required String id, String? channelId, String? code, int? counter, Map? metadata, int? padding, int? positionStep, String? prefix, int? step, String? suffix}) async {
-    final String apiPath = '/v1/orders/number-ranges/{id}'.replaceAll('{id}', id);
+  Future<models.Error> ordersNumberRangesUpdate(
+      {required String id,
+      String? channelId,
+      String? code,
+      int? counter,
+      Map? metadata,
+      int? padding,
+      int? positionStep,
+      String? prefix,
+      int? step,
+      String? suffix}) async {
+    final String apiPath =
+        '/v1/orders/number-ranges/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (channelId != null) 'channel_id': channelId,
+    final Map<String, dynamic> apiParams = {
+      if (channelId != null) 'channel_id': channelId,
+      if (code != null) 'code': code,
+      if (counter != null) 'counter': counter,
+      if (metadata != null) 'metadata': metadata,
+      if (padding != null) 'padding': padding,
+      if (positionStep != null) 'position_step': positionStep,
+      if (prefix != null) 'prefix': prefix,
+      if (step != null) 'step': step,
+      if (suffix != null) 'suffix': suffix,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (counter != null) 'counter': counter,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (metadata != null) 'metadata': metadata,
-
-            if (padding != null) 'padding': padding,
-
-            if (positionStep != null) 'position_step': positionStep,
-
-            if (prefix != null) 'prefix': prefix,
-
-            if (step != null) 'step': step,
-
-            if (suffix != null) 'suffix': suffix,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The way an order comes into existence — the call a checkout, a punch-out
@@ -353,52 +346,52 @@ class Orders extends Service {
   /// from the threshold). The order.requested event says which, in
   /// 'approval_reason'. The currency defaults to the market's default_currency
   /// setting and the position cap is the tenant's max_items_per_order.
-  Future<models.Error> ordersPlace({required List<models.OrderItemCreateRequest> items, Map? billingAddress, Map? buyer, String? cartId, String? channelId, String? contactId, String? currency, String? customerOrderNumber, double? grandTotal, Map? metadata, String? organizationId, Map? payment, Map? shipping, Map? shippingAddress, double? shippingTotal, Map? userData}) async {
+  Future<models.Error> ordersPlace(
+      {required List<models.OrderItemCreateRequest> items,
+      Map? billingAddress,
+      Map? buyer,
+      String? cartId,
+      String? channelId,
+      String? contactId,
+      String? currency,
+      String? customerOrderNumber,
+      double? grandTotal,
+      Map? metadata,
+      String? organizationId,
+      Map? payment,
+      Map? shipping,
+      Map? shippingAddress,
+      double? shippingTotal,
+      Map? userData}) async {
     const String apiPath = '/v1/orders/place';
 
-        final Map<String, dynamic> apiParams = {
-            'billing_address': billingAddress,
+    final Map<String, dynamic> apiParams = {
+      'billing_address': billingAddress,
+      'buyer': buyer,
+      'cart_id': cartId,
+      'channel_id': channelId,
+      'contact_id': contactId,
+      'currency': currency,
+      'customer_order_number': customerOrderNumber,
+      'grand_total': grandTotal,
+      'items': items.map((p) => p.toMap()).toList(),
+      'metadata': metadata,
+      'organization_id': organizationId,
+      'payment': payment,
+      'shipping': shipping,
+      'shipping_address': shippingAddress,
+      'shipping_total': shippingTotal,
+      'user_data': userData,
+    };
 
-            'buyer': buyer,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'cart_id': cartId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'channel_id': channelId,
-
-            'contact_id': contactId,
-
-            'currency': currency,
-
-            'customer_order_number': customerOrderNumber,
-
-            'grand_total': grandTotal,
-
-            'items': items.map((p) => p.toMap()).toList(),
-
-            'metadata': metadata,
-
-            'organization_id': organizationId,
-
-            'payment': payment,
-
-            'shipping': shipping,
-
-            'shipping_address': shippingAddress,
-
-            'shipping_total': shippingTotal,
-
-            'user_data': userData,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What each company has bought, as numbers another app can keep: order count,
@@ -417,28 +410,28 @@ class Orders extends Service {
   /// returned — it is revenue_total / order_count over the merged parts.
   /// Windows are anchored at as_of, which is echoed back so a loop measures one
   /// consistent picture.
-  Future<models.OrderCustomerRollupResponse> ordersReportsCustomerRollup({String? asOf, String? cursor, List<String>? organizationIds, List<enums.OrderStatus>? statuses}) async {
+  Future<models.OrderCustomerRollupResponse> ordersReportsCustomerRollup(
+      {String? asOf,
+      String? cursor,
+      List<String>? organizationIds,
+      List<enums.OrderStatus>? statuses}) async {
     const String apiPath = '/v1/orders/reports/customer-rollup';
 
-        final Map<String, dynamic> apiParams = {
-            'as_of': asOf,
+    final Map<String, dynamic> apiParams = {
+      'as_of': asOf,
+      'cursor': cursor,
+      'organization_ids': organizationIds,
+      'statuses': statuses?.map((e) => e.value).toList(),
+    };
 
-            'cursor': cursor,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'organization_ids': organizationIds,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'statuses': statuses?.map((e) => e.value).toList(),
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.OrderCustomerRollupResponse.fromMap(res.data);
-
+    return models.OrderCustomerRollupResponse.fromMap(res.data);
   }
 
   /// Which value sets this app will describe for you, by name — order
@@ -456,17 +449,14 @@ class Orders extends Service {
   Future<models.OrderVocabularyIndex> ordersVocabulariesList() async {
     const String apiPath = '/v1/orders/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.OrderVocabularyIndex.fromMap(res.data);
-
+    return models.OrderVocabularyIndex.fromMap(res.data);
   }
 
   /// Everything a UI needs to render one of this app's value sets without
@@ -491,20 +481,19 @@ class Orders extends Service {
   /// vocabulary and on every value alike. Names: cancellation-scopes,
   /// comment-visibilities, fulfillment-statuses, item-types, payment-statuses,
   /// return-resolutions, return-statuses, statuses.
-  Future<models.Error> ordersVocabulariesGet({required enums.OrdersVocabulariesGetName name}) async {
-    final String apiPath = '/v1/orders/vocabularies/{name}'.replaceAll('{name}', name.value);
+  Future<models.Error> ordersVocabulariesGet(
+      {required enums.OrdersVocabulariesGetName name}) async {
+    final String apiPath =
+        '/v1/orders/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The single source of order information, and what an order detail screen is
@@ -519,17 +508,14 @@ class Orders extends Service {
   Future<models.Error> ordersGet({required String id}) async {
     final String apiPath = '/v1/orders/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The narrow correction window a service desk needs: the customer gave the
@@ -544,32 +530,34 @@ class Orders extends Service {
   /// order, because from then on the ERP holds the copy that ships — unless
   /// the tenant set allow_modification_after_acknowledge. Every accepted change
   /// writes an order.updated event naming the columns it touched.
-  Future<models.Error> ordersUpdate({required String id, Map? billingAddress, Map? buyer, String? customerOrderNumber, Map? metadata, Map? shippingAddress, Map? userData}) async {
+  Future<models.Error> ordersUpdate(
+      {required String id,
+      Map? billingAddress,
+      Map? buyer,
+      String? customerOrderNumber,
+      Map? metadata,
+      Map? shippingAddress,
+      Map? userData}) async {
     final String apiPath = '/v1/orders/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (billingAddress != null) 'billing_address': billingAddress,
+    final Map<String, dynamic> apiParams = {
+      if (billingAddress != null) 'billing_address': billingAddress,
+      if (buyer != null) 'buyer': buyer,
+      if (customerOrderNumber != null)
+        'customer_order_number': customerOrderNumber,
+      if (metadata != null) 'metadata': metadata,
+      if (shippingAddress != null) 'shipping_address': shippingAddress,
+      if (userData != null) 'user_data': userData,
+    };
 
-            if (buyer != null) 'buyer': buyer,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (customerOrderNumber != null) 'customer_order_number': customerOrderNumber,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (metadata != null) 'metadata': metadata,
-
-            if (shippingAddress != null) 'shipping_address': shippingAddress,
-
-            if (userData != null) 'user_data': userData,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The return channel for whatever fulfils the order. An Integration Studio
@@ -582,22 +570,22 @@ class Orders extends Service {
   /// status, payment_status or fulfillment_status, and it does not ship
   /// anything. Once only: a second call is a 422 rather than a silent overwrite
   /// of the first system's reference.
-  Future<models.Error> ordersAcknowledge({required String id, String? externalRef}) async {
+  Future<models.Error> ordersAcknowledge(
+      {required String id, String? externalRef}) async {
     final String apiPath = '/v1/orders/{id}/acknowledge'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (externalRef != null) 'external_ref': externalRef,
+    final Map<String, dynamic> apiParams = {
+      if (externalRef != null) 'external_ref': externalRef,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Call the whole order off: every position's full quantity is booked as
@@ -611,24 +599,23 @@ class Orders extends Service {
   /// explicit inventories call by the orchestrator. A tenant may require a
   /// reason (cancel_requires_reason), and a hold may block it (on_hold_blocks =
   /// 'shipping_and_cancel').
-  Future<models.Error> ordersCancel({required String id, String? cancelledBy, String? reason}) async {
+  Future<models.Error> ordersCancel(
+      {required String id, String? cancelledBy, String? reason}) async {
     final String apiPath = '/v1/orders/{id}/cancel'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (cancelledBy != null) 'cancelled_by': cancelledBy,
+    final Map<String, dynamic> apiParams = {
+      if (cancelledBy != null) 'cancelled_by': cancelledBy,
+      if (reason != null) 'reason': reason,
+    };
 
-            if (reason != null) 'reason': reason,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What people have written about this order, oldest first: the service desk's
@@ -644,36 +631,35 @@ class Orders extends Service {
   /// repeats 'items' under 'comments' for compatibility with the pre-envelope
   /// shape. It is the same array; read 'items'. The alias is removed in the next
   /// minor version.
-  Future<models.Error> ordersCommentsList({required String id, String? idQuery, String? body, enums.OrderCommentVisibility? visibility, String? author, String? createdAt, int? limit, int? offset, String? order}) async {
+  Future<models.Error> ordersCommentsList(
+      {required String id,
+      String? idQuery,
+      String? body,
+      enums.OrderCommentVisibility? visibility,
+      String? author,
+      String? createdAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     final String apiPath = '/v1/orders/{id}/comments'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (idQuery != null) 'id': idQuery,
+    final Map<String, dynamic> apiParams = {
+      if (idQuery != null) 'id': idQuery,
+      if (body != null) 'body': body,
+      if (visibility != null) 'visibility': visibility.value,
+      if (author != null) 'author': author,
+      if (createdAt != null) 'created_at': createdAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (body != null) 'body': body,
+    final Map<String, String> apiHeaders = {};
 
-            if (visibility != null) 'visibility': visibility.value,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (author != null) 'author': author,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Write down what happened that the state machine cannot record: what the
@@ -686,26 +672,27 @@ class Orders extends Service {
   /// note was made and its visibility, without copying the text onto the bus. It
   /// changes nothing about the order, and it sends nothing to anybody: this
   /// stores a comment, it does not email the customer.
-  Future<models.Error> ordersCommentsCreate({required String id, required String body, String? author, enums.OrderCommentVisibility? visibility}) async {
+  Future<models.Error> ordersCommentsCreate(
+      {required String id,
+      required String body,
+      String? author,
+      enums.OrderCommentVisibility? visibility}) async {
     final String apiPath = '/v1/orders/{id}/comments'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (author != null) 'author': author,
+    final Map<String, dynamic> apiParams = {
+      if (author != null) 'author': author,
+      'body': body,
+      if (visibility != null) 'visibility': visibility.value,
+    };
 
-            'body': body,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (visibility != null) 'visibility': visibility.value,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Declare the order finished, whatever the quantities say — the service was
@@ -720,22 +707,22 @@ class Orders extends Service {
   /// that shipping no longer closes by itself, and it is also the honest end for
   /// a service or digital order that never ships. Writes an order_events row
   /// 'order.completed' with via='manual'.
-  Future<models.Error> ordersComplete({required String id, String? completedBy}) async {
+  Future<models.Error> ordersComplete(
+      {required String id, String? completedBy}) async {
     final String apiPath = '/v1/orders/{id}/complete'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (completedBy != null) 'completed_by': completedBy,
+    final Map<String, dynamic> apiParams = {
+      if (completedBy != null) 'completed_by': completedBy,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Everything that has ever happened to this order, oldest first: placed or
@@ -756,34 +743,33 @@ class Orders extends Service {
   /// JSON document. DEPRECATED KEY: the response also repeats 'items' under
   /// 'events' for compatibility with the pre-envelope shape. It is the same
   /// array; read 'items'. The alias is removed in the next minor version.
-  Future<models.Error> ordersEventsList({required String id, String? idQuery, String? name, String? actor, String? createdAt, int? limit, int? offset, String? order}) async {
+  Future<models.Error> ordersEventsList(
+      {required String id,
+      String? idQuery,
+      String? name,
+      String? actor,
+      String? createdAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     final String apiPath = '/v1/orders/{id}/events'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (idQuery != null) 'id': idQuery,
+    final Map<String, dynamic> apiParams = {
+      if (idQuery != null) 'id': idQuery,
+      if (name != null) 'name': name,
+      if (actor != null) 'actor': actor,
+      if (createdAt != null) 'created_at': createdAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (name != null) 'name': name,
+    final Map<String, String> apiHeaders = {};
 
-            if (actor != null) 'actor': actor,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Stop an order from moving while a human sorts something out — a credit
@@ -800,19 +786,18 @@ class Orders extends Service {
   Future<models.Error> ordersHold({required String id, String? reason}) async {
     final String apiPath = '/v1/orders/{id}/hold'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (reason != null) 'reason': reason,
+    final Map<String, dynamic> apiParams = {
+      if (reason != null) 'reason': reason,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Take quantities off an order that is otherwise going ahead — three of the
@@ -828,26 +813,28 @@ class Orders extends Service {
   /// something anybody should be able to do by accident; that is what POST
   /// /orders/{id}/cancel is for. Read GET /orders/{id}/shippable for the open
   /// quantity per position before calling.
-  Future<models.Error> ordersItemsCancel({required String id, required List<models.OrderCancelPosition> positions, String? cancelledBy, String? reason}) async {
-    final String apiPath = '/v1/orders/{id}/items/cancel'.replaceAll('{id}', id);
+  Future<models.Error> ordersItemsCancel(
+      {required String id,
+      required List<models.OrderCancelPosition> positions,
+      String? cancelledBy,
+      String? reason}) async {
+    final String apiPath =
+        '/v1/orders/{id}/items/cancel'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (cancelledBy != null) 'cancelled_by': cancelledBy,
+    final Map<String, dynamic> apiParams = {
+      if (cancelledBy != null) 'cancelled_by': cancelledBy,
+      'positions': positions.map((p) => p.toMap()).toList(),
+      if (reason != null) 'reason': reason,
+    };
 
-            'positions': positions.map((p) => p.toMap()).toList(),
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (reason != null) 'reason': reason,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Payment is the one status dimension this app does not decide for itself: it
@@ -861,24 +848,26 @@ class Orders extends Service {
   /// else established, and any of the seven words may follow any other. The
   /// other half of auto_complete_on = 'payment': an order that has shipped in
   /// full is completed by this call when the status becomes 'paid'.
-  Future<models.Error> ordersPaymentStatusUpdate({required String id, required enums.OrderPaymentStatus status, String? paymentId}) async {
-    final String apiPath = '/v1/orders/{id}/payment-status'.replaceAll('{id}', id);
+  Future<models.Error> ordersPaymentStatusUpdate(
+      {required String id,
+      required enums.OrderPaymentStatus status,
+      String? paymentId}) async {
+    final String apiPath =
+        '/v1/orders/{id}/payment-status'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (paymentId != null) 'payment_id': paymentId,
+    final Map<String, dynamic> apiParams = {
+      if (paymentId != null) 'payment_id': paymentId,
+      'status': status.value,
+    };
 
-            'status': status.value,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Open a return case: the customer has announced goods are coming back, and
@@ -893,28 +882,30 @@ class Orders extends Service {
   /// move — the return starts as 'registered' and travels through receive and
   /// complete or reject. Allowed on a completed order, refused on a cancelled
   /// one.
-  Future<models.Error> ordersReturn({required String id, Map? metadata, List<models.OrderReturnPosition>? positions, String? reason, bool? restock}) async {
+  Future<models.Error> ordersReturn(
+      {required String id,
+      Map? metadata,
+      List<models.OrderReturnPosition>? positions,
+      String? reason,
+      bool? restock}) async {
     final String apiPath = '/v1/orders/{id}/return'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (metadata != null) 'metadata': metadata,
+    final Map<String, dynamic> apiParams = {
+      if (metadata != null) 'metadata': metadata,
+      if (positions != null)
+        'positions': positions.map((p) => p.toMap()).toList(),
+      if (reason != null) 'reason': reason,
+      if (restock != null) 'restock': restock,
+    };
 
-            if (positions != null) 'positions': positions.map((p) => p.toMap()).toList(),
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (reason != null) 'reason': reason,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (restock != null) 'restock': restock,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Accept the return and close the case: the goods are taken back on the
@@ -934,22 +925,26 @@ class Orders extends Service {
   /// /orders/vocabularies/return-resolutions); anything else is refused rather
   /// than stored as a word no reader knows. It is checked before the positions
   /// are booked, so a rejected value leaves nothing behind.
-  Future<models.Error> ordersReturnsComplete({required String id, required String rid, enums.OrderReturnSettlement? resolution}) async {
-    final String apiPath = '/v1/orders/{id}/returns/{rid}/complete'.replaceAll('{id}', id).replaceAll('{rid}', rid);
+  Future<models.Error> ordersReturnsComplete(
+      {required String id,
+      required String rid,
+      enums.OrderReturnSettlement? resolution}) async {
+    final String apiPath = '/v1/orders/{id}/returns/{rid}/complete'
+        .replaceAll('{id}', id)
+        .replaceAll('{rid}', rid);
 
-        final Map<String, dynamic> apiParams = {
-            'resolution': resolution?.value,
+    final Map<String, dynamic> apiParams = {
+      'resolution': resolution?.value,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The goods-in scan: the parcel is physically back, warehouse staff have it
@@ -962,22 +957,24 @@ class Orders extends Service {
   /// call, or one against a settled return, is a 422. This step is skippable: a
   /// return may be completed straight from 'registered' where a merchant does
   /// not scan goods in.
-  Future<models.Error> ordersReturnsReceive({required String id, required String rid, required Map data}) async {
-    final String apiPath = '/v1/orders/{id}/returns/{rid}/receive'.replaceAll('{id}', id).replaceAll('{rid}', rid);
+  Future<models.Error> ordersReturnsReceive(
+      {required String id, required String rid, required Map data}) async {
+    final String apiPath = '/v1/orders/{id}/returns/{rid}/receive'
+        .replaceAll('{id}', id)
+        .replaceAll('{rid}', rid);
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Close the case against the customer: the goods came back used, outside the
@@ -992,24 +989,28 @@ class Orders extends Service {
   /// not_returnable); 'reason' stays free text — a sentence about this one
   /// return rather than a value out of a set — and is what is stored when no
   /// resolution is named.
-  Future<models.Error> ordersReturnsReject({required String id, required String rid, String? reason, enums.OrderReturnRefusal? resolution}) async {
-    final String apiPath = '/v1/orders/{id}/returns/{rid}/reject'.replaceAll('{id}', id).replaceAll('{rid}', rid);
+  Future<models.Error> ordersReturnsReject(
+      {required String id,
+      required String rid,
+      String? reason,
+      enums.OrderReturnRefusal? resolution}) async {
+    final String apiPath = '/v1/orders/{id}/returns/{rid}/reject'
+        .replaceAll('{id}', id)
+        .replaceAll('{rid}', rid);
 
-        final Map<String, dynamic> apiParams = {
-            if (reason != null) 'reason': reason,
+    final Map<String, dynamic> apiParams = {
+      if (reason != null) 'reason': reason,
+      'resolution': resolution?.value,
+    };
 
-            'resolution': resolution?.value,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Book goods out: which positions and how much of each, with the carrier and
@@ -1026,34 +1027,36 @@ class Orders extends Service {
   /// 'payment' leaves it in_fulfillment until payment_status becomes paid,
   /// 'manual' waits for orders.complete. The order.completed event follows the
   /// order, so it is only emitted when the order actually completed.
-  Future<models.Error> ordersShip({required String id, String? carrier, Map? metadata, String? number, List<models.OrderShipmentPosition>? positions, String? shippedAt, String? trackingCode, String? trackingUrl}) async {
+  Future<models.Error> ordersShip(
+      {required String id,
+      String? carrier,
+      Map? metadata,
+      String? number,
+      List<models.OrderShipmentPosition>? positions,
+      String? shippedAt,
+      String? trackingCode,
+      String? trackingUrl}) async {
     final String apiPath = '/v1/orders/{id}/ship'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (carrier != null) 'carrier': carrier,
+    final Map<String, dynamic> apiParams = {
+      if (carrier != null) 'carrier': carrier,
+      if (metadata != null) 'metadata': metadata,
+      if (number != null) 'number': number,
+      if (positions != null)
+        'positions': positions.map((p) => p.toMap()).toList(),
+      if (shippedAt != null) 'shipped_at': shippedAt,
+      if (trackingCode != null) 'tracking_code': trackingCode,
+      if (trackingUrl != null) 'tracking_url': trackingUrl,
+    };
 
-            if (metadata != null) 'metadata': metadata,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (number != null) 'number': number,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (positions != null) 'positions': positions.map((p) => p.toMap()).toList(),
-
-            if (shippedAt != null) 'shipped_at': shippedAt,
-
-            if (trackingCode != null) 'tracking_code': trackingCode,
-
-            if (trackingUrl != null) 'tracking_url': trackingUrl,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What a shipment dialog needs before it can offer anything: the open
@@ -1072,17 +1075,14 @@ class Orders extends Service {
   Future<models.Error> ordersShippable({required String id}) async {
     final String apiPath = '/v1/orders/{id}/shippable'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The whole of the release: the flag comes off, the reason is cleared, and an
@@ -1094,21 +1094,21 @@ class Orders extends Service {
   /// hand. An order that is not on hold answers 422 rather than pretending to
   /// release one, so this is safe to give to a worklist and not to a loop that
   /// calls it blindly.
-  Future<models.Error> ordersUnhold({required String id, required Map data}) async {
+  Future<models.Error> ordersUnhold(
+      {required String id, required Map data}) async {
     final String apiPath = '/v1/orders/{id}/unhold'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

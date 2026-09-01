@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,116 +40,106 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('InventoriesLocations test', () {
-        late MockClient client;
-        late InventoriesLocations inventoriesLocations;
+  group('InventoriesLocations test', () {
+    late MockClient client;
+    late InventoriesLocations inventoriesLocations;
 
-        setUp(() {
-            client = MockClient();
-            inventoriesLocations = InventoriesLocations(client);
-        });
-
-        test('test method inventoriesLocationsList()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesLocations.inventoriesLocationsList(
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method inventoriesLocationsCreate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesLocations.inventoriesLocationsCreate(
-                code: 'main',
-                name: 'Main warehouse',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method inventoriesLocationsDefaults()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesLocations.inventoriesLocationsDefaults(
-            );
-        });
-
-        test('test method inventoriesLocationsDelete()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesLocations.inventoriesLocationsDelete(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method inventoriesLocationsGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesLocations.inventoriesLocationsGet(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method inventoriesLocationsUpdate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await inventoriesLocations.inventoriesLocationsUpdate(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+    setUp(() {
+      client = MockClient();
+      inventoriesLocations = InventoriesLocations(client);
     });
+
+    test('test method inventoriesLocationsList()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await inventoriesLocations.inventoriesLocationsList();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method inventoriesLocationsCreate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await inventoriesLocations.inventoriesLocationsCreate(
+        code: 'main',
+        name: 'Main warehouse',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method inventoriesLocationsDefaults()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await inventoriesLocations.inventoriesLocationsDefaults();
+    });
+
+    test('test method inventoriesLocationsDelete()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await inventoriesLocations.inventoriesLocationsDelete(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method inventoriesLocationsGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await inventoriesLocations.inventoriesLocationsGet(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method inventoriesLocationsUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await inventoriesLocations.inventoriesLocationsUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

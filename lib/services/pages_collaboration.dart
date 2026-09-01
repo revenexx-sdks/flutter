@@ -1,13 +1,13 @@
 part of '../revenexx.dart';
 
-  /// The review layer over a page: comment threads pinned to blocks, with
-  /// @mentions, task checkboxes and resolve/reopen, plus the notification feed
-  /// those threads and an ownership handover raise, and the user directory a
-  /// mention is picked from. Comments belong to the PAGE, not to a revision or
-  /// an edit state, so they outlive publishing and reverting — which is what
-  /// makes them usable as a review trail. Every write here answers the page&#039;s
-  /// whole comment list rather than the row it touched, so a client can render
-  /// from one response.
+/// The review layer over a page: comment threads pinned to blocks, with
+/// @mentions, task checkboxes and resolve/reopen, plus the notification feed
+/// those threads and an ownership handover raise, and the user directory a
+/// mention is picked from. Comments belong to the PAGE, not to a revision or
+/// an edit state, so they outlive publishing and reverting — which is what
+/// makes them usable as a review trail. Every write here answers the page&#039;s
+/// whole comment list rather than the row it touched, so a client can render
+/// from one response.
 class PagesCollaboration extends Service {
   /// Initializes a [PagesCollaboration] service
   PagesCollaboration(super.client);
@@ -18,24 +18,21 @@ class PagesCollaboration extends Service {
   /// `?markAsRead=true` flags the notifications on the page it just returned as
   /// read, which is how a feed that has been looked at empties its badge without
   /// a second call — leave it off and reading changes nothing.
-  Future pagesEditorNotificationsList({String? after, String? markAsRead}) async {
+  Future pagesEditorNotificationsList(
+      {String? after, String? markAsRead}) async {
     const String apiPath = '/v1/pages/editor/notifications';
 
-        final Map<String, dynamic> apiParams = {
-            if (after != null) 'after': after,
+    final Map<String, dynamic> apiParams = {
+      if (after != null) 'after': after,
+      if (markAsRead != null) 'markAsRead': markAsRead,
+    };
 
-            if (markAsRead != null) 'markAsRead': markAsRead,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Empties the badge in one call. Every unread notification of the CURRENT
@@ -47,34 +44,28 @@ class PagesCollaboration extends Service {
   Future pagesEditorNotificationsMarkAllRead() async {
     const String apiPath = '/v1/pages/editor/notifications/mark-all-read';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// The cheap poll behind the badge.
   Future pagesEditorNotificationsUnreadCount() async {
     const String apiPath = '/v1/pages/editor/notifications/unread-count';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// What the @mention picker is filled from. When the identity service cannot
@@ -84,17 +75,14 @@ class PagesCollaboration extends Service {
   Future pagesEditorUsers() async {
     const String apiPath = '/v1/pages/editor/users';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Every comment on the page in one flat list, oldest first, roots and replies
@@ -104,20 +92,19 @@ class PagesCollaboration extends Service {
   /// PAGE, not off a revision or an edit state, so publishing and reverting
   /// leave them standing; that is what makes them usable as a review trail
   /// across several rounds of edits.
-  Future<models.PageCommentList> pagesEditorCommentsList({required String pageId}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/comments'.replaceAll('{page_id}', pageId);
+  Future<models.PageCommentList> pagesEditorCommentsList(
+      {required String pageId}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/comments'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.PageCommentList.fromMap(res.data);
-
+    return models.PageCommentList.fromMap(res.data);
   }
 
   /// The same route writes both kinds, and which one you get is decided by the
@@ -125,43 +112,45 @@ class PagesCollaboration extends Service {
   /// hangs a reply under an existing root. Everyone named with an @mention in
   /// the body is notified, and on a reply so is everybody already in the thread
   /// — the actor never notifies themselves.
-  Future<models.PageCommentList> pagesEditorCommentsCreate({required String pageId, required String body, List<String>? blockUuids, String? parentUuid}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/comments'.replaceAll('{page_id}', pageId);
+  Future<models.PageCommentList> pagesEditorCommentsCreate(
+      {required String pageId,
+      required String body,
+      List<String>? blockUuids,
+      String? parentUuid}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/comments'.replaceAll('{page_id}', pageId);
 
-        final Map<String, dynamic> apiParams = {
-            'blockUuids': blockUuids,
+    final Map<String, dynamic> apiParams = {
+      'blockUuids': blockUuids,
+      'body': body,
+      'parentUuid': parentUuid,
+    };
 
-            'body': body,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'parentUuid': parentUuid,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.PageCommentList.fromMap(res.data);
-
+    return models.PageCommentList.fromMap(res.data);
   }
 
   /// A hard delete, and deleting a root takes its replies with it.
-  Future<models.PageCommentList> pagesEditorCommentsDelete({required String pageId, required String uuid}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/comments/{uuid}'.replaceAll('{page_id}', pageId).replaceAll('{uuid}', uuid);
+  Future<models.PageCommentList> pagesEditorCommentsDelete(
+      {required String pageId, required String uuid}) async {
+    final String apiPath = '/v1/pages/editor/{page_id}/comments/{uuid}'
+        .replaceAll('{page_id}', pageId)
+        .replaceAll('{uuid}', uuid);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.PageCommentList.fromMap(res.data);
-
+    return models.PageCommentList.fromMap(res.data);
   }
 
   /// Rewrites what a comment says, and only its author may — a comment carries
@@ -171,22 +160,26 @@ class PagesCollaboration extends Service {
   /// @mention notifications, so mentioning somebody new by editing will not
   /// reach them. Answers the page's whole comment list rather than the one row,
   /// so a client can re-render from the response.
-  Future<models.Error> pagesEditorCommentsUpdate({required String pageId, required String uuid, required String body}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/comments/{uuid}'.replaceAll('{page_id}', pageId).replaceAll('{uuid}', uuid);
+  Future<models.Error> pagesEditorCommentsUpdate(
+      {required String pageId,
+      required String uuid,
+      required String body}) async {
+    final String apiPath = '/v1/pages/editor/{page_id}/comments/{uuid}'
+        .replaceAll('{page_id}', pageId)
+        .replaceAll('{uuid}', uuid);
 
-        final Map<String, dynamic> apiParams = {
-            'body': body,
+    final Map<String, dynamic> apiParams = {
+      'body': body,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Marks a thread handled, so the editor stops surfacing it on the block it is
@@ -195,20 +188,20 @@ class PagesCollaboration extends Service {
   /// refused with 400 rather than quietly resolving its parent. Nothing is
   /// deleted, nobody is notified, and the thread stays in the list;
   /// `.../unresolve` is the way back. Answers the page's whole comment list.
-  Future<models.Error> pagesEditorCommentsResolve({required String pageId, required String uuid}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/comments/{uuid}/resolve'.replaceAll('{page_id}', pageId).replaceAll('{uuid}', uuid);
+  Future<models.Error> pagesEditorCommentsResolve(
+      {required String pageId, required String uuid}) async {
+    final String apiPath = '/v1/pages/editor/{page_id}/comments/{uuid}/resolve'
+        .replaceAll('{page_id}', pageId)
+        .replaceAll('{uuid}', uuid);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A comment body may carry a task list. This flips one checkbox by rewriting
@@ -216,22 +209,27 @@ class PagesCollaboration extends Service {
   /// list. A `taskIndex` that names no checkbox is refused and nothing is
   /// written — the comment's `updated_at` is the editor's "edited" marker, so
   /// a call that changes nothing must not move it.
-  Future<models.Error> pagesEditorCommentsToggleTask({required String pageId, required String uuid, required int taskIndex}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/comments/{uuid}/toggle-task'.replaceAll('{page_id}', pageId).replaceAll('{uuid}', uuid);
+  Future<models.Error> pagesEditorCommentsToggleTask(
+      {required String pageId,
+      required String uuid,
+      required int taskIndex}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/comments/{uuid}/toggle-task'
+            .replaceAll('{page_id}', pageId)
+            .replaceAll('{uuid}', uuid);
 
-        final Map<String, dynamic> apiParams = {
-            'taskIndex': taskIndex,
+    final Map<String, dynamic> apiParams = {
+      'taskIndex': taskIndex,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Clears the resolved flag and puts the thread back in front of whoever is
@@ -239,19 +237,20 @@ class PagesCollaboration extends Service {
   /// only a root can be reopened and that a reply answers 400. A thread that was
   /// already open is accepted and stays open. Answers the page's whole comment
   /// list.
-  Future<models.Error> pagesEditorCommentsUnresolve({required String pageId, required String uuid}) async {
-    final String apiPath = '/v1/pages/editor/{page_id}/comments/{uuid}/unresolve'.replaceAll('{page_id}', pageId).replaceAll('{uuid}', uuid);
+  Future<models.Error> pagesEditorCommentsUnresolve(
+      {required String pageId, required String uuid}) async {
+    final String apiPath =
+        '/v1/pages/editor/{page_id}/comments/{uuid}/unresolve'
+            .replaceAll('{page_id}', pageId)
+            .replaceAll('{uuid}', uuid);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

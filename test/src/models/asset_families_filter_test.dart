@@ -10,7 +10,6 @@ void main() {
 
       final map = model.toMap();
       final result = AssetFamiliesFilter.fromMap(map);
-
     });
   });
 }

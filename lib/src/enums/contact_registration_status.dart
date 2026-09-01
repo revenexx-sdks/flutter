@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum ContactRegistrationStatus {
-    pending(value: 'pending'),
-    approved(value: 'approved'),
-    rejected(value: 'rejected');
+  pending(value: 'pending'),
+  approved(value: 'approved'),
+  rejected(value: 'rejected');
 
-    const ContactRegistrationStatus({
-        required this.value
-    });
+  const ContactRegistrationStatus({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

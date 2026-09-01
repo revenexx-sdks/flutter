@@ -1,14 +1,14 @@
 part of '../revenexx.dart';
 
-  /// The lines inside one cart, always addressed through the cart that owns them
-  /// (`/carts/{cart_id}/items`) — a line is never reachable on its own, and an
-  /// id from another cart answers 404 rather than the row. A line is a catalogue
-  /// product, a configured product or a free position, and it carries its price
-  /// twice: the working `unit_price` and the `snapshot` the buyer was shown.
-  /// Adding the same article at the same price folds into the line that is
-  /// already there instead of opening a second one; a configured line always
-  /// stands alone. Every write here recomputes the owning cart&#039;s `item_count`
-  /// and `subtotal`, so a cart can never disagree with its own lines.
+/// The lines inside one cart, always addressed through the cart that owns them
+/// (`/carts/{cart_id}/items`) — a line is never reachable on its own, and an
+/// id from another cart answers 404 rather than the row. A line is a catalogue
+/// product, a configured product or a free position, and it carries its price
+/// twice: the working `unit_price` and the `snapshot` the buyer was shown.
+/// Adding the same article at the same price folds into the line that is
+/// already there instead of opening a second one; a configured line always
+/// stands alone. Every write here recomputes the owning cart&#039;s `item_count`
+/// and `subtotal`, so a cart can never disagree with its own lines.
 class CartsItems extends Service {
   /// Initializes a [CartsItems] service
   CartsItems(super.client);
@@ -18,54 +18,54 @@ class CartsItems extends Service {
   /// of an empty page. A cart with more lines than the page size is not silently
   /// truncated — 'page.hasMore' says so. Lines come back in position order
   /// unless 'order' says otherwise.
-  Future<models.Error> cartsItemsList({required String cartId, String? id, enums.CartItemType? type, String? productId, String? sku, String? name, double? quantity, String? unit, double? unitPrice, String? currency, double? taxRate, double? lineTotal, int? position, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
-    final String apiPath = '/v1/carts/{cart_id}/items'.replaceAll('{cart_id}', cartId);
+  Future<models.Error> cartsItemsList(
+      {required String cartId,
+      String? id,
+      enums.CartItemType? type,
+      String? productId,
+      String? sku,
+      String? name,
+      double? quantity,
+      String? unit,
+      double? unitPrice,
+      String? currency,
+      double? taxRate,
+      double? lineTotal,
+      int? position,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
+    final String apiPath =
+        '/v1/carts/{cart_id}/items'.replaceAll('{cart_id}', cartId);
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (type != null) 'type': type.value,
+      if (productId != null) 'product_id': productId,
+      if (sku != null) 'sku': sku,
+      if (name != null) 'name': name,
+      if (quantity != null) 'quantity': quantity,
+      if (unit != null) 'unit': unit,
+      if (unitPrice != null) 'unit_price': unitPrice,
+      if (currency != null) 'currency': currency,
+      if (taxRate != null) 'tax_rate': taxRate,
+      if (lineTotal != null) 'line_total': lineTotal,
+      if (position != null) 'position': position,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (type != null) 'type': type.value,
+    final Map<String, String> apiHeaders = {};
 
-            if (productId != null) 'product_id': productId,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (sku != null) 'sku': sku,
-
-            if (name != null) 'name': name,
-
-            if (quantity != null) 'quantity': quantity,
-
-            if (unit != null) 'unit': unit,
-
-            if (unitPrice != null) 'unit_price': unitPrice,
-
-            if (currency != null) 'currency': currency,
-
-            if (taxRate != null) 'tax_rate': taxRate,
-
-            if (lineTotal != null) 'line_total': lineTotal,
-
-            if (position != null) 'position': position,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Adds one line to an ACTIVE cart — the add-to-basket call. `name` or `sku`
@@ -82,46 +82,48 @@ class CartsItems extends Service {
   /// `max_items_per_cart` / `max_quantity_per_line` are checked on the RESULT of
   /// the merge (422), so ten calls of one piece cannot walk past a limit one
   /// call of ten would hit.
-  Future<models.Error> cartsItemsCreate({required String cartId, Map? configuration, String? currency, Map? metadata, String? name, int? position, String? productId, double? quantity, String? sku, Map? snapshot, double? taxRate, enums.CartItemType? type, String? unit, double? unitPrice}) async {
-    final String apiPath = '/v1/carts/{cart_id}/items'.replaceAll('{cart_id}', cartId);
+  Future<models.Error> cartsItemsCreate(
+      {required String cartId,
+      Map? configuration,
+      String? currency,
+      Map? metadata,
+      String? name,
+      int? position,
+      String? productId,
+      double? quantity,
+      String? sku,
+      Map? snapshot,
+      double? taxRate,
+      enums.CartItemType? type,
+      String? unit,
+      double? unitPrice}) async {
+    final String apiPath =
+        '/v1/carts/{cart_id}/items'.replaceAll('{cart_id}', cartId);
 
-        final Map<String, dynamic> apiParams = {
-            'configuration': configuration,
+    final Map<String, dynamic> apiParams = {
+      'configuration': configuration,
+      'currency': currency,
+      'metadata': metadata,
+      'name': name,
+      'position': position,
+      'product_id': productId,
+      'quantity': quantity,
+      'sku': sku,
+      if (snapshot != null) 'snapshot': snapshot,
+      'tax_rate': taxRate,
+      if (type != null) 'type': type.value,
+      'unit': unit,
+      'unit_price': unitPrice,
+    };
 
-            'currency': currency,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'metadata': metadata,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'name': name,
-
-            'position': position,
-
-            'product_id': productId,
-
-            'quantity': quantity,
-
-            'sku': sku,
-
-            if (snapshot != null) 'snapshot': snapshot,
-
-            'tax_rate': taxRate,
-
-            if (type != null) 'type': type.value,
-
-            'unit': unit,
-
-            'unit_price': unitPrice,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Set semantics: the payload IS the cart. Every existing line is dropped and
@@ -133,22 +135,24 @@ class CartsItems extends Service {
   /// against the payload BEFORE a single existing line is destroyed, so a sync
   /// refused with 422 leaves the cart exactly as it was. The cart must be
   /// active, and its totals are recomputed before the answer.
-  Future<models.Error> cartsItemsReplace({required String cartId, required List<models.CartItemCreateRequest> items}) async {
-    final String apiPath = '/v1/carts/{cart_id}/items'.replaceAll('{cart_id}', cartId);
+  Future<models.Error> cartsItemsReplace(
+      {required String cartId,
+      required List<models.CartItemCreateRequest> items}) async {
+    final String apiPath =
+        '/v1/carts/{cart_id}/items'.replaceAll('{cart_id}', cartId);
 
-        final Map<String, dynamic> apiParams = {
-            'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      'items': items.map((p) => p.toMap()).toList(),
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Removes one line from an ACTIVE cart and recomputes the owning cart's
@@ -159,20 +163,20 @@ class CartsItems extends Service {
   /// left where it is. Deleting the last line leaves an empty cart, not a
   /// deleted one; the cart itself goes through carts.delete, which takes every
   /// line with it in one call.
-  Future<models.Error> cartsItemsDelete({required String cartId, required String id}) async {
-    final String apiPath = '/v1/carts/{cart_id}/items/{id}'.replaceAll('{cart_id}', cartId).replaceAll('{id}', id);
+  Future<models.Error> cartsItemsDelete(
+      {required String cartId, required String id}) async {
+    final String apiPath = '/v1/carts/{cart_id}/items/{id}'
+        .replaceAll('{cart_id}', cartId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One line, addressed through the cart that owns it. Both ids are checked,
@@ -185,20 +189,20 @@ class CartsItems extends Service {
   /// `line_total`, which is always quantity × unit_price and never what a
   /// payload claimed. To read a whole cart's lines, list them: this route is for
   /// one known line.
-  Future<models.Error> cartsItemsGet({required String cartId, required String id}) async {
-    final String apiPath = '/v1/carts/{cart_id}/items/{id}'.replaceAll('{cart_id}', cartId).replaceAll('{id}', id);
+  Future<models.Error> cartsItemsGet(
+      {required String cartId, required String id}) async {
+    final String apiPath = '/v1/carts/{cart_id}/items/{id}'
+        .replaceAll('{cart_id}', cartId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Changes one line of an ACTIVE cart — the quantity stepper on the cart
@@ -212,45 +216,49 @@ class CartsItems extends Service {
   /// sibling leaves two rows standing, and the next add joins whichever it
   /// matches. `max_quantity_per_line` is enforced on the result (422). A
   /// quantity of zero is not the way to remove a line; the delete is.
-  Future<models.Error> cartsItemsUpdate({required String cartId, required String id, Map? configuration, String? currency, Map? metadata, String? name, int? position, String? productId, double? quantity, String? sku, Map? snapshot, double? taxRate, enums.CartItemType? type, String? unit, double? unitPrice}) async {
-    final String apiPath = '/v1/carts/{cart_id}/items/{id}'.replaceAll('{cart_id}', cartId).replaceAll('{id}', id);
+  Future<models.Error> cartsItemsUpdate(
+      {required String cartId,
+      required String id,
+      Map? configuration,
+      String? currency,
+      Map? metadata,
+      String? name,
+      int? position,
+      String? productId,
+      double? quantity,
+      String? sku,
+      Map? snapshot,
+      double? taxRate,
+      enums.CartItemType? type,
+      String? unit,
+      double? unitPrice}) async {
+    final String apiPath = '/v1/carts/{cart_id}/items/{id}'
+        .replaceAll('{cart_id}', cartId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'configuration': configuration,
+    final Map<String, dynamic> apiParams = {
+      'configuration': configuration,
+      'currency': currency,
+      'metadata': metadata,
+      'name': name,
+      'position': position,
+      'product_id': productId,
+      'quantity': quantity,
+      'sku': sku,
+      if (snapshot != null) 'snapshot': snapshot,
+      'tax_rate': taxRate,
+      if (type != null) 'type': type.value,
+      'unit': unit,
+      'unit_price': unitPrice,
+    };
 
-            'currency': currency,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'metadata': metadata,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'name': name,
-
-            'position': position,
-
-            'product_id': productId,
-
-            'quantity': quantity,
-
-            'sku': sku,
-
-            if (snapshot != null) 'snapshot': snapshot,
-
-            'tax_rate': taxRate,
-
-            if (type != null) 'type': type.value,
-
-            'unit': unit,
-
-            'unit_price': unitPrice,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

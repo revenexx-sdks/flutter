@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = LifecycleStageCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.title, '');
-          });
+      expect(result.code, '');
+      expect(result.title, '');
+    });
   });
 }

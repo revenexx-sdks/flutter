@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = MfaType.fromMap(map);
 
-            expect(result.secret, '');
-                  expect(result.uri, '');
-          });
+      expect(result.secret, '');
+      expect(result.uri, '');
+    });
   });
 }

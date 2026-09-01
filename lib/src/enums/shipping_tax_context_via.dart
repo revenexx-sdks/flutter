@@ -1,13 +1,11 @@
 part of '../../enums.dart';
 
 enum ShippingTaxContextVia {
-    tenantDefault(value: 'tenant_default');
+  tenantDefault(value: 'tenant_default');
 
-    const ShippingTaxContextVia({
-        required this.value
-    });
+  const ShippingTaxContextVia({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

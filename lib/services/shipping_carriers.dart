@@ -1,16 +1,16 @@
 part of '../revenexx.dart';
 
-  /// WHO carries the parcel. A carrier row is one company shipping one class of
-  /// service: it owns the tracking-URL template, the service level, the transit
-  /// days, the pickup cut-off and the handling days, and every shipping method
-  /// that ships with it INHERITS all of those unless it states its own. A
-  /// carrier selling both a parcel and an express product is therefore two rows
-  /// — one row cannot hold two delivery promises. Pausing or retiring one
-  /// takes every method that ships with it out of the quote in a single edit,
-  /// which is the reason the table exists. The tracking resolver lives here too,
-  /// because the template it substitutes into is a column of this row: ask the
-  /// carrier for the link rather than copying one carrier&#039;s URL shape into every
-  /// shipment. What a carrier COSTS is never here — the price is the method&#039;s.
+/// WHO carries the parcel. A carrier row is one company shipping one class of
+/// service: it owns the tracking-URL template, the service level, the transit
+/// days, the pickup cut-off and the handling days, and every shipping method
+/// that ships with it INHERITS all of those unless it states its own. A
+/// carrier selling both a parcel and an express product is therefore two rows
+/// — one row cannot hold two delivery promises. Pausing or retiring one
+/// takes every method that ships with it out of the quote in a single edit,
+/// which is the reason the table exists. The tracking resolver lives here too,
+/// because the template it substitutes into is a column of this row: ask the
+/// carrier for the link rather than copying one carrier&#039;s URL shape into every
+/// shipment. What a carrier COSTS is never here — the price is the method&#039;s.
 class ShippingCarriers extends Service {
   /// Initializes a [ShippingCarriers] service
   ShippingCarriers(super.client);
@@ -20,32 +20,30 @@ class ShippingCarriers extends Service {
   /// query key that names no column of this entity is SILENTLY IGNORED: the page
   /// comes back unfiltered, 200, with an empty `filter`, so compare the echo
   /// against what you sent rather than trusting the status.
-  Future<models.Error> shippingCarriersList({int? limit, int? offset, String? order, String? code, enums.ShippingCarriersListStatus? status, String? serviceLevel}) async {
+  Future<models.Error> shippingCarriersList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? code,
+      enums.ShippingCarriersListStatus? status,
+      String? serviceLevel}) async {
     const String apiPath = '/v1/shipping/carriers';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (code != null) 'code': code,
+      if (status != null) 'status': status.value,
+      if (serviceLevel != null) 'service_level': serviceLevel,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (code != null) 'code': code,
-
-            if (status != null) 'status': status.value,
-
-            if (serviceLevel != null) 'service_level': serviceLevel,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A carrier row is one company shipping one class of service: it owns the
@@ -65,46 +63,46 @@ class ShippingCarriers extends Service {
   /// Creating a carrier quotes nothing on its own: a method has to reference it
   /// (`carrier_id`, or a `carrier` text equal to this code) before any of it is
   /// inherited.
-  Future<models.Error> shippingCarriersCreate({required String code, required String name, List<String>? countries, String? cutoffTime, int? etaDaysMax, int? etaDaysMin, int? handlingDays, Map? labels, Map? metadata, int? position, String? serviceLevel, enums.ShippingCarrierStatus? status, String? trackingUrlTemplate}) async {
+  Future<models.Error> shippingCarriersCreate(
+      {required String code,
+      required String name,
+      List<String>? countries,
+      String? cutoffTime,
+      int? etaDaysMax,
+      int? etaDaysMin,
+      int? handlingDays,
+      Map? labels,
+      Map? metadata,
+      int? position,
+      String? serviceLevel,
+      enums.ShippingCarrierStatus? status,
+      String? trackingUrlTemplate}) async {
     const String apiPath = '/v1/shipping/carriers';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'countries': countries,
+      'cutoff_time': cutoffTime,
+      'eta_days_max': etaDaysMax,
+      'eta_days_min': etaDaysMin,
+      'handling_days': handlingDays,
+      'labels': labels,
+      'metadata': metadata,
+      'name': name,
+      if (position != null) 'position': position,
+      if (serviceLevel != null) 'service_level': serviceLevel,
+      if (status != null) 'status': status.value,
+      'tracking_url_template': trackingUrlTemplate,
+    };
 
-            'countries': countries,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'cutoff_time': cutoffTime,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'eta_days_max': etaDaysMax,
-
-            'eta_days_min': etaDaysMin,
-
-            'handling_days': handlingDays,
-
-            'labels': labels,
-
-            'metadata': metadata,
-
-            'name': name,
-
-            if (position != null) 'position': position,
-
-            if (serviceLevel != null) 'service_level': serviceLevel,
-
-            if (status != null) 'status': status.value,
-
-            'tracking_url_template': trackingUrlTemplate,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The DACH set — the three German parcel networks, the express carriers,
@@ -116,17 +114,14 @@ class ShippingCarriers extends Service {
   Future shippingCarriersCatalog() async {
     const String apiPath = '/v1/shipping/carriers/catalog';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// The four networks a DACH shop is expected to have — DHL, DPD, GLS and UPS
@@ -140,17 +135,14 @@ class ShippingCarriers extends Service {
   Future shippingCarriersDefaults() async {
     const String apiPath = '/v1/shipping/carriers/defaults';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Deleting one clears `shipping_methods.carrier_id` rather than deleting
@@ -168,17 +160,14 @@ class ShippingCarriers extends Service {
   Future<models.Error> shippingCarriersDelete({required String id}) async {
     final String apiPath = '/v1/shipping/carriers/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A carrier row is one company shipping one class of service: it owns the
@@ -195,17 +184,14 @@ class ShippingCarriers extends Service {
   Future<models.Error> shippingCarriersGet({required String id}) async {
     final String apiPath = '/v1/shipping/carriers/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A carrier row is one company shipping one class of service: it owns the
@@ -226,46 +212,47 @@ class ShippingCarriers extends Service {
   /// instant being evaluated — compared at or after, in UTC, and as calendar
   /// days that do not skip a weekend. Two rows of this tenant may not share
   /// `code` — that is the 409.
-  Future<models.Error> shippingCarriersUpdate({required String id, String? code, List<String>? countries, String? cutoffTime, int? etaDaysMax, int? etaDaysMin, int? handlingDays, Map? labels, Map? metadata, String? name, int? position, String? serviceLevel, enums.ShippingCarrierStatus? status, String? trackingUrlTemplate}) async {
+  Future<models.Error> shippingCarriersUpdate(
+      {required String id,
+      String? code,
+      List<String>? countries,
+      String? cutoffTime,
+      int? etaDaysMax,
+      int? etaDaysMin,
+      int? handlingDays,
+      Map? labels,
+      Map? metadata,
+      String? name,
+      int? position,
+      String? serviceLevel,
+      enums.ShippingCarrierStatus? status,
+      String? trackingUrlTemplate}) async {
     final String apiPath = '/v1/shipping/carriers/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (code != null) 'code': code,
+    final Map<String, dynamic> apiParams = {
+      if (code != null) 'code': code,
+      'countries': countries,
+      'cutoff_time': cutoffTime,
+      'eta_days_max': etaDaysMax,
+      'eta_days_min': etaDaysMin,
+      'handling_days': handlingDays,
+      'labels': labels,
+      'metadata': metadata,
+      if (name != null) 'name': name,
+      if (position != null) 'position': position,
+      if (serviceLevel != null) 'service_level': serviceLevel,
+      if (status != null) 'status': status.value,
+      'tracking_url_template': trackingUrlTemplate,
+    };
 
-            'countries': countries,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'cutoff_time': cutoffTime,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'eta_days_max': etaDaysMax,
-
-            'eta_days_min': etaDaysMin,
-
-            'handling_days': handlingDays,
-
-            'labels': labels,
-
-            'metadata': metadata,
-
-            if (name != null) 'name': name,
-
-            if (position != null) 'position': position,
-
-            if (serviceLevel != null) 'service_level': serviceLevel,
-
-            if (status != null) 'status': status.value,
-
-            'tracking_url_template': trackingUrlTemplate,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Hand in a carrier code and the tracking number printed on the label, and
@@ -274,27 +261,27 @@ class ShippingCarriers extends Service {
   /// today, which is one carrier's URL shape copied into every row — the day
   /// it changes, every historic link is wrong. Ask here instead. Tracking is NOT
   /// gated on carrier status: a retired carrier's old shipments stay resolvable.
-  Future<models.Error> shippingTracking({required String carrier, String? country, String? postalCode, String? trackingCode}) async {
+  Future<models.Error> shippingTracking(
+      {required String carrier,
+      String? country,
+      String? postalCode,
+      String? trackingCode}) async {
     const String apiPath = '/v1/shipping/tracking';
 
-        final Map<String, dynamic> apiParams = {
-            'carrier': carrier,
+    final Map<String, dynamic> apiParams = {
+      'carrier': carrier,
+      'country': country,
+      'postal_code': postalCode,
+      'tracking_code': trackingCode,
+    };
 
-            'country': country,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'postal_code': postalCode,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'tracking_code': trackingCode,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

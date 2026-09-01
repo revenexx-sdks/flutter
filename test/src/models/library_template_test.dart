@@ -25,21 +25,21 @@ void main() {
       final map = model.toMap();
       final result = LibraryTemplate.fromMap(map);
 
-            expect(result.body_html, '');
-                  expect(result.body_text, '');
-                  expect(result.channel, '');
-                  expect(result.created_at, '');
-                  expect(result.description, '');
-                  expect(result.design, []);
-                  expect(result.id, '');
-                  expect(result.key, '');
-                  expect(result.locale, '');
-                  expect(result.subject, '');
-                  expect(result.suggested_event, '');
-                  expect(result.suggested_recipient, '');
-                  expect(result.title, '');
-                  expect(result.updated_at, '');
-                  expect(result.variables, []);
-          });
+      expect(result.body_html, '');
+      expect(result.body_text, '');
+      expect(result.channel, '');
+      expect(result.created_at, '');
+      expect(result.description, '');
+      expect(result.design, []);
+      expect(result.id, '');
+      expect(result.key, '');
+      expect(result.locale, '');
+      expect(result.subject, '');
+      expect(result.suggested_event, '');
+      expect(result.suggested_recipient, '');
+      expect(result.title, '');
+      expect(result.updated_at, '');
+      expect(result.variables, []);
+    });
   });
 }

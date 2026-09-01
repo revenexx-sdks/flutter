@@ -1,13 +1,11 @@
 part of '../../enums.dart';
 
 enum MarketsVocabularyName {
-    marketStatuses(value: 'market-statuses');
+  marketStatuses(value: 'market-statuses');
 
-    const MarketsVocabularyName({
-        required this.value
-    });
+  const MarketsVocabularyName({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

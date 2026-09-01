@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = CartIoMappingColumn.fromMap(map);
 
-            expect(result.from, '');
-                  expect(result.to, '');
-          });
+      expect(result.from, '');
+      expect(result.to, '');
+    });
   });
 }

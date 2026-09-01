@@ -1,20 +1,18 @@
 part of '../../enums.dart';
 
 enum OrdersVocabulariesGetName {
-    cancellationScopes(value: 'cancellation-scopes'),
-    commentVisibilities(value: 'comment-visibilities'),
-    fulfillmentStatuses(value: 'fulfillment-statuses'),
-    itemTypes(value: 'item-types'),
-    paymentStatuses(value: 'payment-statuses'),
-    returnResolutions(value: 'return-resolutions'),
-    returnStatuses(value: 'return-statuses'),
-    statuses(value: 'statuses');
+  cancellationScopes(value: 'cancellation-scopes'),
+  commentVisibilities(value: 'comment-visibilities'),
+  fulfillmentStatuses(value: 'fulfillment-statuses'),
+  itemTypes(value: 'item-types'),
+  paymentStatuses(value: 'payment-statuses'),
+  returnResolutions(value: 'return-resolutions'),
+  returnStatuses(value: 'return-statuses'),
+  statuses(value: 'statuses');
 
-    const OrdersVocabulariesGetName({
-        required this.value
-    });
+  const OrdersVocabulariesGetName({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

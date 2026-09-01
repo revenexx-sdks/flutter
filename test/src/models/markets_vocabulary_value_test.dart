@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('MarketsVocabularyValue', () {
     test('model', () {
-      final model = MarketsVocabularyValue(
-      );
+      final model = MarketsVocabularyValue();
 
       final map = model.toMap();
       final result = MarketsVocabularyValue.fromMap(map);
-
     });
   });
 }

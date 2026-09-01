@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = RuntimeList.fromMap(map);
 
-            expect(result.runtimes, []);
-                  expect(result.total, 0);
-          });
+      expect(result.runtimes, []);
+      expect(result.total, 0);
+    });
   });
 }

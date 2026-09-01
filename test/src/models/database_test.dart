@@ -17,12 +17,12 @@ void main() {
       final map = model.toMap();
       final result = Database.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.enabled, true);
-                  expect(result.name, '');
-                  expect(result.type, DatabaseType.legacy);
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$updatedAt, '');
+      expect(result.enabled, true);
+      expect(result.name, '');
+      expect(result.type, DatabaseType.legacy);
+    });
   });
 }

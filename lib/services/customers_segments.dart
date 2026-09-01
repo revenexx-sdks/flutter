@@ -1,13 +1,13 @@
 part of '../revenexx.dart';
 
-  /// Named groups of ORGANIZATIONS — never of people — built by hand, by
-  /// rule, or both at once, plus the memberships that record which of the two a
-  /// company came in by. The rule language is the one product categories use,
-  /// evaluated over organization columns and settings AND over order behaviour
-  /// (revenue, order count, average order value, days since the last order) read
-  /// from this app&#039;s own metrics projection, because the orders app may not be
-  /// joined. Rules are materialized rather than live: preview one before storing
-  /// it, then recompute one segment or every segment that carries rules.
+/// Named groups of ORGANIZATIONS — never of people — built by hand, by
+/// rule, or both at once, plus the memberships that record which of the two a
+/// company came in by. The rule language is the one product categories use,
+/// evaluated over organization columns and settings AND over order behaviour
+/// (revenue, order count, average order value, days since the last order) read
+/// from this app&#039;s own metrics projection, because the orders app may not be
+/// joined. Rules are materialized rather than live: preview one before storing
+/// it, then recompute one segment or every segment that carries rules.
 class CustomersSegments extends Service {
   /// Initializes a [CustomersSegments] service
   CustomersSegments(super.client);
@@ -19,36 +19,34 @@ class CustomersSegments extends Service {
   /// themselves — the answer to "which companies are in this segment"
   /// (`segment_id`) and to "which segments is this company in"
   /// (`organization_id`). Paged with `limit`/`offset`/`order`.
-  Future customersSegmentMembersList({String? id, String? segmentId, String? organizationId, enums.Source? source, String? createdAt, int? limit, int? offset, String? order}) async {
+  Future customersSegmentMembersList(
+      {String? id,
+      String? segmentId,
+      String? organizationId,
+      enums.Source? source,
+      String? createdAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/customers/segment_members';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (segmentId != null) 'segment_id': segmentId,
+      if (organizationId != null) 'organization_id': organizationId,
+      if (source != null) 'source': source.value,
+      if (createdAt != null) 'created_at': createdAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (segmentId != null) 'segment_id': segmentId,
+    final Map<String, String> apiHeaders = {};
 
-            if (organizationId != null) 'organization_id': organizationId,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (source != null) 'source': source.value,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// One organization inside one segment, plus the record of how it got there:
@@ -60,26 +58,26 @@ class CustomersSegments extends Service {
   /// touches this one. A create cannot omit `segment_id` and `organization_id`;
   /// everything else is optional or defaulted by the database. Two rows of this
   /// tenant may not share the combination of `segment_id` + `organization_id`.
-  Future<models.Error> customersSegmentMembersCreate({required String organizationId, required String segmentId, enums.SegmentMemberSource? source}) async {
+  Future<models.Error> customersSegmentMembersCreate(
+      {required String organizationId,
+      required String segmentId,
+      enums.SegmentMemberSource? source}) async {
     const String apiPath = '/v1/customers/segment_members';
 
-        final Map<String, dynamic> apiParams = {
-            'organization_id': organizationId,
+    final Map<String, dynamic> apiParams = {
+      'organization_id': organizationId,
+      'segment_id': segmentId,
+      if (source != null) 'source': source.value,
+    };
 
-            'segment_id': segmentId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (source != null) 'source': source.value,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One organization inside one segment, plus the record of how it got there:
@@ -90,20 +88,19 @@ class CustomersSegments extends Service {
   /// them, the next recompute puts it back; remove it from the rule, not from
   /// the list. Nothing else in this app points at it, so nothing else goes with
   /// it.
-  Future<models.Error> customersSegmentMembersDelete({required String id}) async {
-    final String apiPath = '/v1/customers/segment_members/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersSegmentMembersDelete(
+      {required String id}) async {
+    final String apiPath =
+        '/v1/customers/segment_members/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One organization inside one segment, plus the record of how it got there:
@@ -112,19 +109,17 @@ class CustomersSegments extends Service {
   /// its own rows and leave every hand-picked one alone. One membership row by
   /// id, with the `source` that says how it came about.
   Future<models.Error> customersSegmentMembersGet({required String id}) async {
-    final String apiPath = '/v1/customers/segment_members/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/customers/segment_members/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One organization inside one segment, plus the record of how it got there:
@@ -135,26 +130,28 @@ class CustomersSegments extends Service {
   /// this exists for the `source` correction rather than as the normal path. Two
   /// rows of this tenant may not share the combination of `segment_id` +
   /// `organization_id`.
-  Future<models.Error> customersSegmentMembersUpdate({required String id, String? organizationId, String? segmentId, enums.SegmentMemberSource? source}) async {
-    final String apiPath = '/v1/customers/segment_members/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersSegmentMembersUpdate(
+      {required String id,
+      String? organizationId,
+      String? segmentId,
+      enums.SegmentMemberSource? source}) async {
+    final String apiPath =
+        '/v1/customers/segment_members/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (organizationId != null) 'organization_id': organizationId,
+    final Map<String, dynamic> apiParams = {
+      if (organizationId != null) 'organization_id': organizationId,
+      if (segmentId != null) 'segment_id': segmentId,
+      if (source != null) 'source': source.value,
+    };
 
-            if (segmentId != null) 'segment_id': segmentId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (source != null) 'source': source.value,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A segment is a named group of ORGANIZATIONS — never of people — built
@@ -164,40 +161,38 @@ class CustomersSegments extends Service {
   /// filters and the page is `limit`/`offset`/`order`. Which companies are
   /// actually IN one is `segment_members`, because the rule half is materialized
   /// rather than evaluated on read.
-  Future customersSegmentsList({String? id, String? code, int? position, enums.RuleMatch? ruleMatch, String? rulesComputedAt, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
+  Future customersSegmentsList(
+      {String? id,
+      String? code,
+      int? position,
+      enums.RuleMatch? ruleMatch,
+      String? rulesComputedAt,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/customers/segments';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (position != null) 'position': position,
+      if (ruleMatch != null) 'rule_match': ruleMatch.value,
+      if (rulesComputedAt != null) 'rules_computed_at': rulesComputedAt,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {};
 
-            if (position != null) 'position': position,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (ruleMatch != null) 'rule_match': ruleMatch.value,
-
-            if (rulesComputedAt != null) 'rules_computed_at': rulesComputedAt,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// A segment is a named group of ORGANIZATIONS — never of people — built
@@ -209,30 +204,30 @@ class CustomersSegments extends Service {
   /// deliberately. `code` is the only field a create cannot omit; everything
   /// else is optional or defaulted by the database. Two rows of this tenant may
   /// not share `code`.
-  Future<models.Error> customersSegmentsCreate({required String code, Map? labels, int? position, enums.SegmentRuleMatch? ruleMatch, Map? rules}) async {
+  Future<models.Error> customersSegmentsCreate(
+      {required String code,
+      Map? labels,
+      int? position,
+      enums.SegmentRuleMatch? ruleMatch,
+      Map? rules}) async {
     const String apiPath = '/v1/customers/segments';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'labels': labels,
+      if (position != null) 'position': position,
+      'rule_match': ruleMatch?.value,
+      if (rules != null) 'rules': rules,
+    };
 
-            'labels': labels,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (position != null) 'position': position,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'rule_match': ruleMatch?.value,
-
-            if (rules != null) 'rules': rules,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Same sync as the single-segment recompute, applied to every segment with
@@ -241,22 +236,22 @@ class CustomersSegments extends Service {
   /// reports done:false (or skipped:true) and keeps rules_computed_at null, so
   /// the next call resumes it from its own data. Repeat until the top-level done
   /// is true.
-  Future<models.Error> customersSegmentsRulesRecomputeAll({required Map data}) async {
+  Future<models.Error> customersSegmentsRulesRecomputeAll(
+      {required Map data}) async {
     const String apiPath = '/v1/customers/segments/rules/recompute-all';
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A segment is a named group of ORGANIZATIONS — never of people — built
@@ -270,17 +265,14 @@ class CustomersSegments extends Service {
   Future<models.Error> customersSegmentsDelete({required String id}) async {
     final String apiPath = '/v1/customers/segments/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A segment is a named group of ORGANIZATIONS — never of people — built
@@ -291,17 +283,14 @@ class CustomersSegments extends Service {
   Future<models.Error> customersSegmentsGet({required String id}) async {
     final String apiPath = '/v1/customers/segments/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A segment is a named group of ORGANIZATIONS — never of people — built
@@ -312,30 +301,31 @@ class CustomersSegments extends Service {
   /// /customers/segments/{segment_id}/rules/recompute`, so a half-typed rule
   /// never silently empties a live segment. Two rows of this tenant may not
   /// share `code`.
-  Future<models.Error> customersSegmentsUpdate({required String id, String? code, Map? labels, int? position, enums.SegmentRuleMatch? ruleMatch, Map? rules}) async {
+  Future<models.Error> customersSegmentsUpdate(
+      {required String id,
+      String? code,
+      Map? labels,
+      int? position,
+      enums.SegmentRuleMatch? ruleMatch,
+      Map? rules}) async {
     final String apiPath = '/v1/customers/segments/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (code != null) 'code': code,
+    final Map<String, dynamic> apiParams = {
+      if (code != null) 'code': code,
+      'labels': labels,
+      if (position != null) 'position': position,
+      'rule_match': ruleMatch?.value,
+      if (rules != null) 'rules': rules,
+    };
 
-            'labels': labels,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (position != null) 'position': position,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'rule_match': ruleMatch?.value,
-
-            if (rules != null) 'rules': rules,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A dry run: it answers how many organizations the rule would select, with a
@@ -345,26 +335,28 @@ class CustomersSegments extends Service {
   /// common single-query rule; 'any' rules and rules repeating a column are
   /// combined in the app and capped at 5000 ids, in which case 'capped' is true
   /// and 'count' is a LOWER bound. Membership is never touched.
-  Future<models.Error> customersSegmentsRulesPreview({required String segmentId, required List<models.SegmentRuleCondition> conditions, enums.RuleMatch? ruleMatch, enums.Target? target}) async {
-    final String apiPath = '/v1/customers/segments/{segment_id}/rules/preview'.replaceAll('{segment_id}', segmentId);
+  Future<models.Error> customersSegmentsRulesPreview(
+      {required String segmentId,
+      required List<models.SegmentRuleCondition> conditions,
+      enums.RuleMatch? ruleMatch,
+      enums.Target? target}) async {
+    final String apiPath = '/v1/customers/segments/{segment_id}/rules/preview'
+        .replaceAll('{segment_id}', segmentId);
 
-        final Map<String, dynamic> apiParams = {
-            'conditions': conditions.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      'conditions': conditions.map((p) => p.toMap()).toList(),
+      'rule_match': ruleMatch?.value,
+      'target': target?.value,
+    };
 
-            'rule_match': ruleMatch?.value,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'target': target?.value,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Evaluates segments.rules (NOT the request body), then inserts the newly
@@ -376,21 +368,22 @@ class CustomersSegments extends Service {
   /// Omitting 'cursor' resumes an unfinished pass and starts a fresh one after a
   /// completed pass; an explicit null always restarts.
   /// segments.rules_computed_at is stamped only when the pass completes.
-  Future<models.Error> customersSegmentsRulesRecompute({required String segmentId, String? cursor}) async {
-    final String apiPath = '/v1/customers/segments/{segment_id}/rules/recompute'.replaceAll('{segment_id}', segmentId);
+  Future<models.Error> customersSegmentsRulesRecompute(
+      {required String segmentId, String? cursor}) async {
+    final String apiPath = '/v1/customers/segments/{segment_id}/rules/recompute'
+        .replaceAll('{segment_id}', segmentId);
 
-        final Map<String, dynamic> apiParams = {
-            'cursor': cursor,
+    final Map<String, dynamic> apiParams = {
+      'cursor': cursor,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

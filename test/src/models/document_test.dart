@@ -18,13 +18,13 @@ void main() {
       final map = model.toMap();
       final result = Document.fromMap(map);
 
-            expect(result.$collectionId, '');
-                  expect(result.$createdAt, '');
-                  expect(result.$databaseId, '');
-                  expect(result.$id, '');
-                  expect(result.$permissions, []);
-                  expect(result.$sequence, 0);
-                  expect(result.$updatedAt, '');
-          });
+      expect(result.$collectionId, '');
+      expect(result.$createdAt, '');
+      expect(result.$databaseId, '');
+      expect(result.$id, '');
+      expect(result.$permissions, []);
+      expect(result.$sequence, 0);
+      expect(result.$updatedAt, '');
+    });
   });
 }

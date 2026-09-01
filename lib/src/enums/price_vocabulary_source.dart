@@ -1,13 +1,11 @@
 part of '../../enums.dart';
 
 enum PriceVocabularySource {
-    schema(value: 'schema');
+  schema(value: 'schema');
 
-    const PriceVocabularySource({
-        required this.value
-    });
+  const PriceVocabularySource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

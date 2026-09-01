@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ContactEventKind', () {
     test('model', () {
-      final model = ContactEventKind(
-      );
+      final model = ContactEventKind();
 
       final map = model.toMap();
       final result = ContactEventKind.fromMap(map);
-
     });
   });
 }

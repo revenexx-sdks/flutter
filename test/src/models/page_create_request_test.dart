@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = PageCreateRequest.fromMap(map);
 
-            expect(result.title, '');
-          });
+      expect(result.title, '');
+    });
   });
 }

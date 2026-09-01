@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = AssetsCreateRequest.fromMap(map);
 
-            expect(result.asset_family_id, '');
-                  expect(result.code, '');
-          });
+      expect(result.asset_family_id, '');
+      expect(result.code, '');
+    });
   });
 }

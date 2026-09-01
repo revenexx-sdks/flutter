@@ -21,17 +21,17 @@ void main() {
       final map = model.toMap();
       final result = SyncHistory.fromMap(map);
 
-            expect(result.bytes_synced, 0);
-                  expect(result.created_at, '');
-                  expect(result.duration_ms, 0);
-                  expect(result.error, '');
-                  expect(result.id, 0);
-                  expect(result.rule_id, '');
-                  expect(result.run_id, '');
-                  expect(result.source_path, '');
-                  expect(result.status, '');
-                  expect(result.target_asset_id, '');
-                  expect(result.tenant_id, '');
-          });
+      expect(result.bytes_synced, 0);
+      expect(result.created_at, '');
+      expect(result.duration_ms, 0);
+      expect(result.error, '');
+      expect(result.id, 0);
+      expect(result.rule_id, '');
+      expect(result.run_id, '');
+      expect(result.source_path, '');
+      expect(result.status, '');
+      expect(result.target_asset_id, '');
+      expect(result.tenant_id, '');
+    });
   });
 }

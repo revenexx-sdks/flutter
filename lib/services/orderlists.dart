@@ -1,17 +1,17 @@
 part of '../revenexx.dart';
 
-  /// Commerce Studio Order Lists App — saved, reusable position collections
-  /// (shopping &amp; label lists) that turn back into a cart or an order in one
-  /// call. A list is owned by a contact and can be shared across the
-  /// organization (shared; read-only unless the tenant makes shared lists
-  /// team-editable). Whole positions are stored: article (product_id/sku),
-  /// quantity, unit, price, tax rate, cost center, position texts and custom
-  /// SKU. GET /orderlists returns the owner&#039;s own lists union the organization&#039;s
-  /// shared lists; positions are managed as a nested items resource (list / add
-  /// / bulk-replace / update / remove). POST /orderlists/{id}/cart hands the
-  /// positions to the carts app, POST /orderlists/{id}/order to the orders app.
-  /// Both collections answer the platform envelope { items, page, filter } with
-  /// limit/offset/order.
+/// Commerce Studio Order Lists App — saved, reusable position collections
+/// (shopping &amp; label lists) that turn back into a cart or an order in one
+/// call. A list is owned by a contact and can be shared across the
+/// organization (shared; read-only unless the tenant makes shared lists
+/// team-editable). Whole positions are stored: article (product_id/sku),
+/// quantity, unit, price, tax rate, cost center, position texts and custom
+/// SKU. GET /orderlists returns the owner&#039;s own lists union the organization&#039;s
+/// shared lists; positions are managed as a nested items resource (list / add
+/// / bulk-replace / update / remove). POST /orderlists/{id}/cart hands the
+/// positions to the carts app, POST /orderlists/{id}/order to the orders app.
+/// Both collections answer the platform envelope { items, page, filter } with
+/// limit/offset/order.
 class Orderlists extends Service {
   /// Initializes a [Orderlists] service
   Orderlists(super.client);
@@ -37,32 +37,30 @@ class Orderlists extends Service {
   /// was to read the positions of every list on the page — thousands of rows
   /// to draw twenty numbers. The count is bounded the way the page is: at most
   /// 200 lists, each capped by the tenant's max_items_per_list.
-  Future<models.Error> orderlistsList({String? ownerId, String? organizationId, String? kind, int? limit, int? offset, String? order}) async {
+  Future<models.Error> orderlistsList(
+      {String? ownerId,
+      String? organizationId,
+      String? kind,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/orderlists';
 
-        final Map<String, dynamic> apiParams = {
-            if (ownerId != null) 'owner_id': ownerId,
+    final Map<String, dynamic> apiParams = {
+      if (ownerId != null) 'owner_id': ownerId,
+      if (organizationId != null) 'organization_id': organizationId,
+      if (kind != null) 'kind': kind,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (organizationId != null) 'organization_id': organizationId,
+    final Map<String, String> apiHeaders = {};
 
-            if (kind != null) 'kind': kind,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Three fields are required, and they are exactly the columns the database
@@ -83,36 +81,36 @@ class Orderlists extends Service {
   /// rejected position never leaves an empty list behind and a contact at their
   /// limit is refused before anything is inserted. The owner is set once — no
   /// route moves a list to another contact.
-  Future<models.Error> orderlistsCreate({required String name, required String ownerId, required String ownerName, List<models.OrderListItemInput>? items, String? kind, Map? metadata, String? organizationId, bool? shared}) async {
+  Future<models.Error> orderlistsCreate(
+      {required String name,
+      required String ownerId,
+      required String ownerName,
+      List<models.OrderListItemInput>? items,
+      String? kind,
+      Map? metadata,
+      String? organizationId,
+      bool? shared}) async {
     const String apiPath = '/v1/orderlists';
 
-        final Map<String, dynamic> apiParams = {
-            if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+      if (kind != null) 'kind': kind,
+      'metadata': metadata,
+      'name': name,
+      'organization_id': organizationId,
+      'owner_id': ownerId,
+      'owner_name': ownerName,
+      if (shared != null) 'shared': shared,
+    };
 
-            if (kind != null) 'kind': kind,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'metadata': metadata,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'name': name,
-
-            'organization_id': organizationId,
-
-            'owner_id': ownerId,
-
-            'owner_name': ownerName,
-
-            if (shared != null) 'shared': shared,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Seeds the two kinds a fresh tenant starts with — `shopping` and `label`
@@ -126,17 +124,14 @@ class Orderlists extends Service {
   Future<models.Error> orderlistsDefaults() async {
     const String apiPath = '/v1/orderlists/defaults';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What a saved list may be FOR — the tenant's own taxonomy, and the set
@@ -157,21 +152,17 @@ class Orderlists extends Service {
   Future orderlistsKindsList({int? limit, int? offset}) async {
     const String apiPath = '/v1/orderlists/kinds';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Adds a kind to the tenant's own taxonomy — reagent lists, sample lists,
@@ -183,36 +174,36 @@ class Orderlists extends Service {
   /// since a list stores the code and not the id. `is_default: true` promotes
   /// the new kind and demotes whoever held the flag. Creating a kind changes no
   /// existing list.
-  Future<models.Error> orderlistsKindsCreate({required String code, required String title, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, enums.OrderListKindTone? tone}) async {
+  Future<models.Error> orderlistsKindsCreate(
+      {required String code,
+      required String title,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      enums.OrderListKindTone? tone}) async {
     const String apiPath = '/v1/orderlists/kinds';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'description': description,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'descriptions': descriptions,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// There is no foreign key behind `lists.kind` — it is a plain text column
@@ -236,17 +227,14 @@ class Orderlists extends Service {
   Future<models.Error> orderlistsKindsDelete({required String id}) async {
     final String apiPath = '/v1/orderlists/kinds/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One kind, by the id this route takes. The `code` is the OTHER identity and
@@ -261,17 +249,14 @@ class Orderlists extends Service {
   Future<models.Error> orderlistsKindsGet({required String id}) async {
     final String apiPath = '/v1/orderlists/kinds/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Everything a kind has except its code: the title a person reads, the
@@ -287,34 +272,35 @@ class Orderlists extends Service {
   /// merging into it. `is_default: true` makes the same move POST
   /// /orderlists/kinds/{id}/make-default makes on its own. A system kind is
   /// editable like any other.
-  Future<models.Error> orderlistsKindsUpdate({required String id, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, String? title, enums.OrderListKindTone? tone}) async {
+  Future<models.Error> orderlistsKindsUpdate(
+      {required String id,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      String? title,
+      enums.OrderListKindTone? tone}) async {
     final String apiPath = '/v1/orderlists/kinds/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'description': description,
+    final Map<String, dynamic> apiParams = {
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      if (title != null) 'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'descriptions': descriptions,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            if (title != null) 'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One call MOVES the flag: the kind in the path is promoted and whoever held
@@ -334,22 +320,23 @@ class Orderlists extends Service {
   /// only what a FUTURE create with no `kind` resolves to. The market-scoped
   /// `default_kind` setting still wins where it is set; this flag is the
   /// tenant-wide answer underneath it.
-  Future<models.Error> orderlistsKindsMakeDefault({required String id, required Map data}) async {
-    final String apiPath = '/v1/orderlists/kinds/{id}/make-default'.replaceAll('{id}', id);
+  Future<models.Error> orderlistsKindsMakeDefault(
+      {required String id, required Map data}) async {
+    final String apiPath =
+        '/v1/orderlists/kinds/{id}/make-default'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Discovery for the vocabulary routes, and nothing more: every enum this app
@@ -370,17 +357,14 @@ class Orderlists extends Service {
   Future<models.OrderListVocabularyIndex> orderlistsVocabulariesList() async {
     const String apiPath = '/v1/orderlists/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.OrderListVocabularyIndex.fromMap(res.data);
-
+    return models.OrderListVocabularyIndex.fromMap(res.data);
   }
 
   /// One named enum with every value it permits, and enough about each value to
@@ -399,20 +383,19 @@ class Orderlists extends Service {
   /// whether the set is closed. `source` says which: 'schema' where a CHECK
   /// constraint owns the values, 'table' where the tenant's rows do. Names:
   /// kinds.
-  Future<models.Error> orderlistsVocabulariesGet({required enums.OrderlistsVocabulariesGetName name}) async {
-    final String apiPath = '/v1/orderlists/vocabularies/{name}'.replaceAll('{name}', name.value);
+  Future<models.Error> orderlistsVocabulariesGet(
+      {required enums.OrderlistsVocabulariesGetName name}) async {
+    final String apiPath =
+        '/v1/orderlists/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Takes every position with it, in the database: `items.list_id` is the app's
@@ -431,17 +414,14 @@ class Orderlists extends Service {
   Future<models.Error> orderlistsDelete({required String id}) async {
     final String apiPath = '/v1/orderlists/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The whole list in one call: the row plus every position inline, in
@@ -455,17 +435,14 @@ class Orderlists extends Service {
   Future<models.Error> orderlistsGet({required String id}) async {
     final String apiPath = '/v1/orderlists/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Rename, share or reclassify — the whole of what a list says about itself,
@@ -477,28 +454,29 @@ class Orderlists extends Service {
   /// rather than refused, so the list quietly keeps the kind it had and a client
   /// that cares must read the answer back. An empty body is a 400 rather than a
   /// no-op.
-  Future<models.Error> orderlistsUpdate({required String id, String? kind, Map? metadata, String? name, bool? shared}) async {
+  Future<models.Error> orderlistsUpdate(
+      {required String id,
+      String? kind,
+      Map? metadata,
+      String? name,
+      bool? shared}) async {
     final String apiPath = '/v1/orderlists/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (kind != null) 'kind': kind,
+    final Map<String, dynamic> apiParams = {
+      if (kind != null) 'kind': kind,
+      'metadata': metadata,
+      if (name != null) 'name': name,
+      if (shared != null) 'shared': shared,
+    };
 
-            'metadata': metadata,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (name != null) 'name': name,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (shared != null) 'shared': shared,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The reason a buyer keeps a list at all: every position of the list goes
@@ -517,26 +495,27 @@ class Orderlists extends Service {
   /// the list it came from. The list itself is never touched: it is read, not
   /// emptied, so the same list converts again next month. Cross-app:
   /// carts.create, carts.items.create, carts.items.replace.
-  Future<models.Error> orderlistsToCart({required String id, String? cartId, String? currency, enums.OrderListCartMode? mode}) async {
+  Future<models.Error> orderlistsToCart(
+      {required String id,
+      String? cartId,
+      String? currency,
+      enums.OrderListCartMode? mode}) async {
     final String apiPath = '/v1/orderlists/{id}/cart'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'cart_id': cartId,
+    final Map<String, dynamic> apiParams = {
+      'cart_id': cartId,
+      'currency': currency,
+      if (mode != null) 'mode': mode.value,
+    };
 
-            'currency': currency,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (mode != null) 'mode': mode.value,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The other half of the reason a list exists — and it is the ORDERS app
@@ -554,24 +533,25 @@ class Orderlists extends Service {
   /// override it, which is why `status` is reported rather than chosen and why
   /// the created order is handed back verbatim under `order` beside the three
   /// fields lifted out of it. Cross-app: orders.place.
-  Future<models.Error> orderlistsToOrder({required String id, String? currency, String? customerOrderNumber}) async {
+  Future<models.Error> orderlistsToOrder(
+      {required String id,
+      String? currency,
+      String? customerOrderNumber}) async {
     final String apiPath = '/v1/orderlists/{id}/order'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'currency': currency,
+    final Map<String, dynamic> apiParams = {
+      'currency': currency,
+      'customer_order_number': customerOrderNumber,
+    };
 
-            'customer_order_number': customerOrderNumber,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Every column of a position is an exact-match filter — eighteen of them,
@@ -583,62 +563,62 @@ class Orderlists extends Service {
   /// produces two rows sharing a number and the tie falls to whatever the
   /// database returns first. Sort by `created_at` where the order has to be
   /// unambiguous.
-  Future<models.Error> orderlistsItemsList({required String listId, String? id, String? productId, String? sku, String? name, String? image, double? quantity, String? unit, double? price, double? taxRate, String? costCenterId, String? positionTexts, String? customSku, String? categorySlug, String? subcategorySlug, int? position, String? metadata, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
-    final String apiPath = '/v1/orderlists/{list_id}/items'.replaceAll('{list_id}', listId);
+  Future<models.Error> orderlistsItemsList(
+      {required String listId,
+      String? id,
+      String? productId,
+      String? sku,
+      String? name,
+      String? image,
+      double? quantity,
+      String? unit,
+      double? price,
+      double? taxRate,
+      String? costCenterId,
+      String? positionTexts,
+      String? customSku,
+      String? categorySlug,
+      String? subcategorySlug,
+      int? position,
+      String? metadata,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
+    final String apiPath =
+        '/v1/orderlists/{list_id}/items'.replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (productId != null) 'product_id': productId,
+      if (sku != null) 'sku': sku,
+      if (name != null) 'name': name,
+      if (image != null) 'image': image,
+      if (quantity != null) 'quantity': quantity,
+      if (unit != null) 'unit': unit,
+      if (price != null) 'price': price,
+      if (taxRate != null) 'tax_rate': taxRate,
+      if (costCenterId != null) 'cost_center_id': costCenterId,
+      if (positionTexts != null) 'position_texts': positionTexts,
+      if (customSku != null) 'custom_sku': customSku,
+      if (categorySlug != null) 'category_slug': categorySlug,
+      if (subcategorySlug != null) 'subcategory_slug': subcategorySlug,
+      if (position != null) 'position': position,
+      if (metadata != null) 'metadata': metadata,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (productId != null) 'product_id': productId,
+    final Map<String, String> apiHeaders = {};
 
-            if (sku != null) 'sku': sku,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (name != null) 'name': name,
-
-            if (image != null) 'image': image,
-
-            if (quantity != null) 'quantity': quantity,
-
-            if (unit != null) 'unit': unit,
-
-            if (price != null) 'price': price,
-
-            if (taxRate != null) 'tax_rate': taxRate,
-
-            if (costCenterId != null) 'cost_center_id': costCenterId,
-
-            if (positionTexts != null) 'position_texts': positionTexts,
-
-            if (customSku != null) 'custom_sku': customSku,
-
-            if (categorySlug != null) 'category_slug': categorySlug,
-
-            if (subcategorySlug != null) 'subcategory_slug': subcategorySlug,
-
-            if (position != null) 'position': position,
-
-            if (metadata != null) 'metadata': metadata,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A position is a whole saved line, not a pointer at a product. `name` is
@@ -651,50 +631,52 @@ class Orderlists extends Service {
   /// an existing number whenever an earlier position was deleted from the
   /// middle. The list's `updated_at` is touched, which is what the default sort
   /// of GET /orderlists reads.
-  Future<models.Error> orderlistsItemsCreate({required String listId, required String name, String? categorySlug, String? costCenterId, String? customSku, String? image, Map? metadata, int? position, List<String>? positionTexts, double? price, String? productId, double? quantity, String? sku, String? subcategorySlug, double? taxRate, String? unit}) async {
-    final String apiPath = '/v1/orderlists/{list_id}/items'.replaceAll('{list_id}', listId);
+  Future<models.Error> orderlistsItemsCreate(
+      {required String listId,
+      required String name,
+      String? categorySlug,
+      String? costCenterId,
+      String? customSku,
+      String? image,
+      Map? metadata,
+      int? position,
+      List<String>? positionTexts,
+      double? price,
+      String? productId,
+      double? quantity,
+      String? sku,
+      String? subcategorySlug,
+      double? taxRate,
+      String? unit}) async {
+    final String apiPath =
+        '/v1/orderlists/{list_id}/items'.replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            'category_slug': categorySlug,
+    final Map<String, dynamic> apiParams = {
+      'category_slug': categorySlug,
+      'cost_center_id': costCenterId,
+      'custom_sku': customSku,
+      'image': image,
+      'metadata': metadata,
+      'name': name,
+      if (position != null) 'position': position,
+      'position_texts': positionTexts,
+      'price': price,
+      'product_id': productId,
+      if (quantity != null) 'quantity': quantity,
+      'sku': sku,
+      'subcategory_slug': subcategorySlug,
+      'tax_rate': taxRate,
+      'unit': unit,
+    };
 
-            'cost_center_id': costCenterId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'custom_sku': customSku,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'image': image,
-
-            'metadata': metadata,
-
-            'name': name,
-
-            if (position != null) 'position': position,
-
-            'position_texts': positionTexts,
-
-            'price': price,
-
-            'product_id': productId,
-
-            if (quantity != null) 'quantity': quantity,
-
-            'sku': sku,
-
-            'subcategory_slug': subcategorySlug,
-
-            'tax_rate': taxRate,
-
-            'unit': unit,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Set semantics: what you send becomes the list's positions and everything
@@ -715,22 +697,24 @@ class Orderlists extends Service {
   /// other collection uses, with `limit`, `offset` and `total` describing
   /// exactly what was written; the list's `updated_at` is touched, which moves
   /// it to the front of the default GET /orderlists page.
-  Future<models.Error> orderlistsItemsReplace({required String listId, required List<models.OrderListItemInput> items}) async {
-    final String apiPath = '/v1/orderlists/{list_id}/items'.replaceAll('{list_id}', listId);
+  Future<models.Error> orderlistsItemsReplace(
+      {required String listId,
+      required List<models.OrderListItemInput> items}) async {
+    final String apiPath =
+        '/v1/orderlists/{list_id}/items'.replaceAll('{list_id}', listId);
 
-        final Map<String, dynamic> apiParams = {
-            'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      'items': items.map((p) => p.toMap()).toList(),
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Removes one saved line and takes nothing with it — no foreign key in this
@@ -742,20 +726,20 @@ class Orderlists extends Service {
   /// `order_list_item_id` in its snapshot — a jsonb value, not a reference —
   /// so it is simply left naming a row that is gone. The list's `updated_at` is
   /// touched.
-  Future<models.Error> orderlistsItemsDelete({required String listId, required String id}) async {
-    final String apiPath = '/v1/orderlists/{list_id}/items/{id}'.replaceAll('{list_id}', listId).replaceAll('{id}', id);
+  Future<models.Error> orderlistsItemsDelete(
+      {required String listId, required String id}) async {
+    final String apiPath = '/v1/orderlists/{list_id}/items/{id}'
+        .replaceAll('{list_id}', listId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One saved line by its own id, in exactly the shape the collection returns
@@ -765,20 +749,20 @@ class Orderlists extends Service {
   /// belongs to a different list answers 404 rather than the row, which is what
   /// stops an id lifting a position out of a list the caller may not read. An
   /// unknown or unreadable list is a 404 before the position is looked at.
-  Future<models.Error> orderlistsItemsGet({required String listId, required String id}) async {
-    final String apiPath = '/v1/orderlists/{list_id}/items/{id}'.replaceAll('{list_id}', listId).replaceAll('{id}', id);
+  Future<models.Error> orderlistsItemsGet(
+      {required String listId, required String id}) async {
+    final String apiPath = '/v1/orderlists/{list_id}/items/{id}'
+        .replaceAll('{list_id}', listId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A partial update: omitted fields keep the value they have, and an explicit
@@ -789,49 +773,53 @@ class Orderlists extends Service {
   /// `position` is set, not shifted: writing 3 puts this row at 3 and moves
   /// nothing else, which is the other way two positions come to share a number.
   /// The list's `updated_at` is touched.
-  Future<models.Error> orderlistsItemsUpdate({required String listId, required String id, String? categorySlug, String? costCenterId, String? customSku, String? image, Map? metadata, String? name, int? position, List<String>? positionTexts, double? price, String? productId, double? quantity, String? sku, String? subcategorySlug, double? taxRate, String? unit}) async {
-    final String apiPath = '/v1/orderlists/{list_id}/items/{id}'.replaceAll('{list_id}', listId).replaceAll('{id}', id);
+  Future<models.Error> orderlistsItemsUpdate(
+      {required String listId,
+      required String id,
+      String? categorySlug,
+      String? costCenterId,
+      String? customSku,
+      String? image,
+      Map? metadata,
+      String? name,
+      int? position,
+      List<String>? positionTexts,
+      double? price,
+      String? productId,
+      double? quantity,
+      String? sku,
+      String? subcategorySlug,
+      double? taxRate,
+      String? unit}) async {
+    final String apiPath = '/v1/orderlists/{list_id}/items/{id}'
+        .replaceAll('{list_id}', listId)
+        .replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'category_slug': categorySlug,
+    final Map<String, dynamic> apiParams = {
+      'category_slug': categorySlug,
+      'cost_center_id': costCenterId,
+      'custom_sku': customSku,
+      'image': image,
+      'metadata': metadata,
+      if (name != null) 'name': name,
+      if (position != null) 'position': position,
+      'position_texts': positionTexts,
+      'price': price,
+      'product_id': productId,
+      if (quantity != null) 'quantity': quantity,
+      'sku': sku,
+      'subcategory_slug': subcategorySlug,
+      'tax_rate': taxRate,
+      'unit': unit,
+    };
 
-            'cost_center_id': costCenterId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'custom_sku': customSku,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'image': image,
-
-            'metadata': metadata,
-
-            if (name != null) 'name': name,
-
-            if (position != null) 'position': position,
-
-            'position_texts': positionTexts,
-
-            'price': price,
-
-            'product_id': productId,
-
-            if (quantity != null) 'quantity': quantity,
-
-            'sku': sku,
-
-            'subcategory_slug': subcategorySlug,
-
-            'tax_rate': taxRate,
-
-            'unit': unit,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

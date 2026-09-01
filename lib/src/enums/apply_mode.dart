@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum ApplyMode {
-    upsert(value: 'upsert'),
-    fullSync(value: 'full-sync'),
-    append(value: 'append');
+  upsert(value: 'upsert'),
+  fullSync(value: 'full-sync'),
+  append(value: 'append');
 
-    const ApplyMode({
-        required this.value
-    });
+  const ApplyMode({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

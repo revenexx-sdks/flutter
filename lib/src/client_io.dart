@@ -88,11 +88,13 @@ class ClientIO extends ClientBase with ClientMixin {
     addHeader('X-Revenexx-Api-Key', value);
     return this;
   }
+
   /// A Zitadel-issued JWT (Cockpit / interactive callers).
   @override
   ClientIO setBearerAuth(value) {
     config['bearerAuth'] = value;
-    addHeader('Authorization', value.toLowerCase().startsWith('bearer ') ? value : 'Bearer $value');
+    addHeader('Authorization',
+        value.toLowerCase().startsWith('bearer ') ? value : 'Bearer $value');
     return this;
   }
 

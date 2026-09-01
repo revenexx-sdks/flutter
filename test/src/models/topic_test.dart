@@ -18,14 +18,14 @@ void main() {
       final map = model.toMap();
       final result = Topic.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.emailTotal, 0);
-                  expect(result.name, '');
-                  expect(result.pushTotal, 0);
-                  expect(result.smsTotal, 0);
-                  expect(result.subscribe, []);
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$updatedAt, '');
+      expect(result.emailTotal, 0);
+      expect(result.name, '');
+      expect(result.pushTotal, 0);
+      expect(result.smsTotal, 0);
+      expect(result.subscribe, []);
+    });
   });
 }

@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = OrderListCreateRequest.fromMap(map);
 
-            expect(result.name, '');
-                  expect(result.owner_id, '');
-                  expect(result.owner_name, '');
-          });
+      expect(result.name, '');
+      expect(result.owner_id, '');
+      expect(result.owner_name, '');
+    });
   });
 }

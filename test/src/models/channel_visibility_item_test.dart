@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = ChannelVisibilityItem.fromMap(map);
 
-            expect(result.id, '');
-          });
+      expect(result.id, '');
+    });
   });
 }

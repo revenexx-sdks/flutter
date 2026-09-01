@@ -1,19 +1,19 @@
 part of '../revenexx.dart';
 
-  /// WHERE stock is kept — the list every other group points at. A location is
-  /// a warehouse, a shop floor, a supplier that dropships or a virtual bucket
-  /// for pre-orders and quarantine, and it holds no quantity itself: what is at
-  /// it is a stock level, and the `location_id` on every stock row, every ledger
-  /// booking and every reservation resolves here. Three columns carry the
-  /// behaviour and only one of them is obvious: `type` is descriptive and
-  /// nothing branches on it, `priority` is what the allocation strategy sorts by
-  /// when it picks a location to reserve from, and `enabled` is the on/off
-  /// switch — a disabled location keeps its stock and every row that points at
-  /// it, and simply stops being offered by availability and reserve, which is
-  /// the reversible thing to do instead of deleting one. Every tenant is seeded
-  /// with `main` on install, because the stock calls fall back to a configured
-  /// default location code and a tenant with none would answer 400 on its first
-  /// receipt.
+/// WHERE stock is kept — the list every other group points at. A location is
+/// a warehouse, a shop floor, a supplier that dropships or a virtual bucket
+/// for pre-orders and quarantine, and it holds no quantity itself: what is at
+/// it is a stock level, and the `location_id` on every stock row, every ledger
+/// booking and every reservation resolves here. Three columns carry the
+/// behaviour and only one of them is obvious: `type` is descriptive and
+/// nothing branches on it, `priority` is what the allocation strategy sorts by
+/// when it picks a location to reserve from, and `enabled` is the on/off
+/// switch — a disabled location keeps its stock and every row that points at
+/// it, and simply stops being offered by availability and reserve, which is
+/// the reversible thing to do instead of deleting one. Every tenant is seeded
+/// with `main` on install, because the stock calls fall back to a configured
+/// default location code and a tenant with none would answer 400 on its first
+/// receipt.
 class InventoriesLocations extends Service {
   /// Initializes a [InventoriesLocations] service
   InventoriesLocations(super.client);
@@ -31,48 +31,46 @@ class InventoriesLocations extends Service {
   /// `?enabled=true` for the operational subset: availability and reserve only
   /// ever look at enabled locations, so a disabled one is invisible to a shop
   /// while keeping every row that points at it.
-  Future<models.Error> inventoriesLocationsList({int? limit, int? offset, String? order, String? id, String? code, String? name, String? labels, enums.InventoriesLocationsListType? type, int? priority, bool? enabled, String? address, String? metadata, String? createdAt, String? updatedAt}) async {
+  Future<models.Error> inventoriesLocationsList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? id,
+      String? code,
+      String? name,
+      String? labels,
+      enums.InventoriesLocationsListType? type,
+      int? priority,
+      bool? enabled,
+      String? address,
+      String? metadata,
+      String? createdAt,
+      String? updatedAt}) async {
     const String apiPath = '/v1/inventories/locations';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (name != null) 'name': name,
+      if (labels != null) 'labels': labels,
+      if (type != null) 'type': type.value,
+      if (priority != null) 'priority': priority,
+      if (enabled != null) 'enabled': enabled,
+      if (address != null) 'address': address,
+      if (metadata != null) 'metadata': metadata,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (id != null) 'id': id,
-
-            if (code != null) 'code': code,
-
-            if (name != null) 'name': name,
-
-            if (labels != null) 'labels': labels,
-
-            if (type != null) 'type': type.value,
-
-            if (priority != null) 'priority': priority,
-
-            if (enabled != null) 'enabled': enabled,
-
-            if (address != null) 'address': address,
-
-            if (metadata != null) 'metadata': metadata,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Registers a new place stock can be kept, and `type` says what kind of place
@@ -91,36 +89,36 @@ class InventoriesLocations extends Service {
   /// `type`), and `enabled` defaults to true, so a location created for a
   /// warehouse that has not opened yet starts being offered by availability and
   /// reserve immediately.
-  Future<models.Error> inventoriesLocationsCreate({required String code, required String name, Map? address, bool? enabled, Map? labels, Map? metadata, int? priority, enums.LocationType? type}) async {
+  Future<models.Error> inventoriesLocationsCreate(
+      {required String code,
+      required String name,
+      Map? address,
+      bool? enabled,
+      Map? labels,
+      Map? metadata,
+      int? priority,
+      enums.LocationType? type}) async {
     const String apiPath = '/v1/inventories/locations';
 
-        final Map<String, dynamic> apiParams = {
-            'address': address,
+    final Map<String, dynamic> apiParams = {
+      'address': address,
+      'code': code,
+      if (enabled != null) 'enabled': enabled,
+      'labels': labels,
+      'metadata': metadata,
+      'name': name,
+      if (priority != null) 'priority': priority,
+      if (type != null) 'type': type.value,
+    };
 
-            'code': code,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            'metadata': metadata,
-
-            'name': name,
-
-            if (priority != null) 'priority': priority,
-
-            if (type != null) 'type': type.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Gives a tenant its first location, `main`, so the stock calls have
@@ -136,17 +134,14 @@ class InventoriesLocations extends Service {
   Future inventoriesLocationsDefaults() async {
     const String apiPath = '/v1/inventories/locations/defaults';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Deleting one takes every `stock_levels` row that points at it with it —
@@ -176,19 +171,17 @@ class InventoriesLocations extends Service {
   /// location is merely out of service, PUT `enabled: false` keeps every row and
   /// can be undone.
   Future<models.Error> inventoriesLocationsDelete({required String id}) async {
-    final String apiPath = '/v1/inventories/locations/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/inventories/locations/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A location is WHERE stock is kept — a warehouse, a shop floor, a supplier
@@ -204,19 +197,17 @@ class InventoriesLocations extends Service {
   /// while its stock stays exactly where it is) and where its `priority` puts it
   /// when the allocation strategy picks somewhere to reserve from.
   Future<models.Error> inventoriesLocationsGet({required String id}) async {
-    final String apiPath = '/v1/inventories/locations/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/inventories/locations/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Partial update: send the fields that change. The one with consequences is
@@ -231,35 +222,37 @@ class InventoriesLocations extends Service {
   /// this tenant may not share `code` — that is the 409, and it answers an
   /// update that moves a row onto a sibling's value exactly as it answers a
   /// second insert.
-  Future<models.Error> inventoriesLocationsUpdate({required String id, Map? address, String? code, bool? enabled, Map? labels, Map? metadata, String? name, int? priority, enums.LocationType? type}) async {
-    final String apiPath = '/v1/inventories/locations/{id}'.replaceAll('{id}', id);
+  Future<models.Error> inventoriesLocationsUpdate(
+      {required String id,
+      Map? address,
+      String? code,
+      bool? enabled,
+      Map? labels,
+      Map? metadata,
+      String? name,
+      int? priority,
+      enums.LocationType? type}) async {
+    final String apiPath =
+        '/v1/inventories/locations/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'address': address,
+    final Map<String, dynamic> apiParams = {
+      'address': address,
+      if (code != null) 'code': code,
+      if (enabled != null) 'enabled': enabled,
+      'labels': labels,
+      'metadata': metadata,
+      if (name != null) 'name': name,
+      if (priority != null) 'priority': priority,
+      if (type != null) 'type': type.value,
+    };
 
-            if (code != null) 'code': code,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            'metadata': metadata,
-
-            if (name != null) 'name': name,
-
-            if (priority != null) 'priority': priority,
-
-            if (type != null) 'type': type.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

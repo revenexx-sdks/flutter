@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = AuthVerificationRequest.fromMap(map);
 
-            expect(result.url, '');
-                  expect(result.user_id, '');
-          });
+      expect(result.url, '');
+      expect(result.user_id, '');
+    });
   });
 }

@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = CartClaimRequest.fromMap(map);
 
-            expect(result.contact_id, '');
-                  expect(result.session_key, '');
-          });
+      expect(result.contact_id, '');
+      expect(result.session_key, '');
+    });
   });
 }

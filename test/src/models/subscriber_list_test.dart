@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = SubscriberList.fromMap(map);
 
-            expect(result.subscribers, []);
-                  expect(result.total, 0);
-          });
+      expect(result.subscribers, []);
+      expect(result.total, 0);
+    });
   });
 }

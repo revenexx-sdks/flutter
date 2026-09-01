@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = MeasurementFamiliesCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.standard_unit, '');
-          });
+      expect(result.code, '');
+      expect(result.standard_unit, '');
+    });
   });
 }

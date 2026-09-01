@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('PriceTaxContext', () {
     test('model', () {
-      final model = PriceTaxContext(
-      );
+      final model = PriceTaxContext();
 
       final map = model.toMap();
       final result = PriceTaxContext.fromMap(map);
-
     });
   });
 }

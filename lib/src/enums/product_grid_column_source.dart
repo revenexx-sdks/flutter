@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum ProductGridColumnSource {
-    column(value: 'column'),
-    attribute(value: 'attribute'),
-    resolved(value: 'resolved');
+  column(value: 'column'),
+  attribute(value: 'attribute'),
+  resolved(value: 'resolved');
 
-    const ProductGridColumnSource({
-        required this.value
-    });
+  const ProductGridColumnSource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

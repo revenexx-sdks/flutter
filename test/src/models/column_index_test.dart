@@ -19,15 +19,15 @@ void main() {
       final map = model.toMap();
       final result = ColumnIndex.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.columns, []);
-                  expect(result.error, '');
-                  expect(result.key, '');
-                  expect(result.lengths, []);
-                  expect(result.status, '');
-                  expect(result.type, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$updatedAt, '');
+      expect(result.columns, []);
+      expect(result.error, '');
+      expect(result.key, '');
+      expect(result.lengths, []);
+      expect(result.status, '');
+      expect(result.type, '');
+    });
   });
 }

@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = LanguageList.fromMap(map);
 
-            expect(result.languages, []);
-                  expect(result.total, 0);
-          });
+      expect(result.languages, []);
+      expect(result.total, 0);
+    });
   });
 }

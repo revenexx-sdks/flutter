@@ -1,13 +1,13 @@
 part of '../revenexx.dart';
 
-  /// The buying COMPANIES and everything keyed to one: the company rows
-  /// themselves, their postal addresses, and the revenue/order projection pulled
-  /// from the orders app. An organization is the unit a contract, a credit
-  /// limit, a price list and a payment term belong to — not a person, and not
-  /// a household. Addresses live here because a B2B address is the company&#039;s (a
-  /// contact may own a private one, and that row is reached the same way). The
-  /// people inside a company are in Contacts, and the groups a company falls
-  /// into are in Segments.
+/// The buying COMPANIES and everything keyed to one: the company rows
+/// themselves, their postal addresses, and the revenue/order projection pulled
+/// from the orders app. An organization is the unit a contract, a credit
+/// limit, a price list and a payment term belong to — not a person, and not
+/// a household. Addresses live here because a B2B address is the company&#039;s (a
+/// contact may own a private one, and that row is reached the same way). The
+/// people inside a company are in Contacts, and the groups a company falls
+/// into are in Segments.
 class CustomersOrganizations extends Service {
   /// Initializes a [CustomersOrganizations] service
   CustomersOrganizations(super.client);
@@ -20,58 +20,56 @@ class CustomersOrganizations extends Service {
   /// (`organization_id`, `contact_id`), by `type` and by any other column. It is
   /// how the addresses tab of a company or a person is filled; the page is
   /// `limit`/`offset`/`order`.
-  Future customersAddressesList({String? id, String? organizationId, String? contactId, String? type, String? company, String? name, String? street, String? street2, String? zip, String? city, String? region, String? country, String? phone, bool? isDefault, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
+  Future customersAddressesList(
+      {String? id,
+      String? organizationId,
+      String? contactId,
+      String? type,
+      String? company,
+      String? name,
+      String? street,
+      String? street2,
+      String? zip,
+      String? city,
+      String? region,
+      String? country,
+      String? phone,
+      bool? isDefault,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/customers/addresses';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (organizationId != null) 'organization_id': organizationId,
+      if (contactId != null) 'contact_id': contactId,
+      if (type != null) 'type': type,
+      if (company != null) 'company': company,
+      if (name != null) 'name': name,
+      if (street != null) 'street': street,
+      if (street2 != null) 'street2': street2,
+      if (zip != null) 'zip': zip,
+      if (city != null) 'city': city,
+      if (region != null) 'region': region,
+      if (country != null) 'country': country,
+      if (phone != null) 'phone': phone,
+      if (isDefault != null) 'is_default': isDefault,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (organizationId != null) 'organization_id': organizationId,
+    final Map<String, String> apiHeaders = {};
 
-            if (contactId != null) 'contact_id': contactId,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (type != null) 'type': type,
-
-            if (company != null) 'company': company,
-
-            if (name != null) 'name': name,
-
-            if (street != null) 'street': street,
-
-            if (street2 != null) 'street2': street2,
-
-            if (zip != null) 'zip': zip,
-
-            if (city != null) 'city': city,
-
-            if (region != null) 'region': region,
-
-            if (country != null) 'country': country,
-
-            if (phone != null) 'phone': phone,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// A postal address used for billing or for shipping, owned by exactly one of
@@ -84,46 +82,46 @@ class CustomersOrganizations extends Service {
   /// the one a checkout should preselect for that owner and that type. A create
   /// cannot omit `street`, `zip`, `city` and `country`; everything else is
   /// optional or defaulted by the database.
-  Future<models.Error> customersAddressesCreate({required String city, required String country, required String street, required String zip, String? company, String? contactId, bool? isDefault, String? name, String? organizationId, String? phone, String? region, String? street2, String? type}) async {
+  Future<models.Error> customersAddressesCreate(
+      {required String city,
+      required String country,
+      required String street,
+      required String zip,
+      String? company,
+      String? contactId,
+      bool? isDefault,
+      String? name,
+      String? organizationId,
+      String? phone,
+      String? region,
+      String? street2,
+      String? type}) async {
     const String apiPath = '/v1/customers/addresses';
 
-        final Map<String, dynamic> apiParams = {
-            'city': city,
+    final Map<String, dynamic> apiParams = {
+      'city': city,
+      'company': company,
+      'contact_id': contactId,
+      'country': country,
+      if (isDefault != null) 'is_default': isDefault,
+      'name': name,
+      'organization_id': organizationId,
+      'phone': phone,
+      'region': region,
+      'street': street,
+      'street2': street2,
+      if (type != null) 'type': type,
+      'zip': zip,
+    };
 
-            'company': company,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'contact_id': contactId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'country': country,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            'name': name,
-
-            'organization_id': organizationId,
-
-            'phone': phone,
-
-            'region': region,
-
-            'street': street,
-
-            'street2': street2,
-
-            if (type != null) 'type': type,
-
-            'zip': zip,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A postal address used for billing or for shipping, owned by exactly one of
@@ -134,19 +132,17 @@ class CustomersOrganizations extends Service {
   /// were placed with; nothing in this app reaches back. Nothing else in this
   /// app points at it, so nothing else goes with it.
   Future<models.Error> customersAddressesDelete({required String id}) async {
-    final String apiPath = '/v1/customers/addresses/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/customers/addresses/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A postal address used for billing or for shipping, owned by exactly one of
@@ -155,19 +151,17 @@ class CustomersOrganizations extends Service {
   /// are nullable and exactly one is set — sending both, or neither, is
   /// refused. One address by id, whichever of the two owners it hangs off.
   Future<models.Error> customersAddressesGet({required String id}) async {
-    final String apiPath = '/v1/customers/addresses/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/customers/addresses/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A postal address used for billing or for shipping, owned by exactly one of
@@ -177,46 +171,48 @@ class CustomersOrganizations extends Service {
   /// refused. A partial update — send only what changes. An empty body is
   /// refused rather than answered as a no-op, so a client that built the wrong
   /// patch finds out.
-  Future<models.Error> customersAddressesUpdate({required String id, String? city, String? company, String? contactId, String? country, bool? isDefault, String? name, String? organizationId, String? phone, String? region, String? street, String? street2, String? type, String? zip}) async {
-    final String apiPath = '/v1/customers/addresses/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersAddressesUpdate(
+      {required String id,
+      String? city,
+      String? company,
+      String? contactId,
+      String? country,
+      bool? isDefault,
+      String? name,
+      String? organizationId,
+      String? phone,
+      String? region,
+      String? street,
+      String? street2,
+      String? type,
+      String? zip}) async {
+    final String apiPath =
+        '/v1/customers/addresses/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (city != null) 'city': city,
+    final Map<String, dynamic> apiParams = {
+      if (city != null) 'city': city,
+      'company': company,
+      'contact_id': contactId,
+      if (country != null) 'country': country,
+      if (isDefault != null) 'is_default': isDefault,
+      'name': name,
+      'organization_id': organizationId,
+      'phone': phone,
+      'region': region,
+      if (street != null) 'street': street,
+      'street2': street2,
+      if (type != null) 'type': type,
+      if (zip != null) 'zip': zip,
+    };
 
-            'company': company,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'contact_id': contactId,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (country != null) 'country': country,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            'name': name,
-
-            'organization_id': organizationId,
-
-            'phone': phone,
-
-            'region': region,
-
-            if (street != null) 'street': street,
-
-            'street2': street2,
-
-            if (type != null) 'type': type,
-
-            if (zip != null) 'zip': zip,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What an organization has BOUGHT, materialized into this app from the orders
@@ -230,86 +226,82 @@ class CustomersOrganizations extends Service {
   /// dormant ones. Every row carries `computed_at`, and a row is only as current
   /// as the last refresh — `GET /customers/organization_metrics/freshness`
   /// says how stale the set is before a number is shown to anybody.
-  Future customersOrganizationMetricsList({String? id, String? organizationId, int? orderCount, int? orderCount30d, int? orderCount90d, int? orderCount365d, double? revenueTotal, double? revenue30d, double? revenue90d, double? revenue365d, double? avgOrderValue, double? avgOrderValue365d, String? firstOrderAt, String? lastOrderAt, String? currency, bool? currencyMixed, String? ordersAsOf, String? computedAt, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
+  Future customersOrganizationMetricsList(
+      {String? id,
+      String? organizationId,
+      int? orderCount,
+      int? orderCount30d,
+      int? orderCount90d,
+      int? orderCount365d,
+      double? revenueTotal,
+      double? revenue30d,
+      double? revenue90d,
+      double? revenue365d,
+      double? avgOrderValue,
+      double? avgOrderValue365d,
+      String? firstOrderAt,
+      String? lastOrderAt,
+      String? currency,
+      bool? currencyMixed,
+      String? ordersAsOf,
+      String? computedAt,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/customers/organization_metrics';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (organizationId != null) 'organization_id': organizationId,
+      if (orderCount != null) 'order_count': orderCount,
+      if (orderCount30d != null) 'order_count_30d': orderCount30d,
+      if (orderCount90d != null) 'order_count_90d': orderCount90d,
+      if (orderCount365d != null) 'order_count_365d': orderCount365d,
+      if (revenueTotal != null) 'revenue_total': revenueTotal,
+      if (revenue30d != null) 'revenue_30d': revenue30d,
+      if (revenue90d != null) 'revenue_90d': revenue90d,
+      if (revenue365d != null) 'revenue_365d': revenue365d,
+      if (avgOrderValue != null) 'avg_order_value': avgOrderValue,
+      if (avgOrderValue365d != null) 'avg_order_value_365d': avgOrderValue365d,
+      if (firstOrderAt != null) 'first_order_at': firstOrderAt,
+      if (lastOrderAt != null) 'last_order_at': lastOrderAt,
+      if (currency != null) 'currency': currency,
+      if (currencyMixed != null) 'currency_mixed': currencyMixed,
+      if (ordersAsOf != null) 'orders_as_of': ordersAsOf,
+      if (computedAt != null) 'computed_at': computedAt,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (organizationId != null) 'organization_id': organizationId,
+    final Map<String, String> apiHeaders = {};
 
-            if (orderCount != null) 'order_count': orderCount,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (orderCount30d != null) 'order_count_30d': orderCount30d,
-
-            if (orderCount90d != null) 'order_count_90d': orderCount90d,
-
-            if (orderCount365d != null) 'order_count_365d': orderCount365d,
-
-            if (revenueTotal != null) 'revenue_total': revenueTotal,
-
-            if (revenue30d != null) 'revenue_30d': revenue30d,
-
-            if (revenue90d != null) 'revenue_90d': revenue90d,
-
-            if (revenue365d != null) 'revenue_365d': revenue365d,
-
-            if (avgOrderValue != null) 'avg_order_value': avgOrderValue,
-
-            if (avgOrderValue365d != null) 'avg_order_value_365d': avgOrderValue365d,
-
-            if (firstOrderAt != null) 'first_order_at': firstOrderAt,
-
-            if (lastOrderAt != null) 'last_order_at': lastOrderAt,
-
-            if (currency != null) 'currency': currency,
-
-            if (currencyMixed != null) 'currency_mixed': currencyMixed,
-
-            if (ordersAsOf != null) 'orders_as_of': ordersAsOf,
-
-            if (computedAt != null) 'computed_at': computedAt,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// The projection is materialized, so it is only as true as its last refresh.
   /// This is that fact as one answer: the OLDEST computed_at in the table (the
   /// floor, not an average), the anchor those numbers were measured from, and
   /// how many organizations are not covered at all yet.
-  Future<models.OrganizationMetricsFreshness> customersOrganizationMetricsFreshness() async {
+  Future<models.OrganizationMetricsFreshness>
+      customersOrganizationMetricsFreshness() async {
     const String apiPath = '/v1/customers/organization_metrics/freshness';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.OrganizationMetricsFreshness.fromMap(res.data);
-
+    return models.OrganizationMetricsFreshness.fromMap(res.data);
   }
 
   /// Revenue lives in the orders app and cannot be joined (ADR-0055: no
@@ -325,26 +317,24 @@ class CustomersOrganizations extends Service {
   /// multi-call refresh). 'organization_ids' refreshes exactly those
   /// organizations in a single call — the targeted path after a customer
   /// ordered.
-  Future<models.Error> customersOrganizationMetricsRefresh({String? asOf, String? cursor, List<String>? organizationIds}) async {
+  Future<models.Error> customersOrganizationMetricsRefresh(
+      {String? asOf, String? cursor, List<String>? organizationIds}) async {
     const String apiPath = '/v1/customers/organization_metrics/refresh';
 
-        final Map<String, dynamic> apiParams = {
-            'as_of': asOf,
+    final Map<String, dynamic> apiParams = {
+      'as_of': asOf,
+      'cursor': cursor,
+      'organization_ids': organizationIds,
+    };
 
-            'cursor': cursor,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'organization_ids': organizationIds,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// What an organization has BOUGHT, materialized into this app from the orders
@@ -357,20 +347,19 @@ class CustomersOrganizations extends Service {
   /// metrics row id. All zeroes mean the company has never ordered, not that the
   /// projection is missing — a missing row means the refresh has not reached
   /// that company yet.
-  Future<models.Error> customersOrganizationMetricsGet({required String id}) async {
-    final String apiPath = '/v1/customers/organization_metrics/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersOrganizationMetricsGet(
+      {required String id}) async {
+    final String apiPath =
+        '/v1/customers/organization_metrics/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// An organization is a buying COMPANY — the unit a contract, a credit
@@ -385,54 +374,52 @@ class CustomersOrganizations extends Service {
   /// confused: `status` is ACCESS (active or blocked) and `lifecycle_stage` is
   /// the sales PIPELINE, so filtering the wrong one answers with the wrong
   /// companies rather than with an error.
-  Future customersOrganizationsList({String? id, String? name, String? vatId, String? branche, String? customerNumber, enums.CustomersOrganizationsListStatus? status, String? lifecycleStage, String? paymentTerms, double? creditLimit, String? priceList, bool? deliveryBlock, String? externalTeamId, String? createdAt, String? updatedAt, int? limit, int? offset, String? order}) async {
+  Future customersOrganizationsList(
+      {String? id,
+      String? name,
+      String? vatId,
+      String? branche,
+      String? customerNumber,
+      enums.CustomersOrganizationsListStatus? status,
+      String? lifecycleStage,
+      String? paymentTerms,
+      double? creditLimit,
+      String? priceList,
+      bool? deliveryBlock,
+      String? externalTeamId,
+      String? createdAt,
+      String? updatedAt,
+      int? limit,
+      int? offset,
+      String? order}) async {
     const String apiPath = '/v1/customers/organizations';
 
-        final Map<String, dynamic> apiParams = {
-            if (id != null) 'id': id,
+    final Map<String, dynamic> apiParams = {
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (vatId != null) 'vat_id': vatId,
+      if (branche != null) 'branche': branche,
+      if (customerNumber != null) 'customer_number': customerNumber,
+      if (status != null) 'status': status.value,
+      if (lifecycleStage != null) 'lifecycle_stage': lifecycleStage,
+      if (paymentTerms != null) 'payment_terms': paymentTerms,
+      if (creditLimit != null) 'credit_limit': creditLimit,
+      if (priceList != null) 'price_list': priceList,
+      if (deliveryBlock != null) 'delivery_block': deliveryBlock,
+      if (externalTeamId != null) 'external_team_id': externalTeamId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+    };
 
-            if (name != null) 'name': name,
+    final Map<String, String> apiHeaders = {};
 
-            if (vatId != null) 'vat_id': vatId,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (branche != null) 'branche': branche,
-
-            if (customerNumber != null) 'customer_number': customerNumber,
-
-            if (status != null) 'status': status.value,
-
-            if (lifecycleStage != null) 'lifecycle_stage': lifecycleStage,
-
-            if (paymentTerms != null) 'payment_terms': paymentTerms,
-
-            if (creditLimit != null) 'credit_limit': creditLimit,
-
-            if (priceList != null) 'price_list': priceList,
-
-            if (deliveryBlock != null) 'delivery_block': deliveryBlock,
-
-            if (externalTeamId != null) 'external_team_id': externalTeamId,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-            if (limit != null) 'limit': limit,
-
-            if (offset != null) 'offset': offset,
-
-            if (order != null) 'order': order,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// An organization is a buying COMPANY — the unit a contract, a credit
@@ -450,42 +437,42 @@ class CustomersOrganizations extends Service {
   /// everything else is optional or defaulted by the database. Two rows of this
   /// tenant may not share `customer_number` (while customer_number IS NOT NULL)
   /// or `external_team_id` (while external_team_id IS NOT NULL).
-  Future<models.Error> customersOrganizationsCreate({required String name, String? branche, double? creditLimit, String? customerNumber, bool? deliveryBlock, String? lifecycleStage, String? paymentTerms, String? priceList, Map? settings, enums.OrganizationStatus? status, String? vatId}) async {
+  Future<models.Error> customersOrganizationsCreate(
+      {required String name,
+      String? branche,
+      double? creditLimit,
+      String? customerNumber,
+      bool? deliveryBlock,
+      String? lifecycleStage,
+      String? paymentTerms,
+      String? priceList,
+      Map? settings,
+      enums.OrganizationStatus? status,
+      String? vatId}) async {
     const String apiPath = '/v1/customers/organizations';
 
-        final Map<String, dynamic> apiParams = {
-            'branche': branche,
+    final Map<String, dynamic> apiParams = {
+      'branche': branche,
+      'credit_limit': creditLimit,
+      'customer_number': customerNumber,
+      if (deliveryBlock != null) 'delivery_block': deliveryBlock,
+      if (lifecycleStage != null) 'lifecycle_stage': lifecycleStage,
+      'name': name,
+      'payment_terms': paymentTerms,
+      'price_list': priceList,
+      'settings': settings,
+      if (status != null) 'status': status.value,
+      'vat_id': vatId,
+    };
 
-            'credit_limit': creditLimit,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'customer_number': customerNumber,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (deliveryBlock != null) 'delivery_block': deliveryBlock,
-
-            if (lifecycleStage != null) 'lifecycle_stage': lifecycleStage,
-
-            'name': name,
-
-            'payment_terms': paymentTerms,
-
-            'price_list': priceList,
-
-            'settings': settings,
-
-            if (status != null) 'status': status.value,
-
-            'vat_id': vatId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// An organization is a buying COMPANY — the unit a contract, a credit
@@ -501,20 +488,19 @@ class CustomersOrganizations extends Service {
   /// `segment_members` row that points at it with it and clears
   /// `contacts.organization_id` rather than deleting those rows — the foreign
   /// keys decide, not this route.
-  Future<models.Error> customersOrganizationsDelete({required String id}) async {
-    final String apiPath = '/v1/customers/organizations/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersOrganizationsDelete(
+      {required String id}) async {
+    final String apiPath =
+        '/v1/customers/organizations/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// An organization is a buying COMPANY — the unit a contract, a credit
@@ -527,19 +513,17 @@ class CustomersOrganizations extends Service {
   /// — that is the `organization_metrics` row for the same id, refreshed on
   /// its own schedule.
   Future<models.Error> customersOrganizationsGet({required String id}) async {
-    final String apiPath = '/v1/customers/organizations/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/customers/organizations/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// An organization is a buying COMPANY — the unit a contract, a credit
@@ -554,41 +538,43 @@ class CustomersOrganizations extends Service {
   /// Two rows of this tenant may not share `customer_number` (while
   /// customer_number IS NOT NULL) or `external_team_id` (while external_team_id
   /// IS NOT NULL).
-  Future<models.Error> customersOrganizationsUpdate({required String id, String? branche, double? creditLimit, String? customerNumber, bool? deliveryBlock, String? lifecycleStage, String? name, String? paymentTerms, String? priceList, Map? settings, enums.OrganizationStatus? status, String? vatId}) async {
-    final String apiPath = '/v1/customers/organizations/{id}'.replaceAll('{id}', id);
+  Future<models.Error> customersOrganizationsUpdate(
+      {required String id,
+      String? branche,
+      double? creditLimit,
+      String? customerNumber,
+      bool? deliveryBlock,
+      String? lifecycleStage,
+      String? name,
+      String? paymentTerms,
+      String? priceList,
+      Map? settings,
+      enums.OrganizationStatus? status,
+      String? vatId}) async {
+    final String apiPath =
+        '/v1/customers/organizations/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'branche': branche,
+    final Map<String, dynamic> apiParams = {
+      'branche': branche,
+      'credit_limit': creditLimit,
+      'customer_number': customerNumber,
+      if (deliveryBlock != null) 'delivery_block': deliveryBlock,
+      if (lifecycleStage != null) 'lifecycle_stage': lifecycleStage,
+      if (name != null) 'name': name,
+      'payment_terms': paymentTerms,
+      'price_list': priceList,
+      'settings': settings,
+      if (status != null) 'status': status.value,
+      'vat_id': vatId,
+    };
 
-            'credit_limit': creditLimit,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'customer_number': customerNumber,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (deliveryBlock != null) 'delivery_block': deliveryBlock,
-
-            if (lifecycleStage != null) 'lifecycle_stage': lifecycleStage,
-
-            if (name != null) 'name': name,
-
-            'payment_terms': paymentTerms,
-
-            'price_list': priceList,
-
-            'settings': settings,
-
-            if (status != null) 'status': status.value,
-
-            'vat_id': vatId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

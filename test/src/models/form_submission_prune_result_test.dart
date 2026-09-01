@@ -4,12 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('FormSubmissionPruneResult', () {
     test('model', () {
-      final model = FormSubmissionPruneResult(
-      );
+      final model = FormSubmissionPruneResult();
 
       final map = model.toMap();
       final result = FormSubmissionPruneResult.fromMap(map);
-
     });
   });
 }

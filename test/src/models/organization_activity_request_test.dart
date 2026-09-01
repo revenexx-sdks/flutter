@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = OrganizationActivityRequest.fromMap(map);
 
-            expect(result.contact_id, '');
-                  expect(result.subject, '');
-          });
+      expect(result.contact_id, '');
+      expect(result.subject, '');
+    });
   });
 }

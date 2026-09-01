@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrderListToCartResult', () {
     test('model', () {
-      final model = OrderListToCartResult(
-      );
+      final model = OrderListToCartResult();
 
       final map = model.toMap();
       final result = OrderListToCartResult.fromMap(map);
-
     });
   });
 }

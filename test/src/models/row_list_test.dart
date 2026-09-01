@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = RowList.fromMap(map);
 
-            expect(result.rows, []);
-                  expect(result.total, 0);
-          });
+      expect(result.rows, []);
+      expect(result.total, 0);
+    });
   });
 }

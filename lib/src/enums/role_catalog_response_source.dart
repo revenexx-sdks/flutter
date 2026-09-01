@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum RoleCatalogResponseSource {
-    tenant(value: 'tenant'),
-    defaults(value: 'defaults');
+  tenant(value: 'tenant'),
+  defaults(value: 'defaults');
 
-    const RoleCatalogResponseSource({
-        required this.value
-    });
+  const RoleCatalogResponseSource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

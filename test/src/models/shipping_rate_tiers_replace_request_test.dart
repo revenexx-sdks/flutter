@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = ShippingRateTiersReplaceRequest.fromMap(map);
 
-            expect(result.tiers, []);
-          });
+      expect(result.tiers, []);
+    });
   });
 }

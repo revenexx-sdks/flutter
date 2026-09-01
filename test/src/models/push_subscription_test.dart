@@ -18,14 +18,14 @@ void main() {
       final map = model.toMap();
       final result = PushSubscription.fromMap(map);
 
-            expect(result.created_at, '');
-                  expect(result.endpoint, '');
-                  expect(result.id, '');
-                  expect(result.last_seen_at, '');
-                  expect(result.subscriber_id, '');
-                  expect(result.tenant_id, '');
-                  expect(result.updated_at, '');
-                  expect(result.user_agent, '');
-          });
+      expect(result.created_at, '');
+      expect(result.endpoint, '');
+      expect(result.id, '');
+      expect(result.last_seen_at, '');
+      expect(result.subscriber_id, '');
+      expect(result.tenant_id, '');
+      expect(result.updated_at, '');
+      expect(result.user_agent, '');
+    });
   });
 }

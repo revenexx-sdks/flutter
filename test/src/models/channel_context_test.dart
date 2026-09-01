@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ChannelContext', () {
     test('model', () {
-      final model = ChannelContext(
-      );
+      final model = ChannelContext();
 
       final map = model.toMap();
       final result = ChannelContext.fromMap(map);
-
     });
   });
 }

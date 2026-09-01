@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = HealthTime.fromMap(map);
 
-            expect(result.diff, 0);
-                  expect(result.localTime, 0);
-                  expect(result.remoteTime, 0);
-          });
+      expect(result.diff, 0);
+      expect(result.localTime, 0);
+      expect(result.remoteTime, 0);
+    });
   });
 }

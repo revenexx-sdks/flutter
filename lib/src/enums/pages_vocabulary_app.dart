@@ -1,13 +1,11 @@
 part of '../../enums.dart';
 
 enum PagesVocabularyApp {
-    pages(value: 'pages');
+  pages(value: 'pages');
 
-    const PagesVocabularyApp({
-        required this.value
-    });
+  const PagesVocabularyApp({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

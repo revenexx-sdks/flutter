@@ -4,12 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('PriceEntriesReplaceResponse', () {
     test('model', () {
-      final model = PriceEntriesReplaceResponse(
-      );
+      final model = PriceEntriesReplaceResponse();
 
       final map = model.toMap();
       final result = PriceEntriesReplaceResponse.fromMap(map);
-
     });
   });
 }

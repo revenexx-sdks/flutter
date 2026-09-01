@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum CreateImportTarget {
-    live(value: 'live'),
-    shadow(value: 'shadow');
+  live(value: 'live'),
+  shadow(value: 'shadow');
 
-    const CreateImportTarget({
-        required this.value
-    });
+  const CreateImportTarget({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

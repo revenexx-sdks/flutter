@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = AuthMagicLinkConfirmRequest.fromMap(map);
 
-            expect(result.secret, '');
-                  expect(result.user_id, '');
-          });
+      expect(result.secret, '');
+      expect(result.user_id, '');
+    });
   });
 }

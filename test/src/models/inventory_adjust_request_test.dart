@@ -4,12 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('InventoryAdjustRequest', () {
     test('model', () {
-      final model = InventoryAdjustRequest(
-      );
+      final model = InventoryAdjustRequest();
 
       final map = model.toMap();
       final result = InventoryAdjustRequest.fromMap(map);
-
     });
   });
 }

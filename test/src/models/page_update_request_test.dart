@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('PageUpdateRequest', () {
     test('model', () {
-      final model = PageUpdateRequest(
-      );
+      final model = PageUpdateRequest();
 
       final map = model.toMap();
       final result = PageUpdateRequest.fromMap(map);
-
     });
   });
 }

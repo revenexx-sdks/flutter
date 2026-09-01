@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum ShippingRatesBasisMatrixBasisDefault {
-    weight(value: 'weight'),
-    quantity(value: 'quantity'),
-    orderValue(value: 'order_value');
+  weight(value: 'weight'),
+  quantity(value: 'quantity'),
+  orderValue(value: 'order_value');
 
-    const ShippingRatesBasisMatrixBasisDefault({
-        required this.value
-    });
+  const ShippingRatesBasisMatrixBasisDefault({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

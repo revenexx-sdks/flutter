@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = PageTemplateCreateRequest.fromMap(map);
 
-            expect(result.label, '');
-                  expect(result.uuids, []);
-          });
+      expect(result.label, '');
+      expect(result.uuids, []);
+    });
   });
 }

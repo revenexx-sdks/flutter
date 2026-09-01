@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('LifecycleStage', () {
     test('model', () {
-      final model = LifecycleStage(
-      );
+      final model = LifecycleStage();
 
       final map = model.toMap();
       final result = LifecycleStage.fromMap(map);
-
     });
   });
 }

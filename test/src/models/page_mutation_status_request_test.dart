@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = PageMutationStatusRequest.fromMap(map);
 
-            expect(result.enabled, true);
-                  expect(result.index, 0);
-          });
+      expect(result.enabled, true);
+      expect(result.index, 0);
+    });
   });
 }

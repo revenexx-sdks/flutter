@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum SegmentRulePreviewResponseRuleMatch {
-    all(value: 'all'),
-    any(value: 'any');
+  all(value: 'all'),
+  any(value: 'any');
 
-    const SegmentRulePreviewResponseRuleMatch({
-        required this.value
-    });
+  const SegmentRulePreviewResponseRuleMatch({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ShippingTaxContext', () {
     test('model', () {
-      final model = ShippingTaxContext(
-      );
+      final model = ShippingTaxContext();
 
       final map = model.toMap();
       final result = ShippingTaxContext.fromMap(map);
-
     });
   });
 }

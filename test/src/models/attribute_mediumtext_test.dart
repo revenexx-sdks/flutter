@@ -18,13 +18,13 @@ void main() {
       final map = model.toMap();
       final result = AttributeMediumtext.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.error, '');
-                  expect(result.key, '');
-                  expect(result.xrequired, true);
-                  expect(result.status, AttributeMediumtextStatus.available);
-                  expect(result.type, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$updatedAt, '');
+      expect(result.error, '');
+      expect(result.key, '');
+      expect(result.xrequired, true);
+      expect(result.status, AttributeMediumtextStatus.available);
+      expect(result.type, '');
+    });
   });
 }

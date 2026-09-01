@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ProductLabel', () {
     test('model', () {
-      final model = ProductLabel(
-      );
+      final model = ProductLabel();
 
       final map = model.toMap();
       final result = ProductLabel.fromMap(map);
-
     });
   });
 }

@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ChannelVocabularyRef', () {
     test('model', () {
-      final model = ChannelVocabularyRef(
-      );
+      final model = ChannelVocabularyRef();
 
       final map = model.toMap();
       final result = ChannelVocabularyRef.fromMap(map);
-
     });
   });
 }

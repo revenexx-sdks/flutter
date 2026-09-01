@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,43 +40,41 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('Health test', () {
-        late MockClient client;
-        late Health health;
+  group('Health test', () {
+    late MockClient client;
+    late Health health;
 
-        setUp(() {
-            client = MockClient();
-            health = Health(client);
-        });
-
-        test('test method healthLive()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await health.healthLive(
-            );
-        });
-
-        test('test method healthReady()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await health.healthReady(
-            );
-        });
-
+    setUp(() {
+      client = MockClient();
+      health = Health(client);
     });
+
+    test('test method healthLive()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await health.healthLive();
+    });
+
+    test('test method healthReady()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await health.healthReady();
+    });
+  });
 }

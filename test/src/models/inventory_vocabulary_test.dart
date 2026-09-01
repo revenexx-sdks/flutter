@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('InventoryVocabulary', () {
     test('model', () {
-      final model = InventoryVocabulary(
-      );
+      final model = InventoryVocabulary();
 
       final map = model.toMap();
       final result = InventoryVocabulary.fromMap(map);
-
     });
   });
 }

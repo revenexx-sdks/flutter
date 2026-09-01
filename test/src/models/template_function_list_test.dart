@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = TemplateFunctionList.fromMap(map);
 
-            expect(result.templates, []);
-                  expect(result.total, 0);
-          });
+      expect(result.templates, []);
+      expect(result.total, 0);
+    });
   });
 }

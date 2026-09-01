@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = RolePermissionsRequest.fromMap(map);
 
-            expect(result.permissions, []);
-          });
+      expect(result.permissions, []);
+    });
   });
 }

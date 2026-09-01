@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,69 +40,63 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('CustomersRoles test', () {
-        late MockClient client;
-        late CustomersRoles customersRoles;
+  group('CustomersRoles test', () {
+    late MockClient client;
+    late CustomersRoles customersRoles;
 
-        setUp(() {
-            client = MockClient();
-            customersRoles = CustomersRoles(client);
-        });
-
-        test('test method customersRolesList()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersRoles.customersRolesList(
-            );
-            expect(response, isA<models.RoleCatalogResponse>());
-
-        });
-
-        test('test method customersRolesDefaults()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersRoles.customersRolesDefaults(
-                data: {},
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersRolesPermissionsReplace()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersRoles.customersRolesPermissionsReplace(
-                key: 'buyer',
-                permissions: [],
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+    setUp(() {
+      client = MockClient();
+      customersRoles = CustomersRoles(client);
     });
+
+    test('test method customersRolesList()', () async {
+      final Map<String, dynamic> data = {};
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await customersRoles.customersRolesList();
+      expect(response, isA<models.RoleCatalogResponse>());
+    });
+
+    test('test method customersRolesDefaults()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await customersRoles.customersRolesDefaults(
+        data: {},
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersRolesPermissionsReplace()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await customersRoles.customersRolesPermissionsReplace(
+        key: 'buyer',
+        permissions: [],
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

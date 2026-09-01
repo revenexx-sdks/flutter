@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ShippingServiceLevelRow', () {
     test('model', () {
-      final model = ShippingServiceLevelRow(
-      );
+      final model = ShippingServiceLevelRow();
 
       final map = model.toMap();
       final result = ShippingServiceLevelRow.fromMap(map);
-
     });
   });
 }

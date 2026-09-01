@@ -18,13 +18,13 @@ void main() {
       final map = model.toMap();
       final result = ColumnMediumtext.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.error, '');
-                  expect(result.key, '');
-                  expect(result.xrequired, true);
-                  expect(result.status, ColumnMediumtextStatus.available);
-                  expect(result.type, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$updatedAt, '');
+      expect(result.error, '');
+      expect(result.key, '');
+      expect(result.xrequired, true);
+      expect(result.status, ColumnMediumtextStatus.available);
+      expect(result.type, '');
+    });
   });
 }

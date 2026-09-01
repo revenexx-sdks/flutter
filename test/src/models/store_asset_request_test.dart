@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = StoreAssetRequest.fromMap(map);
 
-            expect(result.file, '');
-          });
+      expect(result.file, '');
+    });
   });
 }

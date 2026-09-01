@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,242 +40,221 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('CustomersOrganizations test', () {
-        late MockClient client;
-        late CustomersOrganizations customersOrganizations;
-
-        setUp(() {
-            client = MockClient();
-            customersOrganizations = CustomersOrganizations(client);
-        });
-
-        test('test method customersAddressesList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersAddressesList(
-            );
-        });
-
-        test('test method customersAddressesCreate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersAddressesCreate(
-                city: 'Berlin',
-                country: 'DE',
-                street: 'Musterstraße 12',
-                zip: '10115',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersAddressesDelete()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersAddressesDelete(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersAddressesGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersAddressesGet(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersAddressesUpdate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersAddressesUpdate(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersOrganizationMetricsList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersOrganizationMetricsList(
-            );
-        });
-
-        test('test method customersOrganizationMetricsFreshness()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersOrganizationMetricsFreshness(
-            );
-            expect(response, isA<models.OrganizationMetricsFreshness>());
-
-        });
-
-        test('test method customersOrganizationMetricsRefresh()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersOrganizationMetricsRefresh(
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersOrganizationMetricsGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersOrganizationMetricsGet(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersOrganizationsList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersOrganizationsList(
-            );
-        });
-
-        test('test method customersOrganizationsCreate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersOrganizationsCreate(
-                name: 'Beispiel Industrietechnik GmbH',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersOrganizationsDelete()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersOrganizationsDelete(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersOrganizationsGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersOrganizationsGet(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method customersOrganizationsUpdate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await customersOrganizations.customersOrganizationsUpdate(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+  group('CustomersOrganizations test', () {
+    late MockClient client;
+    late CustomersOrganizations customersOrganizations;
+
+    setUp(() {
+      client = MockClient();
+      customersOrganizations = CustomersOrganizations(client);
     });
+
+    test('test method customersAddressesList()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await customersOrganizations.customersAddressesList();
+    });
+
+    test('test method customersAddressesCreate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await customersOrganizations.customersAddressesCreate(
+        city: 'Berlin',
+        country: 'DE',
+        street: 'Musterstraße 12',
+        zip: '10115',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersAddressesDelete()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await customersOrganizations.customersAddressesDelete(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersAddressesGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await customersOrganizations.customersAddressesGet(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersAddressesUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await customersOrganizations.customersAddressesUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersOrganizationMetricsList()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await customersOrganizations.customersOrganizationMetricsList();
+    });
+
+    test('test method customersOrganizationMetricsFreshness()', () async {
+      final Map<String, dynamic> data = {};
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await customersOrganizations.customersOrganizationMetricsFreshness();
+      expect(response, isA<models.OrganizationMetricsFreshness>());
+    });
+
+    test('test method customersOrganizationMetricsRefresh()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await customersOrganizations.customersOrganizationMetricsRefresh();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersOrganizationMetricsGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await customersOrganizations.customersOrganizationMetricsGet(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersOrganizationsList()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await customersOrganizations.customersOrganizationsList();
+    });
+
+    test('test method customersOrganizationsCreate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await customersOrganizations.customersOrganizationsCreate(
+        name: 'Beispiel Industrietechnik GmbH',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersOrganizationsDelete()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await customersOrganizations.customersOrganizationsDelete(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersOrganizationsGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await customersOrganizations.customersOrganizationsGet(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method customersOrganizationsUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response =
+          await customersOrganizations.customersOrganizationsUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

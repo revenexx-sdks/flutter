@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = Metric.fromMap(map);
 
-            expect(result.date, '');
-                  expect(result.value, 0);
-          });
+      expect(result.date, '');
+      expect(result.value, 0);
+    });
   });
 }

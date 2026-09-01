@@ -20,16 +20,16 @@ void main() {
       final map = model.toMap();
       final result = Identity.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.provider, '');
-                  expect(result.providerAccessToken, '');
-                  expect(result.providerAccessTokenExpiry, '');
-                  expect(result.providerEmail, '');
-                  expect(result.providerRefreshToken, '');
-                  expect(result.providerUid, '');
-                  expect(result.userId, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$updatedAt, '');
+      expect(result.provider, '');
+      expect(result.providerAccessToken, '');
+      expect(result.providerAccessTokenExpiry, '');
+      expect(result.providerEmail, '');
+      expect(result.providerRefreshToken, '');
+      expect(result.providerUid, '');
+      expect(result.userId, '');
+    });
   });
 }

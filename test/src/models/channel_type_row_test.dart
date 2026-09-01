@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ChannelTypeRow', () {
     test('model', () {
-      final model = ChannelTypeRow(
-      );
+      final model = ChannelTypeRow();
 
       final map = model.toMap();
       final result = ChannelTypeRow.fromMap(map);
-
     });
   });
 }

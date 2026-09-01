@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ShippingRatesBasis', () {
     test('model', () {
-      final model = ShippingRatesBasis(
-      );
+      final model = ShippingRatesBasis();
 
       final map = model.toMap();
       final result = ShippingRatesBasis.fromMap(map);
-
     });
   });
 }

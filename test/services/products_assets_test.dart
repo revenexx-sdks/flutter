@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,100 +40,92 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('ProductsAssets test', () {
-        late MockClient client;
-        late ProductsAssets productsAssets;
+  group('ProductsAssets test', () {
+    late MockClient client;
+    late ProductsAssets productsAssets;
 
-        setUp(() {
-            client = MockClient();
-            productsAssets = ProductsAssets(client);
-        });
-
-        test('test method productsAssetsList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await productsAssets.productsAssetsList(
-            );
-        });
-
-        test('test method productsAssetsCreate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await productsAssets.productsAssetsCreate(
-                assetFamilyId: '',
-                code: 'acme-4711-blk_packshot_1',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method productsAssetsDelete()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await productsAssets.productsAssetsDelete(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method productsAssetsGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await productsAssets.productsAssetsGet(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method productsAssetsUpdate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await productsAssets.productsAssetsUpdate(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+    setUp(() {
+      client = MockClient();
+      productsAssets = ProductsAssets(client);
     });
+
+    test('test method productsAssetsList()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await productsAssets.productsAssetsList();
+    });
+
+    test('test method productsAssetsCreate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await productsAssets.productsAssetsCreate(
+        assetFamilyId: '',
+        code: 'acme-4711-blk_packshot_1',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method productsAssetsDelete()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await productsAssets.productsAssetsDelete(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method productsAssetsGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await productsAssets.productsAssetsGet(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method productsAssetsUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await productsAssets.productsAssetsUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

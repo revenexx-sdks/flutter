@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,125 +40,115 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('CartsItems test', () {
-        late MockClient client;
-        late CartsItems cartsItems;
+  group('CartsItems test', () {
+    late MockClient client;
+    late CartsItems cartsItems;
 
-        setUp(() {
-            client = MockClient();
-            cartsItems = CartsItems(client);
-        });
-
-        test('test method cartsItemsList()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await cartsItems.cartsItemsList(
-                cartId: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method cartsItemsCreate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await cartsItems.cartsItemsCreate(
-                cartId: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method cartsItemsReplace()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await cartsItems.cartsItemsReplace(
-                cartId: '',
-                items: [],
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method cartsItemsDelete()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await cartsItems.cartsItemsDelete(
-                cartId: '',
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method cartsItemsGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await cartsItems.cartsItemsGet(
-                cartId: '',
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method cartsItemsUpdate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await cartsItems.cartsItemsUpdate(
-                cartId: '',
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+    setUp(() {
+      client = MockClient();
+      cartsItems = CartsItems(client);
     });
+
+    test('test method cartsItemsList()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await cartsItems.cartsItemsList(
+        cartId: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method cartsItemsCreate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await cartsItems.cartsItemsCreate(
+        cartId: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method cartsItemsReplace()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await cartsItems.cartsItemsReplace(
+        cartId: '',
+        items: [],
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method cartsItemsDelete()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await cartsItems.cartsItemsDelete(
+        cartId: '',
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method cartsItemsGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await cartsItems.cartsItemsGet(
+        cartId: '',
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method cartsItemsUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await cartsItems.cartsItemsUpdate(
+        cartId: '',
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

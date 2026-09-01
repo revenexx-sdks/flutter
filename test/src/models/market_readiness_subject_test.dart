@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('MarketReadinessSubject', () {
     test('model', () {
-      final model = MarketReadinessSubject(
-      );
+      final model = MarketReadinessSubject();
 
       final map = model.toMap();
       final result = MarketReadinessSubject.fromMap(map);
-
     });
   });
 }

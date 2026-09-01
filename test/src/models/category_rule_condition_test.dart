@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = CategoryRuleCondition.fromMap(map);
 
-            expect(result.field, '');
-                  expect(result.xoperator, CategoryRuleOperator.eq);
-          });
+      expect(result.field, '');
+      expect(result.xoperator, CategoryRuleOperator.eq);
+    });
   });
 }

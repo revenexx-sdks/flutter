@@ -14,10 +14,10 @@ void main() {
       final map = model.toMap();
       final result = Specification.fromMap(map);
 
-            expect(result.cpus, 0);
-                  expect(result.enabled, true);
-                  expect(result.memory, 0);
-                  expect(result.slug, '');
-          });
+      expect(result.cpus, 0);
+      expect(result.enabled, true);
+      expect(result.memory, 0);
+      expect(result.slug, '');
+    });
   });
 }

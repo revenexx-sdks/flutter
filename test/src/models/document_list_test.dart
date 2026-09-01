@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = DocumentList.fromMap(map);
 
-            expect(result.documents, []);
-                  expect(result.total, 0);
-          });
+      expect(result.documents, []);
+      expect(result.total, 0);
+    });
   });
 }

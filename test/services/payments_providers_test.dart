@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,128 +40,116 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('PaymentsProviders test', () {
-        late MockClient client;
-        late PaymentsProviders paymentsProviders;
+  group('PaymentsProviders test', () {
+    late MockClient client;
+    late PaymentsProviders paymentsProviders;
 
-        setUp(() {
-            client = MockClient();
-            paymentsProviders = PaymentsProviders(client);
-        });
-
-        test('test method paymentsLogosGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsProviders.paymentsLogosGet(
-                slug: 'stripe',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method paymentsProvidersList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsProviders.paymentsProvidersList(
-            );
-        });
-
-        test('test method paymentsProvidersCreate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsProviders.paymentsProvidersCreate(
-                provider: 'stripe',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method paymentsProvidersCatalog()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsProviders.paymentsProvidersCatalog(
-            );
-        });
-
-        test('test method paymentsProvidersDelete()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsProviders.paymentsProvidersDelete(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method paymentsProvidersGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsProviders.paymentsProvidersGet(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method paymentsProvidersUpdate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsProviders.paymentsProvidersUpdate(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+    setUp(() {
+      client = MockClient();
+      paymentsProviders = PaymentsProviders(client);
     });
+
+    test('test method paymentsLogosGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsProviders.paymentsLogosGet(
+        slug: 'stripe',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method paymentsProvidersList()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsProviders.paymentsProvidersList();
+    });
+
+    test('test method paymentsProvidersCreate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsProviders.paymentsProvidersCreate(
+        provider: 'stripe',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method paymentsProvidersCatalog()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsProviders.paymentsProvidersCatalog();
+    });
+
+    test('test method paymentsProvidersDelete()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsProviders.paymentsProvidersDelete(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method paymentsProvidersGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsProviders.paymentsProvidersGet(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method paymentsProvidersUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsProviders.paymentsProvidersUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

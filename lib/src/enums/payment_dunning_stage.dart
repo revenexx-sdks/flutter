@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum PaymentDunningStage {
-    none(value: 'none'),
-    reminder(value: 'reminder'),
-    overdue(value: 'overdue');
+  none(value: 'none'),
+  reminder(value: 'reminder'),
+  overdue(value: 'overdue');
 
-    const PaymentDunningStage({
-        required this.value
-    });
+  const PaymentDunningStage({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

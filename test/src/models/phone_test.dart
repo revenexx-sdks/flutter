@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = Phone.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.countryCode, '');
-                  expect(result.countryName, '');
-          });
+      expect(result.code, '');
+      expect(result.countryCode, '');
+      expect(result.countryName, '');
+    });
   });
 }

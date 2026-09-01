@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum CartIoApplyMode {
-    insert(value: 'insert'),
-    append(value: 'append'),
-    replace(value: 'replace');
+  insert(value: 'insert'),
+  append(value: 'append'),
+  replace(value: 'replace');
 
-    const CartIoApplyMode({
-        required this.value
-    });
+  const CartIoApplyMode({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

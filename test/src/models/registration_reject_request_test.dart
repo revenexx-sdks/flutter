@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = RegistrationRejectRequest.fromMap(map);
 
-            expect(result.reason, '');
-          });
+      expect(result.reason, '');
+    });
   });
 }

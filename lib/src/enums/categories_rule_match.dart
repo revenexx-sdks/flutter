@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum CategoriesRuleMatch {
-    all(value: 'all'),
-    any(value: 'any');
+  all(value: 'all'),
+  any(value: 'any');
 
-    const CategoriesRuleMatch({
-        required this.value
-    });
+  const CategoriesRuleMatch({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

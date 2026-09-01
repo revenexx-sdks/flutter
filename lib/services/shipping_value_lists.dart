@@ -1,18 +1,18 @@
 part of '../revenexx.dart';
 
-  /// The code lists the other two groups point at, and what each code MEANS.
-  /// Service levels and weight units were CHECK constraints until a merchant
-  /// wanted a night-courier tier and a tonne — they are the tenant&#039;s own ROWS
-  /// now, so adding one is a call rather than a release of this app, and both
-  /// sets seed themselves on first read so neither ever answers empty. A weight
-  /// unit is the one that is not merely a label: it carries a `factor`,
-  /// kilograms per unit, and that number prices parcels, because every weight
-  /// matrix converts a rate request through it into the unit its tiers are keyed
-  /// in. The vocabulary routes sit here as the general form of the same question
-  /// — they serve these two tenant-owned sets AND the enums this app really
-  /// does fix (pricing model, matrix basis, carrier status), each with its
-  /// title, description and badge tone, so no client keeps a second copy of a
-  /// list it cannot see.
+/// The code lists the other two groups point at, and what each code MEANS.
+/// Service levels and weight units were CHECK constraints until a merchant
+/// wanted a night-courier tier and a tonne — they are the tenant&#039;s own ROWS
+/// now, so adding one is a call rather than a release of this app, and both
+/// sets seed themselves on first read so neither ever answers empty. A weight
+/// unit is the one that is not merely a label: it carries a `factor`,
+/// kilograms per unit, and that number prices parcels, because every weight
+/// matrix converts a rate request through it into the unit its tiers are keyed
+/// in. The vocabulary routes sit here as the general form of the same question
+/// — they serve these two tenant-owned sets AND the enums this app really
+/// does fix (pricing model, matrix basis, carrier status), each with its
+/// title, description and badge tone, so no client keeps a second copy of a
+/// list it cannot see.
 class ShippingValueLists extends Service {
   /// Initializes a [ShippingValueLists] service
   ShippingValueLists(super.client);
@@ -30,21 +30,17 @@ class ShippingValueLists extends Service {
   Future shippingServiceLevelsList({int? limit, int? offset}) async {
     const String apiPath = '/v1/shipping/service-levels';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// A service level is the class of service a carrier row represents, as one of
@@ -59,55 +55,53 @@ class ShippingValueLists extends Service {
   /// carrier stores; it cannot be changed afterwards, because every carrier
   /// carrying it would be orphaned. Creating one changes nothing on its own: a
   /// carrier has to be moved onto it before it means anything.
-  Future<models.Error> shippingServiceLevelsCreate({required String code, required String title, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, enums.Tone? tone}) async {
+  Future<models.Error> shippingServiceLevelsCreate(
+      {required String code,
+      required String title,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      enums.Tone? tone}) async {
     const String apiPath = '/v1/shipping/service-levels';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'description': description,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'descriptions': descriptions,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// There is no foreign key doing this: adding one to a table that starts empty
   /// would fail the migration of every existing tenant. The refusal lives in the
   /// handler instead.
   Future<models.Error> shippingServiceLevelsDelete({required String id}) async {
-    final String apiPath = '/v1/shipping/service-levels/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/shipping/service-levels/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A service level is the class of service a carrier row represents, as one of
@@ -122,19 +116,17 @@ class ShippingValueLists extends Service {
   /// /shipping/vocabularies/service-levels, which is keyed the way the rest of
   /// the platform refers to these values.
   Future<models.Error> shippingServiceLevelsGet({required String id}) async {
-    final String apiPath = '/v1/shipping/service-levels/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/shipping/service-levels/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A service level is the class of service a carrier row represents, as one of
@@ -149,34 +141,36 @@ class ShippingValueLists extends Service {
   /// `position` does not renumber its neighbours — the collection is returned
   /// in position order and ties fall back to whatever the database returns, so a
   /// deliberate order means writing every row's position.
-  Future<models.Error> shippingServiceLevelsUpdate({required String id, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, String? title, enums.Tone? tone}) async {
-    final String apiPath = '/v1/shipping/service-levels/{id}'.replaceAll('{id}', id);
+  Future<models.Error> shippingServiceLevelsUpdate(
+      {required String id,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      String? title,
+      enums.Tone? tone}) async {
+    final String apiPath =
+        '/v1/shipping/service-levels/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'description': description,
+    final Map<String, dynamic> apiParams = {
+      'description': description,
+      'descriptions': descriptions,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      if (title != null) 'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'descriptions': descriptions,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (isDefault != null) 'is_default': isDefault,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            if (title != null) 'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The flag is a single answer, not a per-row opinion: it is what every
@@ -185,22 +179,23 @@ class ShippingValueLists extends Service {
   /// is demoted in the same call — there is no separate write to clear the old
   /// one, and no window in which both carry it. Only the rows whose flag is
   /// wrong are written, so repeating the call is free.
-  Future<models.Error> shippingServiceLevelsMakeDefault({required String id, required Map data}) async {
-    final String apiPath = '/v1/shipping/service-levels/{id}/make-default'.replaceAll('{id}', id);
+  Future<models.Error> shippingServiceLevelsMakeDefault(
+      {required String id, required Map data}) async {
+    final String apiPath =
+        '/v1/shipping/service-levels/{id}/make-default'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Discovery for the vocabulary routes: every enum this app publishes, each
@@ -216,17 +211,14 @@ class ShippingValueLists extends Service {
   Future<models.ShippingVocabularyIndex> shippingVocabulariesList() async {
     const String apiPath = '/v1/shipping/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.ShippingVocabularyIndex.fromMap(res.data);
-
+    return models.ShippingVocabularyIndex.fromMap(res.data);
   }
 
   /// One vocabulary in full: every value it permits, each carrying the title to
@@ -247,20 +239,19 @@ class ShippingValueLists extends Service {
   /// copy carries the map, a value titled from its own key carries the string.
   /// Names: carrier-statuses, matrix-bases, pricing-types, service-levels,
   /// weight-units.
-  Future<models.Error> shippingVocabulariesGet({required enums.ShippingVocabulariesGetName name}) async {
-    final String apiPath = '/v1/shipping/vocabularies/{name}'.replaceAll('{name}', name.value);
+  Future<models.Error> shippingVocabulariesGet(
+      {required enums.ShippingVocabulariesGetName name}) async {
+    final String apiPath =
+        '/v1/shipping/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Not a taxonomy: a unit is a code PLUS a factor, and the factor prices
@@ -275,21 +266,17 @@ class ShippingValueLists extends Service {
   Future shippingWeightUnitsList({int? limit, int? offset}) async {
     const String apiPath = '/v1/shipping/weight-units';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Reach for this when a merchant weighs goods in something this app was not
@@ -299,38 +286,38 @@ class ShippingValueLists extends Service {
   /// factor turns a parcel into a credit. The new unit is never the base —
   /// which unit anchors the others is decided at install, and moving it would
   /// silently reprice every weight matrix in the shop.
-  Future<models.Error> shippingWeightUnitsCreate({required String code, required double factor, required String title, String? description, Map? descriptions, bool? isDefault, Map? labels, int? position, enums.Tone? tone}) async {
+  Future<models.Error> shippingWeightUnitsCreate(
+      {required String code,
+      required double factor,
+      required String title,
+      String? description,
+      Map? descriptions,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      enums.Tone? tone}) async {
     const String apiPath = '/v1/shipping/weight-units';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'description': description,
+      'descriptions': descriptions,
+      'factor': factor,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'description': description,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'descriptions': descriptions,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'factor': factor,
-
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The market check is best effort by design — the setting is per market and
@@ -338,19 +325,17 @@ class ShippingValueLists extends Service {
   /// case degrades to the market falling back to the flagged unit rather than
   /// failing its quotes.
   Future<models.Error> shippingWeightUnitsDelete({required String id}) async {
-    final String apiPath = '/v1/shipping/weight-units/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/shipping/weight-units/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A weight unit is a code PLUS a factor — how many kilograms one of this
@@ -366,55 +351,55 @@ class ShippingValueLists extends Service {
   /// `basis.request_weight_unit_factor` precisely so it stays re-derivable after
   /// this row has been edited.
   Future<models.Error> shippingWeightUnitsGet({required String id}) async {
-    final String apiPath = '/v1/shipping/weight-units/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/shipping/weight-units/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Everything but the code and the base flag. A factor sent for the BASE unit
   /// is refused rather than silently ignored: it reads as 1 because every other
   /// factor is relative to it, so changing it would rescale the whole table
   /// without touching another row.
-  Future<models.Error> shippingWeightUnitsUpdate({required String id, String? description, Map? descriptions, double? factor, bool? isDefault, Map? labels, int? position, String? title, enums.Tone? tone}) async {
-    final String apiPath = '/v1/shipping/weight-units/{id}'.replaceAll('{id}', id);
+  Future<models.Error> shippingWeightUnitsUpdate(
+      {required String id,
+      String? description,
+      Map? descriptions,
+      double? factor,
+      bool? isDefault,
+      Map? labels,
+      int? position,
+      String? title,
+      enums.Tone? tone}) async {
+    final String apiPath =
+        '/v1/shipping/weight-units/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'description': description,
+    final Map<String, dynamic> apiParams = {
+      'description': description,
+      'descriptions': descriptions,
+      if (factor != null) 'factor': factor,
+      if (isDefault != null) 'is_default': isDefault,
+      'labels': labels,
+      if (position != null) 'position': position,
+      if (title != null) 'title': title,
+      if (tone != null) 'tone': tone.value,
+    };
 
-            'descriptions': descriptions,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (factor != null) 'factor': factor,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (isDefault != null) 'is_default': isDefault,
-
-            'labels': labels,
-
-            if (position != null) 'position': position,
-
-            if (title != null) 'title': title,
-
-            if (tone != null) 'tone': tone.value,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The flag is a single answer, not a per-row opinion: it is what every
@@ -423,21 +408,22 @@ class ShippingValueLists extends Service {
   /// is demoted in the same call — there is no separate write to clear the old
   /// one, and no window in which both carry it. Only the rows whose flag is
   /// wrong are written, so repeating the call is free.
-  Future<models.Error> shippingWeightUnitsMakeDefault({required String id, required Map data}) async {
-    final String apiPath = '/v1/shipping/weight-units/{id}/make-default'.replaceAll('{id}', id);
+  Future<models.Error> shippingWeightUnitsMakeDefault(
+      {required String id, required Map data}) async {
+    final String apiPath =
+        '/v1/shipping/weight-units/{id}/make-default'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,124 +40,112 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('PaymentsMethods test', () {
-        late MockClient client;
-        late PaymentsMethods paymentsMethods;
+  group('PaymentsMethods test', () {
+    late MockClient client;
+    late PaymentsMethods paymentsMethods;
 
-        setUp(() {
-            client = MockClient();
-            paymentsMethods = PaymentsMethods(client);
-        });
-
-        test('test method paymentsMethodsList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsMethods.paymentsMethodsList(
-            );
-        });
-
-        test('test method paymentsMethodsCreate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsMethods.paymentsMethodsCreate(
-                code: 'invoice',
-                name: 'Invoice',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method paymentsMethodsDefaults()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsMethods.paymentsMethodsDefaults(
-            );
-        });
-
-        test('test method paymentsMethodsEligible()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsMethods.paymentsMethodsEligible(
-            );
-        });
-
-        test('test method paymentsMethodsDelete()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsMethods.paymentsMethodsDelete(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method paymentsMethodsGet()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsMethods.paymentsMethodsGet(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
-        test('test method paymentsMethodsUpdate()', () async {
-            final Map<String, dynamic> data = {
-                'error': '',};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await paymentsMethods.paymentsMethodsUpdate(
-                id: '',
-            );
-            expect(response, isA<models.Error>());
-
-        });
-
+    setUp(() {
+      client = MockClient();
+      paymentsMethods = PaymentsMethods(client);
     });
+
+    test('test method paymentsMethodsList()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsMethods.paymentsMethodsList();
+    });
+
+    test('test method paymentsMethodsCreate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsMethods.paymentsMethodsCreate(
+        code: 'invoice',
+        name: 'Invoice',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method paymentsMethodsDefaults()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsMethods.paymentsMethodsDefaults();
+    });
+
+    test('test method paymentsMethodsEligible()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsMethods.paymentsMethodsEligible();
+    });
+
+    test('test method paymentsMethodsDelete()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsMethods.paymentsMethodsDelete(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method paymentsMethodsGet()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsMethods.paymentsMethodsGet(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method paymentsMethodsUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await paymentsMethods.paymentsMethodsUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

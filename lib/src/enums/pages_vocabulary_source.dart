@@ -1,13 +1,11 @@
 part of '../../enums.dart';
 
 enum PagesVocabularySource {
-    schema(value: 'schema');
+  schema(value: 'schema');
 
-    const PagesVocabularySource({
-        required this.value
-    });
+  const PagesVocabularySource({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

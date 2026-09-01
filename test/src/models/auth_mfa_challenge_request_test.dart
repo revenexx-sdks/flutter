@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = AuthMfaChallengeRequest.fromMap(map);
 
-            expect(result.user_id, '');
-          });
+      expect(result.user_id, '');
+    });
   });
 }

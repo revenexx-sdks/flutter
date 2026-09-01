@@ -1,14 +1,12 @@
 part of '../../enums.dart';
 
 enum Scope {
-    all(value: 'all'),
-    marketing(value: 'marketing');
+  all(value: 'all'),
+  marketing(value: 'marketing');
 
-    const Scope({
-        required this.value
-    });
+  const Scope({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

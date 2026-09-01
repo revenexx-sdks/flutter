@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ReorderAlert', () {
     test('model', () {
-      final model = ReorderAlert(
-      );
+      final model = ReorderAlert();
 
       final map = model.toMap();
       final result = ReorderAlert.fromMap(map);
-
     });
   });
 }

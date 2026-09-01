@@ -4,12 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('PageLibraryItemUpdateRequest', () {
     test('model', () {
-      final model = PageLibraryItemUpdateRequest(
-      );
+      final model = PageLibraryItemUpdateRequest();
 
       final map = model.toMap();
       final result = PageLibraryItemUpdateRequest.fromMap(map);
-
     });
   });
 }

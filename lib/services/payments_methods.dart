@@ -1,17 +1,17 @@
 part of '../revenexx.dart';
 
-  /// WHAT a buyer may pay with, and what it costs them. A payment method is the
-  /// line a checkout offers: a `code`, buyer-facing `labels`, a kind
-  /// (&#039;self_managed&#039; for invoice and prepayment, &#039;psp&#039; for anything an acquirer
-  /// moves), a fee (&#039;none&#039;, &#039;fixed&#039; or &#039;percent&#039; of the order), the countries it
-  /// may be offered into and the order-value bounds it applies between. POST
-  /// /payments/methods/eligible is the read side of everything in here — it
-  /// takes the buyer context and answers only the methods that apply, with their
-  /// computed fees, plus an `excluded` list naming the ones that did not and
-  /// why. Note what eligibility does NOT ask: whether the method&#039;s PSP is
-  /// configured and enabled. A method is joined to the ledger by CODE and not by
-  /// a foreign key, which is why both deleting one and renaming its `code` are
-  /// refused while a payment still names it.
+/// WHAT a buyer may pay with, and what it costs them. A payment method is the
+/// line a checkout offers: a `code`, buyer-facing `labels`, a kind
+/// (&#039;self_managed&#039; for invoice and prepayment, &#039;psp&#039; for anything an acquirer
+/// moves), a fee (&#039;none&#039;, &#039;fixed&#039; or &#039;percent&#039; of the order), the countries it
+/// may be offered into and the order-value bounds it applies between. POST
+/// /payments/methods/eligible is the read side of everything in here — it
+/// takes the buyer context and answers only the methods that apply, with their
+/// computed fees, plus an `excluded` list naming the ones that did not and
+/// why. Note what eligibility does NOT ask: whether the method&#039;s PSP is
+/// configured and enabled. A method is joined to the ledger by CODE and not by
+/// a foreign key, which is why both deleting one and renaming its `code` are
+/// refused while a payment still names it.
 class PaymentsMethods extends Service {
   /// Initializes a [PaymentsMethods] service
   PaymentsMethods(super.client);
@@ -26,34 +26,32 @@ class PaymentsMethods extends Service {
   /// returns them, so a storefront-shaped list needs `?order=position.asc` —
   /// `position` is the merchant's intended sequence and nothing sorts by it here
   /// on its own.
-  Future paymentsMethodsList({int? limit, int? offset, String? order, String? code, enums.PaymentMethodKind? kind, bool? enabled, String? provider}) async {
+  Future paymentsMethodsList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? code,
+      enums.PaymentMethodKind? kind,
+      bool? enabled,
+      String? provider}) async {
     const String apiPath = '/v1/payments/methods';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (code != null) 'code': code,
+      if (kind != null) 'kind': kind.value,
+      if (enabled != null) 'enabled': enabled,
+      if (provider != null) 'provider': provider,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (code != null) 'code': code,
-
-            if (kind != null) 'kind': kind.value,
-
-            if (enabled != null) 'enabled': enabled,
-
-            if (provider != null) 'provider': provider,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// Adds a line a checkout can offer. A create cannot omit `code` and `name`;
@@ -67,52 +65,52 @@ class PaymentsMethods extends Service {
   /// payment, every checkout and every ERP will name this method by from now on,
   /// and once a single payment has been made under it a rename is refused with
   /// 409: choose it once.
-  Future<models.Error> paymentsMethodsCreate({required String code, required String name, List<String>? countries, String? description, bool? enabled, double? feeAmount, String? feeCurrency, enums.PaymentFeeType? feeType, enums.PaymentMethodKind? kind, Map? labels, double? maxOrderValue, Map? metadata, double? minOrderValue, int? position, String? provider, String? providerMethod}) async {
+  Future<models.Error> paymentsMethodsCreate(
+      {required String code,
+      required String name,
+      List<String>? countries,
+      String? description,
+      bool? enabled,
+      double? feeAmount,
+      String? feeCurrency,
+      enums.PaymentFeeType? feeType,
+      enums.PaymentMethodKind? kind,
+      Map? labels,
+      double? maxOrderValue,
+      Map? metadata,
+      double? minOrderValue,
+      int? position,
+      String? provider,
+      String? providerMethod}) async {
     const String apiPath = '/v1/payments/methods';
 
-        final Map<String, dynamic> apiParams = {
-            'code': code,
+    final Map<String, dynamic> apiParams = {
+      'code': code,
+      'countries': countries,
+      'description': description,
+      if (enabled != null) 'enabled': enabled,
+      if (feeAmount != null) 'fee_amount': feeAmount,
+      if (feeCurrency != null) 'fee_currency': feeCurrency,
+      if (feeType != null) 'fee_type': feeType.value,
+      if (kind != null) 'kind': kind.value,
+      'labels': labels,
+      'max_order_value': maxOrderValue,
+      'metadata': metadata,
+      'min_order_value': minOrderValue,
+      'name': name,
+      if (position != null) 'position': position,
+      'provider': provider,
+      'provider_method': providerMethod,
+    };
 
-            'countries': countries,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'description': description,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (enabled != null) 'enabled': enabled,
-
-            if (feeAmount != null) 'fee_amount': feeAmount,
-
-            if (feeCurrency != null) 'fee_currency': feeCurrency,
-
-            if (feeType != null) 'fee_type': feeType.value,
-
-            if (kind != null) 'kind': kind.value,
-
-            'labels': labels,
-
-            'max_order_value': maxOrderValue,
-
-            'metadata': metadata,
-
-            'min_order_value': minOrderValue,
-
-            'name': name,
-
-            if (position != null) 'position': position,
-
-            'provider': provider,
-
-            'provider_method': providerMethod,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Writes the four methods a shop starts with — invoice and prepayment as
@@ -133,17 +131,14 @@ class PaymentsMethods extends Service {
   Future paymentsMethodsDefaults() async {
     const String apiPath = '/v1/payments/methods/defaults';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// The checkout's question — "what can THIS buyer pay with?" — answered
@@ -162,26 +157,24 @@ class PaymentsMethods extends Service {
   /// no longer be deleted, which closes the other half of the same gap), and
   /// anything about the buyer beyond country and amount. A context that matches
   /// nothing is 200 with an empty `methods` list, never 404.
-  Future paymentsMethodsEligible({double? amount, String? country, String? currency}) async {
+  Future paymentsMethodsEligible(
+      {double? amount, String? country, String? currency}) async {
     const String apiPath = '/v1/payments/methods/eligible';
 
-        final Map<String, dynamic> apiParams = {
-            'amount': amount,
+    final Map<String, dynamic> apiParams = {
+      'amount': amount,
+      'country': country,
+      'currency': currency,
+    };
 
-            'country': country,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'currency': currency,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return res.data;
   }
 
   /// payments.method_code is a CODE, not a foreign key: a payment records what
@@ -196,17 +189,14 @@ class PaymentsMethods extends Service {
   Future<models.Error> paymentsMethodsDelete({required String id}) async {
     final String apiPath = '/v1/payments/methods/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// One configuration, every column, addressed by its row id — the edit
@@ -221,17 +211,14 @@ class PaymentsMethods extends Service {
   Future<models.Error> paymentsMethodsGet({required String id}) async {
     final String apiPath = '/v1/payments/methods/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A PUT that PATCHES: only the keys in the body are written and every omitted
@@ -256,51 +243,52 @@ class PaymentsMethods extends Service {
   /// answers 409 for — so it answers the same 409, with the same
   /// `method_in_use` code and the same count. Renaming a method nothing has been
   /// paid with is still free, and so is every other column at any time.
-  Future<models.Error> paymentsMethodsUpdate({required String id, String? code, List<String>? countries, String? description, bool? enabled, double? feeAmount, String? feeCurrency, enums.PaymentFeeType? feeType, enums.PaymentMethodKind? kind, Map? labels, double? maxOrderValue, Map? metadata, double? minOrderValue, String? name, int? position, String? provider, String? providerMethod}) async {
+  Future<models.Error> paymentsMethodsUpdate(
+      {required String id,
+      String? code,
+      List<String>? countries,
+      String? description,
+      bool? enabled,
+      double? feeAmount,
+      String? feeCurrency,
+      enums.PaymentFeeType? feeType,
+      enums.PaymentMethodKind? kind,
+      Map? labels,
+      double? maxOrderValue,
+      Map? metadata,
+      double? minOrderValue,
+      String? name,
+      int? position,
+      String? provider,
+      String? providerMethod}) async {
     final String apiPath = '/v1/payments/methods/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (code != null) 'code': code,
+    final Map<String, dynamic> apiParams = {
+      if (code != null) 'code': code,
+      'countries': countries,
+      'description': description,
+      if (enabled != null) 'enabled': enabled,
+      if (feeAmount != null) 'fee_amount': feeAmount,
+      if (feeCurrency != null) 'fee_currency': feeCurrency,
+      if (feeType != null) 'fee_type': feeType.value,
+      if (kind != null) 'kind': kind.value,
+      'labels': labels,
+      'max_order_value': maxOrderValue,
+      'metadata': metadata,
+      'min_order_value': minOrderValue,
+      if (name != null) 'name': name,
+      if (position != null) 'position': position,
+      'provider': provider,
+      'provider_method': providerMethod,
+    };
 
-            'countries': countries,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'description': description,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (enabled != null) 'enabled': enabled,
-
-            if (feeAmount != null) 'fee_amount': feeAmount,
-
-            if (feeCurrency != null) 'fee_currency': feeCurrency,
-
-            if (feeType != null) 'fee_type': feeType.value,
-
-            if (kind != null) 'kind': kind.value,
-
-            'labels': labels,
-
-            'max_order_value': maxOrderValue,
-
-            'metadata': metadata,
-
-            'min_order_value': minOrderValue,
-
-            if (name != null) 'name': name,
-
-            if (position != null) 'position': position,
-
-            'provider': provider,
-
-            'provider_method': providerMethod,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

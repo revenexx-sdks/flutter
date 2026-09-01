@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('LocationUpdateRequest', () {
     test('model', () {
-      final model = LocationUpdateRequest(
-      );
+      final model = LocationUpdateRequest();
 
       final map = model.toMap();
       final result = LocationUpdateRequest.fromMap(map);
-
     });
   });
 }

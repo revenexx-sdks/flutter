@@ -1,15 +1,13 @@
 part of '../../enums.dart';
 
 enum ChannelsVocabulariesGetName {
-    statuses(value: 'statuses'),
-    types(value: 'types'),
-    unassignedVisibility(value: 'unassigned-visibility');
+  statuses(value: 'statuses'),
+  types(value: 'types'),
+  unassignedVisibility(value: 'unassigned-visibility');
 
-    const ChannelsVocabulariesGetName({
-        required this.value
-    });
+  const ChannelsVocabulariesGetName({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

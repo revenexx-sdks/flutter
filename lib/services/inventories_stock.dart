@@ -1,22 +1,22 @@
 part of '../revenexx.dart';
 
-  /// How much is there, what may still be sold, and every call that changes the
-  /// number. A stock level is one item at one location and it carries two
-  /// figures, neither of which is the sellable one: `on_hand` counts what is
-  /// physically there INCLUDING everything already promised, `reserved` counts
-  /// the promises and never reduces `on_hand`, and what a shop may sell is the
-  /// difference — derived on read, never stored, so there is no `available`
-  /// column to filter or order by. The balance is not editable either: every
-  /// change is a booking in the movements ledger, which is why `receive` (goods
-  /// in), `adjust` (a signed correction with a reason), `restock` (a return
-  /// coming back) and the row-scoped adjust are the only things that move a
-  /// number, and why the ledger reads sit in this same group rather than a
-  /// section of their own — a movement is the receipt for the call above it,
-  /// not a subject. POST /inventories/availability is the read side of all of
-  /// it, and the one capability an ERP-stocked tenant replaces wholesale through
-  /// the gateway override. The vocabulary routes are here because the code a
-  /// caller cannot guess is a movement&#039;s `type`: it decides the SIGN of the
-  /// quantity.
+/// How much is there, what may still be sold, and every call that changes the
+/// number. A stock level is one item at one location and it carries two
+/// figures, neither of which is the sellable one: `on_hand` counts what is
+/// physically there INCLUDING everything already promised, `reserved` counts
+/// the promises and never reduces `on_hand`, and what a shop may sell is the
+/// difference — derived on read, never stored, so there is no `available`
+/// column to filter or order by. The balance is not editable either: every
+/// change is a booking in the movements ledger, which is why `receive` (goods
+/// in), `adjust` (a signed correction with a reason), `restock` (a return
+/// coming back) and the row-scoped adjust are the only things that move a
+/// number, and why the ledger reads sit in this same group rather than a
+/// section of their own — a movement is the receipt for the call above it,
+/// not a subject. POST /inventories/availability is the read side of all of
+/// it, and the one capability an ERP-stocked tenant replaces wholesale through
+/// the gateway override. The vocabulary routes are here because the code a
+/// caller cannot guess is a movement&#039;s `type`: it decides the SIGN of the
+/// quantity.
 class InventoriesStock extends Service {
   /// Initializes a [InventoriesStock] service
   InventoriesStock(super.client);
@@ -29,32 +29,32 @@ class InventoriesStock extends Service {
   /// record of who changed what and why instead of a number that silently
   /// differs from yesterday's. A reason is mandatory unless
   /// movement_reason_required is 'none'.
-  Future<models.Error> inventoriesAdjust({List<models.InventoryAdjustItem>? items, String? locationCode, String? productId, double? quantity, String? reason, String? sku}) async {
+  Future<models.Error> inventoriesAdjust(
+      {List<models.InventoryAdjustItem>? items,
+      String? locationCode,
+      String? productId,
+      double? quantity,
+      String? reason,
+      String? sku}) async {
     const String apiPath = '/v1/inventories/adjust';
 
-        final Map<String, dynamic> apiParams = {
-            if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+      'location_code': locationCode,
+      'product_id': productId,
+      'quantity': quantity,
+      'reason': reason,
+      'sku': sku,
+    };
 
-            'location_code': locationCode,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product_id': productId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'quantity': quantity,
-
-            'reason': reason,
-
-            'sku': sku,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// THE stock call of this app, and a batch one: name any number of items and
@@ -72,30 +72,30 @@ class InventoriesStock extends Service {
   /// response shapes below read as a contract to be implemented rather than as
   /// an implementation detail: whatever ends up answering this path has to
   /// answer in these terms.
-  Future<models.Error> inventoriesAvailability({List<models.InventoryAvailabilityItem>? items, String? locationCode, String? productId, double? quantity, String? sku}) async {
+  Future<models.Error> inventoriesAvailability(
+      {List<models.InventoryAvailabilityItem>? items,
+      String? locationCode,
+      String? productId,
+      double? quantity,
+      String? sku}) async {
     const String apiPath = '/v1/inventories/availability';
 
-        final Map<String, dynamic> apiParams = {
-            if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+      'location_code': locationCode,
+      'product_id': productId,
+      'quantity': quantity,
+      'sku': sku,
+    };
 
-            'location_code': locationCode,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product_id': productId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'quantity': quantity,
-
-            'sku': sku,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The movements ledger, read end to end. Every stock change this app has ever
@@ -106,46 +106,44 @@ class InventoriesStock extends Service {
   /// catches up by paging here. Append-only: the ledger has no update and no
   /// delete, because a correction is another booking. `order=created_at.desc` is
   /// the feed order.
-  Future<models.Error> inventoriesMovementsList({int? limit, int? offset, String? order, String? id, String? locationId, String? productId, String? sku, enums.InventoriesMovementsListType? type, double? quantity, String? orderRef, String? reason, String? metadata, String? createdAt}) async {
+  Future<models.Error> inventoriesMovementsList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? id,
+      String? locationId,
+      String? productId,
+      String? sku,
+      enums.InventoriesMovementsListType? type,
+      double? quantity,
+      String? orderRef,
+      String? reason,
+      String? metadata,
+      String? createdAt}) async {
     const String apiPath = '/v1/inventories/movements';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (id != null) 'id': id,
+      if (locationId != null) 'location_id': locationId,
+      if (productId != null) 'product_id': productId,
+      if (sku != null) 'sku': sku,
+      if (type != null) 'type': type.value,
+      if (quantity != null) 'quantity': quantity,
+      if (orderRef != null) 'order_ref': orderRef,
+      if (reason != null) 'reason': reason,
+      if (metadata != null) 'metadata': metadata,
+      if (createdAt != null) 'created_at': createdAt,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (id != null) 'id': id,
-
-            if (locationId != null) 'location_id': locationId,
-
-            if (productId != null) 'product_id': productId,
-
-            if (sku != null) 'sku': sku,
-
-            if (type != null) 'type': type.value,
-
-            if (quantity != null) 'quantity': quantity,
-
-            if (orderRef != null) 'order_ref': orderRef,
-
-            if (reason != null) 'reason': reason,
-
-            if (metadata != null) 'metadata': metadata,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A movement is one booking row in the ledger, and the ledger is append-only:
@@ -163,51 +161,49 @@ class InventoriesStock extends Service {
   /// a broken row. Fixing a wrong booking is another booking (POST
   /// /inventories/adjust); nothing here can be edited or removed.
   Future<models.Error> inventoriesMovementsGet({required String id}) async {
-    final String apiPath = '/v1/inventories/movements/{id}'.replaceAll('{id}', id);
+    final String apiPath =
+        '/v1/inventories/movements/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Books a delivery into the receiving location (the caller's location_code,
   /// else the default_location_code setting), creating the stock row if the item
   /// is new. A reason is optional unless movement_reason_required is 'all'.
   /// Takes a batch or one item inline.
-  Future<models.Error> inventoriesReceive({List<models.InventoryStockItem>? items, String? locationCode, String? productId, double? quantity, String? reason, String? sku}) async {
+  Future<models.Error> inventoriesReceive(
+      {List<models.InventoryStockItem>? items,
+      String? locationCode,
+      String? productId,
+      double? quantity,
+      String? reason,
+      String? sku}) async {
     const String apiPath = '/v1/inventories/receive';
 
-        final Map<String, dynamic> apiParams = {
-            if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+      'location_code': locationCode,
+      'product_id': productId,
+      'quantity': quantity,
+      'reason': reason,
+      'sku': sku,
+    };
 
-            'location_code': locationCode,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product_id': productId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'quantity': quantity,
-
-            'reason': reason,
-
-            'sku': sku,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// The replenishment worklist: the stock rows that have run down far enough
@@ -221,17 +217,14 @@ class InventoriesStock extends Service {
   Future<models.ReorderAlerts> inventoriesReorderAlerts() async {
     const String apiPath = '/v1/inventories/reorder-alerts';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.ReorderAlerts.fromMap(res.data);
-
+    return models.ReorderAlerts.fromMap(res.data);
   }
 
   /// Publishes `stock_level.low` on the event bus for every row GET
@@ -247,19 +240,18 @@ class InventoriesStock extends Service {
   Future<models.ReorderScan> inventoriesReorderScan({required Map data}) async {
     const String apiPath = '/v1/inventories/reorder-alerts/scan';
 
-        final Map<String, dynamic> apiParams = {
-            'data': data,
+    final Map<String, dynamic> apiParams = {
+      'data': data,
+    };
 
-        };
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.ReorderScan.fromMap(res.data);
-
+    return models.ReorderScan.fromMap(res.data);
   }
 
   /// Whether a return rejoins sellable stock follows restock_on_return_default,
@@ -267,36 +259,36 @@ class InventoriesStock extends Service {
   /// says restocked:false and nothing moves — there is no movement to book,
   /// because no stock moved. That branch is why this route answers 200 and its
   /// sibling `receive` answers 201: a restock may legitimately create nothing.
-  Future<models.Error> inventoriesRestock({List<models.InventoryStockItem>? items, String? locationCode, String? orderRef, String? productId, double? quantity, String? reason, bool? restock, String? sku}) async {
+  Future<models.Error> inventoriesRestock(
+      {List<models.InventoryStockItem>? items,
+      String? locationCode,
+      String? orderRef,
+      String? productId,
+      double? quantity,
+      String? reason,
+      bool? restock,
+      String? sku}) async {
     const String apiPath = '/v1/inventories/restock';
 
-        final Map<String, dynamic> apiParams = {
-            if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+    final Map<String, dynamic> apiParams = {
+      if (items != null) 'items': items.map((p) => p.toMap()).toList(),
+      'location_code': locationCode,
+      'order_ref': orderRef,
+      'product_id': productId,
+      'quantity': quantity,
+      'reason': reason,
+      'restock': restock,
+      'sku': sku,
+    };
 
-            'location_code': locationCode,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'order_ref': orderRef,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'product_id': productId,
-
-            'quantity': quantity,
-
-            'reason': reason,
-
-            'restock': restock,
-
-            'sku': sku,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A stock level is ONE item at ONE location, and it carries two numbers,
@@ -316,46 +308,44 @@ class InventoriesStock extends Service {
   /// not a constraint, so a row written past it, or one that predates the guard,
   /// still splits an item's balance in two, and the write routes find and update
   /// whichever of them the database returns first.
-  Future<models.Error> inventoriesStockList({int? limit, int? offset, String? order, String? id, String? locationId, String? productId, String? sku, double? onHand, double? reserved, double? reorderPoint, String? metadata, String? createdAt, String? updatedAt}) async {
+  Future<models.Error> inventoriesStockList(
+      {int? limit,
+      int? offset,
+      String? order,
+      String? id,
+      String? locationId,
+      String? productId,
+      String? sku,
+      double? onHand,
+      double? reserved,
+      double? reorderPoint,
+      String? metadata,
+      String? createdAt,
+      String? updatedAt}) async {
     const String apiPath = '/v1/inventories/stock';
 
-        final Map<String, dynamic> apiParams = {
-            if (limit != null) 'limit': limit,
+    final Map<String, dynamic> apiParams = {
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (id != null) 'id': id,
+      if (locationId != null) 'location_id': locationId,
+      if (productId != null) 'product_id': productId,
+      if (sku != null) 'sku': sku,
+      if (onHand != null) 'on_hand': onHand,
+      if (reserved != null) 'reserved': reserved,
+      if (reorderPoint != null) 'reorder_point': reorderPoint,
+      if (metadata != null) 'metadata': metadata,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    };
 
-            if (offset != null) 'offset': offset,
+    final Map<String, String> apiHeaders = {};
 
-            if (order != null) 'order': order,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (id != null) 'id': id,
-
-            if (locationId != null) 'location_id': locationId,
-
-            if (productId != null) 'product_id': productId,
-
-            if (sku != null) 'sku': sku,
-
-            if (onHand != null) 'on_hand': onHand,
-
-            if (reserved != null) 'reserved': reserved,
-
-            if (reorderPoint != null) 'reorder_point': reorderPoint,
-
-            if (metadata != null) 'metadata': metadata,
-
-            if (createdAt != null) 'created_at': createdAt,
-
-            if (updatedAt != null) 'updated_at': updatedAt,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Registers an item at a location. The row is born at ZERO and never gets a
@@ -376,30 +366,30 @@ class InventoriesStock extends Service {
   /// first. That guard is a check before the insert and not a constraint, so it
   /// closes a double click or a re-run import and does not claim to close a race
   /// between two simultaneous creates.
-  Future<models.Error> inventoriesStockCreate({required String locationId, Map? metadata, String? productId, double? reorderPoint, String? sku}) async {
+  Future<models.Error> inventoriesStockCreate(
+      {required String locationId,
+      Map? metadata,
+      String? productId,
+      double? reorderPoint,
+      String? sku}) async {
     const String apiPath = '/v1/inventories/stock';
 
-        final Map<String, dynamic> apiParams = {
-            'location_id': locationId,
+    final Map<String, dynamic> apiParams = {
+      'location_id': locationId,
+      'metadata': metadata,
+      'product_id': productId,
+      'reorder_point': reorderPoint,
+      'sku': sku,
+    };
 
-            'metadata': metadata,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product_id': productId,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'reorder_point': reorderPoint,
-
-            'sku': sku,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Stops tracking one item at one location. A stock level is ONE item at ONE
@@ -434,17 +424,14 @@ class InventoriesStock extends Service {
   Future<models.Error> inventoriesStockDelete({required String id}) async {
     final String apiPath = '/v1/inventories/stock/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// A stock level is ONE item at ONE location, and it carries two numbers,
@@ -462,17 +449,14 @@ class InventoriesStock extends Service {
   Future<models.Error> inventoriesStockGet({required String id}) async {
     final String apiPath = '/v1/inventories/stock/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Partial update of everything on the row EXCEPT its balance: reorder_point,
@@ -480,30 +464,31 @@ class InventoriesStock extends Service {
   /// every stock change is a movement, and a body carrying nothing else is
   /// answered 422 with the route that was meant (POST
   /// /inventories/stock/{id}/adjust).
-  Future<models.Error> inventoriesStockUpdate({required String id, String? locationId, Map? metadata, String? productId, double? reorderPoint, String? sku}) async {
+  Future<models.Error> inventoriesStockUpdate(
+      {required String id,
+      String? locationId,
+      Map? metadata,
+      String? productId,
+      double? reorderPoint,
+      String? sku}) async {
     final String apiPath = '/v1/inventories/stock/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (locationId != null) 'location_id': locationId,
+    final Map<String, dynamic> apiParams = {
+      if (locationId != null) 'location_id': locationId,
+      'metadata': metadata,
+      'product_id': productId,
+      'reorder_point': reorderPoint,
+      'sku': sku,
+    };
 
-            'metadata': metadata,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            'product_id': productId,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'reorder_point': reorderPoint,
-
-            'sku': sku,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.put, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Corrects the balance of ONE stock row, and only that one. It is the
@@ -515,24 +500,24 @@ class InventoriesStock extends Service {
   /// the answer hands back the row at its new value instead of an
   /// acknowledgement. This is the route that replaced the Cockpit's editable
   /// on_hand field.
-  Future<models.Error> inventoriesStockAdjust({required String id, required double quantity, String? reason}) async {
-    final String apiPath = '/v1/inventories/stock/{id}/adjust'.replaceAll('{id}', id);
+  Future<models.Error> inventoriesStockAdjust(
+      {required String id, required double quantity, String? reason}) async {
+    final String apiPath =
+        '/v1/inventories/stock/{id}/adjust'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            'quantity': quantity,
+    final Map<String, dynamic> apiParams = {
+      'quantity': quantity,
+      'reason': reason,
+    };
 
-            'reason': reason,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
   /// Discovery for the vocabulary routes: the enums this app publishes, each
@@ -544,17 +529,14 @@ class InventoriesStock extends Service {
   Future<models.InventoryVocabularyIndex> inventoriesVocabulariesList() async {
     const String apiPath = '/v1/inventories/vocabularies';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.InventoryVocabularyIndex.fromMap(res.data);
-
+    return models.InventoryVocabularyIndex.fromMap(res.data);
   }
 
   /// One vocabulary in full: every permitted value, each carrying the title and
@@ -567,19 +549,18 @@ class InventoriesStock extends Service {
   /// order for a status. 'closed' says the set is exhaustive, so a value outside
   /// it is stale data rather than a missing label. Names: location-types,
   /// movement-types, reservation-statuses.
-  Future<models.Error> inventoriesVocabulariesGet({required enums.InventoriesVocabulariesGetName name}) async {
-    final String apiPath = '/v1/inventories/vocabularies/{name}'.replaceAll('{name}', name.value);
+  Future<models.Error> inventoriesVocabulariesGet(
+      {required enums.InventoriesVocabulariesGetName name}) async {
+    final String apiPath =
+        '/v1/inventories/vocabularies/{name}'.replaceAll('{name}', name.value);
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {};
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Error.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 }

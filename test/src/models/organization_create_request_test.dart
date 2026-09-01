@@ -12,7 +12,7 @@ void main() {
       final map = model.toMap();
       final result = OrganizationCreateRequest.fromMap(map);
 
-            expect(result.name, '');
-          });
+      expect(result.name, '');
+    });
   });
 }
