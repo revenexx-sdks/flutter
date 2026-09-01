@@ -2,18 +2,18 @@ import 'package:revenexx/src/exception.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('RevenexxAPIRevenexxException', () {
+  group('RevenexxException', () {
     test('toString should return correct string representation', () {
-      final exception1 = RevenexxAPIRevenexxException();
-      expect(exception1.toString(), equals('RevenexxAPIRevenexxException'));
+      final exception1 = RevenexxException();
+      expect(exception1.toString(), equals('RevenexxException'));
 
-      final exception2 = RevenexxAPIRevenexxException('Some error message');
+      final exception2 = RevenexxException('Some error message');
       expect(
         exception2.toString(),
-        equals('AppwriteException: , Some error message (0)'),
+        equals('RevenexxException: , Some error message (0)'),
       );
 
-      final exception3 = AppwriteException(
+      final exception3 = RevenexxException(
         'Invalid request',
         400,
         'ValidationError',
@@ -21,7 +21,7 @@ void main() {
       expect(
         exception3.toString(),
         equals(
-          'AppwriteException: ValidationError, Invalid request (400)',
+          'RevenexxException: ValidationError, Invalid request (400)',
         ),
       );
     });

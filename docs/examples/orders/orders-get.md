@@ -7,7 +7,7 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-OrderDetail result = await orders.ordersGet(
+Error result = await orders.ordersGet(
     id: '',
 );
 ```

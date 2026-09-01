@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = LocaleCodeList(
         localeCodes: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = LocaleCodeList.fromMap(map);
 
             expect(result.localeCodes, []);
-                  expect(result.total, );
+                  expect(result.total, 0);
           });
   });
 }

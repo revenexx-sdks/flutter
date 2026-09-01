@@ -80,7 +80,8 @@ void main() {
         });
 
         test('test method ordersNumberRangesCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -89,14 +90,15 @@ void main() {
 
 
             final response = await orders.ordersNumberRangesCreate(
-                code: '',
+                code: 'order',
             );
-            expect(response, isA<models.NumberRange>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersNumberRangesDefaults()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -105,10 +107,14 @@ void main() {
 
             final response = await orders.ordersNumberRangesDefaults(
             );
+            expect(response, isA<models.OrderNumberRangesSeeded>());
+
         });
 
         test('test method ordersNumberRangesDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -118,10 +124,13 @@ void main() {
             final response = await orders.ordersNumberRangesDelete(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method ordersNumberRangesGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -132,12 +141,13 @@ void main() {
             final response = await orders.ordersNumberRangesGet(
                 id: '',
             );
-            expect(response, isA<models.NumberRange>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersNumberRangesUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -148,12 +158,13 @@ void main() {
             final response = await orders.ordersNumberRangesUpdate(
                 id: '',
             );
-            expect(response, isA<models.NumberRange>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersPlace()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -164,12 +175,60 @@ void main() {
             final response = await orders.ordersPlace(
                 items: [],
             );
-            expect(response, isA<models.OrderDetail>());
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method ordersReportsCustomerRollup()', () async {
+            final Map<String, dynamic> data = {};
+
+
+            when(client.call(
+                HttpMethod.post,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await orders.ordersReportsCustomerRollup(
+            );
+            expect(response, isA<models.OrderCustomerRollupResponse>());
+
+        });
+
+        test('test method ordersVocabulariesList()', () async {
+            final Map<String, dynamic> data = {};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await orders.ordersVocabulariesList(
+            );
+            expect(response, isA<models.OrderVocabularyIndex>());
+
+        });
+
+        test('test method ordersVocabulariesGet()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await orders.ordersVocabulariesGet(
+                name: enums.OrdersVocabulariesGetName.cancellationScopes,
+            );
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -180,12 +239,13 @@ void main() {
             final response = await orders.ordersGet(
                 id: '',
             );
-            expect(response, isA<models.OrderDetail>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -196,12 +256,13 @@ void main() {
             final response = await orders.ordersUpdate(
                 id: '',
             );
-            expect(response, isA<models.Order>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersAcknowledge()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -212,12 +273,13 @@ void main() {
             final response = await orders.ordersAcknowledge(
                 id: '',
             );
-            expect(response, isA<models.Order>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersCancel()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -228,12 +290,14 @@ void main() {
             final response = await orders.ordersCancel(
                 id: '',
             );
-            expect(response, isA<models.Order>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersCommentsList()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -243,10 +307,13 @@ void main() {
             final response = await orders.ordersCommentsList(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method ordersCommentsCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -256,14 +323,33 @@ void main() {
 
             final response = await orders.ordersCommentsCreate(
                 id: '',
-                body: '',
+                body: 'Called the customer, delivery agreed for next week.',
             );
-            expect(response, isA<models.OrderComment>());
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method ordersComplete()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.post,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await orders.ordersComplete(
+                id: '',
+            );
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersEventsList()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -273,10 +359,13 @@ void main() {
             final response = await orders.ordersEventsList(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method ordersHold()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -287,12 +376,13 @@ void main() {
             final response = await orders.ordersHold(
                 id: '',
             );
-            expect(response, isA<models.Order>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersItemsCancel()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -304,12 +394,13 @@ void main() {
                 id: '',
                 positions: [],
             );
-            expect(response, isA<models.Order>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersPaymentStatusUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -321,12 +412,13 @@ void main() {
                 id: '',
                 status: enums.OrderPaymentStatus.open,
             );
-            expect(response, isA<models.Order>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersReturn()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -336,14 +428,14 @@ void main() {
 
             final response = await orders.ordersReturn(
                 id: '',
-                positions: [],
             );
-            expect(response, isA<models.OrderReturn>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersReturnsComplete()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -355,12 +447,13 @@ void main() {
                 id: '',
                 rid: '',
             );
-            expect(response, isA<models.OrderReturn>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersReturnsReceive()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -373,12 +466,13 @@ void main() {
                 rid: '',
                 data: {},
             );
-            expect(response, isA<models.OrderReturn>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersReturnsReject()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -390,12 +484,14 @@ void main() {
                 id: '',
                 rid: '',
             );
-            expect(response, isA<models.OrderReturn>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method ordersShip()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -405,10 +501,30 @@ void main() {
             final response = await orders.ordersShip(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method ordersShippable()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await orders.ordersShippable(
+                id: '',
+            );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method ordersUnhold()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -420,7 +536,7 @@ void main() {
                 id: '',
                 data: {},
             );
-            expect(response, isA<models.Order>());
+            expect(response, isA<models.Error>());
 
         });
 

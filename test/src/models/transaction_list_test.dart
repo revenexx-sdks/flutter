@@ -5,14 +5,14 @@ void main() {
   group('TransactionList', () {
     test('model', () {
       final model = TransactionList(
-        total: ,
+        total: 0,
         transactions: [],
       );
 
       final map = model.toMap();
       final result = TransactionList.fromMap(map);
 
-            expect(result.total, );
+            expect(result.total, 0);
                   expect(result.transactions, []);
           });
   });

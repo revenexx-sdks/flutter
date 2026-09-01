@@ -10,14 +10,14 @@ void main() {
         $permissions: [],
         $updatedAt: '',
         bucketId: '',
-        chunksTotal: ,
-        chunksUploaded: ,
+        chunksTotal: 0,
+        chunksUploaded: 0,
         compression: '',
         encryption: true,
         mimeType: '',
         name: '',
         signature: '',
-        sizeOriginal: ,
+        sizeOriginal: 0,
       );
 
       final map = model.toMap();
@@ -28,14 +28,14 @@ void main() {
                   expect(result.$permissions, []);
                   expect(result.$updatedAt, '');
                   expect(result.bucketId, '');
-                  expect(result.chunksTotal, );
-                  expect(result.chunksUploaded, );
+                  expect(result.chunksTotal, 0);
+                  expect(result.chunksUploaded, 0);
                   expect(result.compression, '');
                   expect(result.encryption, true);
                   expect(result.mimeType, '');
                   expect(result.name, '');
                   expect(result.signature, '');
-                  expect(result.sizeOriginal, );
+                  expect(result.sizeOriginal, 0);
           });
   });
 }

@@ -7,7 +7,7 @@ Client client = Client()
 
 Prices prices = Prices(client);
 
- result = await prices.pricesEntriesReplace(
+Error result = await prices.pricesEntriesReplace(
     listId: '',
     entries: [],
 );

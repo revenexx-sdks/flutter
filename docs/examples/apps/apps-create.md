@@ -12,20 +12,20 @@ Func result = await apps.appsCreate(
     functionId: '',
     name: '',
     runtime: enums.Runtime.node180,
-    commands: '', // optional
-    enabled: false, // optional
-    entrypoint: '', // optional
+    commands: 'npm install', // optional
+    enabled: true, // optional
+    entrypoint: 'src/main.js', // optional
     events: [], // optional
-    execute: [], // optional
+    execute: ["any"], // optional
     installationId: '', // optional
-    logging: false, // optional
-    providerBranch: '', // optional
+    logging: true, // optional
+    providerBranch: 'main', // optional
     providerRepositoryId: '', // optional
     providerRootDirectory: '', // optional
-    providerSilentMode: false, // optional
-    schedule: '', // optional
+    providerSilentMode: true, // optional
+    schedule: '0 3 * * *', // optional
     scopes: [enums.Scopes.sessionsWrite], // optional
-    specification: '', // optional
-    timeout: 0, // optional
+    specification: 's-1vcpu-512mb', // optional
+    timeout: 1, // optional
 );
 ```

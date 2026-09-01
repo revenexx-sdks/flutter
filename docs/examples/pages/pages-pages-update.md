@@ -8,12 +8,12 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
-Page result = await pages.pagesPagesUpdate(
+Error result = await pages.pagesPagesUpdate(
     id: '',
-    bundle: '', // optional
+    bundle: 'standard', // optional
     meta: {}, // optional
-    slug: '', // optional
+    slug: 'about-us', // optional
     status: enums.PageStatus.draft, // optional
-    title: '', // optional
+    title: 'About us', // optional
 );
 ```

@@ -7,7 +7,7 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
- result = await pages.pagesSeed(
+SeedResult result = await pages.pagesSeed(
     menus: [], // optional
     pages: [], // optional
 );

@@ -249,7 +249,7 @@ class Sites extends Service {
   /// Create a new site code deployment. Use this endpoint to upload a new
   /// version of your site code. To activate your newly uploaded code, you'll
   /// need to update the site's deployment to use your new deployment ID.
-  Future<models.Deployment> sitesCreateDeployment({required String siteId, required bool activate, required String code, String? buildCommand, String? installCommand, String? outputDirectory, Function(UploadProgress)? onProgress}) async {
+  Future<models.Deployment> sitesCreateDeployment({required String siteId, required bool activate, required InputFile code, String? buildCommand, String? installCommand, String? outputDirectory, Function(UploadProgress)? onProgress}) async {
     final String apiPath = '/v1/sites/{siteId}/deployments'.replaceAll('{siteId}', siteId);
 
         final Map<String, dynamic> apiParams = {
@@ -272,6 +272,7 @@ class Sites extends Service {
         };
 
         String idParamName = '';
+        final paramName = 'code';
         final res = await client.chunkedUpload(
             path: apiPath,
             params: apiParams,
@@ -310,10 +311,11 @@ class Sites extends Service {
 
   /// Create a deployment based on a template.
   /// 
-  /// Use this endpoint with combination of
-  /// [listTemplates](https://appwrite.io/docs/products/sites/templates) to find
-  /// the template details.
-  Future<models.Deployment> sitesCreateTemplateDeployment({required String siteId, required String owner, required String reference, required String repository, required String rootDirectory, required enums.Type type, bool? activate}) async {
+  /// Unlike app templates, site templates have no listing on this API — that
+  /// catalogue is the vendor's and is not reproduced here. Take `repository`,
+  /// `owner`, `rootDirectory` and `reference` from wherever the template is
+  /// published.
+  Future<models.Deployment> sitesCreateTemplateDeployment({required String siteId, required String owner, required String reference, required String repository, required String rootDirectory, required enums.SitesCreateTemplateDeploymentType type, bool? activate}) async {
     final String apiPath = '/v1/sites/{siteId}/deployments/template'.replaceAll('{siteId}', siteId);
 
         final Map<String, dynamic> apiParams = {
@@ -344,7 +346,7 @@ class Sites extends Service {
   /// Create a deployment when a site is connected to VCS.
   /// 
   /// This endpoint lets you create deployment from a branch, commit, or a tag.
-  Future<models.Deployment> sitesCreateVcsDeployment({required String siteId, required String reference, required enums.Type type, bool? activate}) async {
+  Future<models.Deployment> sitesCreateVcsDeployment({required String siteId, required String reference, required enums.SitesCreateTemplateDeploymentType type, bool? activate}) async {
     final String apiPath = '/v1/sites/{siteId}/deployments/vcs'.replaceAll('{siteId}', siteId);
 
         final Map<String, dynamic> apiParams = {
@@ -403,7 +405,7 @@ class Sites extends Service {
   /// Get a site deployment content by its unique ID. The endpoint response
   /// return with a 'Content-Disposition: attachment' header that tells the
   /// browser to start downloading the file to user downloads directory.
-  Future sitesGetDeploymentDownload({required String siteId, required String deploymentId, enums.Type? type}) async {
+  Future sitesGetDeploymentDownload({required String siteId, required String deploymentId, enums.AppsGetDeploymentDownloadType? type}) async {
     final String apiPath = '/v1/sites/{siteId}/deployments/{deploymentId}/download'.replaceAll('{siteId}', siteId).replaceAll('{deploymentId}', deploymentId);
 
         final Map<String, dynamic> apiParams = {

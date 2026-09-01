@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = ContinentList(
         continents: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = ContinentList.fromMap(map);
 
             expect(result.continents, []);
-                  expect(result.total, );
+                  expect(result.total, 0);
           });
   });
 }

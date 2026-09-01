@@ -2,13 +2,13 @@ part of '../../models.dart';
 
 /// 
 class OrderCommentCreateRequest implements Model {
-    /// 
+    /// Who wrote it, as the caller reported it. Free text; not resolved against a user directory.
     final String? author;
 
-    /// 
+    /// The comment itself. Plain text; this app neither renders nor sanitizes it.
     final String body;
 
-    /// Default &#039;internal&#039;.
+    /// Who may see it: 'internal' is a note between operators, 'customer' is meant to be shown in the customer's order view. Nothing here enforces that — this app labels the comment and the client showing it decides. Defaults to the tenant's default_comment_visibility. Defaults to the tenant's default_comment_visibility setting, which is 'internal' out of the box.
     final enums.OrderCommentVisibility? visibility;
 
     OrderCommentCreateRequest({

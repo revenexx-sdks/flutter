@@ -2,11 +2,11 @@ part of '../../models.dart';
 
 /// 
 class OrderReturnRejectRequest implements Model {
-    /// Fallback for &#039;resolution&#039;.
+    /// Free-text fallback for 'resolution' — a sentence about this one return, not a value out of the set.
     final String? reason;
 
-    /// Why the return was rejected.
-    final String? resolution;
+    /// Why the return was refused.
+    final enums.OrderReturnRefusal? resolution;
 
     OrderReturnRejectRequest({
         this.reason,
@@ -16,7 +16,7 @@ class OrderReturnRejectRequest implements Model {
     factory OrderReturnRejectRequest.fromMap(Map<String, dynamic> map) {
         return OrderReturnRejectRequest(
             reason: map['reason']?.toString(),
-            resolution: map['resolution']?.toString(),
+            resolution: map['resolution'] != null ? enums.OrderReturnRefusal.values.firstWhere((e) => e.value == map['resolution']) : null,
         );
     }
 
@@ -24,7 +24,7 @@ class OrderReturnRejectRequest implements Model {
     Map<String, dynamic> toMap() {
         return {
             "reason": reason,
-            "resolution": resolution,
+            "resolution": resolution?.value,
         };
     }
 }

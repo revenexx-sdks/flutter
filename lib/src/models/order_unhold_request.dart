@@ -1,6 +1,6 @@
 part of '../../models.dart';
 
-/// No payload — releasing the hold is a pure state transition.
+/// No payload — releasing the hold is a pure state transition, and it clears hold_reason with it. Send {}.
 class OrderUnholdRequest implements Model {
     OrderUnholdRequest(
     );

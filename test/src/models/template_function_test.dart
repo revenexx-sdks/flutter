@@ -18,7 +18,7 @@ void main() {
         runtimes: [],
         scopes: [],
         tagline: '',
-        timeout: ,
+        timeout: 0,
         useCases: [],
         variables: [],
         vcsProvider: '',
@@ -40,7 +40,7 @@ void main() {
                   expect(result.runtimes, []);
                   expect(result.scopes, []);
                   expect(result.tagline, '');
-                  expect(result.timeout, );
+                  expect(result.timeout, 0);
                   expect(result.useCases, []);
                   expect(result.variables, []);
                   expect(result.vcsProvider, '');

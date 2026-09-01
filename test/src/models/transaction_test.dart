@@ -9,7 +9,7 @@ void main() {
         $id: '',
         $updatedAt: '',
         expiresAt: '',
-        operations: ,
+        operations: 0,
         status: '',
       );
 
@@ -20,7 +20,7 @@ void main() {
                   expect(result.$id, '');
                   expect(result.$updatedAt, '');
                   expect(result.expiresAt, '');
-                  expect(result.operations, );
+                  expect(result.operations, 0);
                   expect(result.status, '');
           });
   });

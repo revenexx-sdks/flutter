@@ -1,14 +1,14 @@
 part of '../../models.dart';
 
-/// Identify by &#039;product_id&#039; or &#039;sku&#039; — an item without identity resolves to on_request with a per-item error.
+/// Identify by 'product_id' or 'sku' — an item without identity resolves to on_request with a per-item error rather than failing the call.
 class PriceResolveItem implements Model {
     /// Product to price.
     final String? product_id;
 
-    /// Requested quantity for tier selection and line_total (default 1; non-positive values fall back to 1).
+    /// Requested quantity, counted in the entry’s `unit`. It picks the tier (the highest `quantity_min` at or below it) and multiplies into `line_total`. Default 1; a non-positive value falls back to 1.
     final double? quantity;
 
-    /// SKU to price (alternative to product_id).
+    /// SKU to price (alternative to product_id). Matched exactly against the entries’ own `sku`.
     final String? sku;
 
     PriceResolveItem({

@@ -3,7 +3,11 @@ name: Publish to pub.dev
 on:
   push:
     tags:
-      - '[0-9]+\.[0-9]+\.[0-9]+*'
+      # The generator tags releases as v$VERSION (see generate-sdks.yml), so the
+      # pattern must carry the `v` prefix or this workflow never fires. Kept as a
+      # plain prefix glob: these are filter patterns, not regex, so anything
+      # cleverer risks matching nothing and failing silently.
+      - 'v*'
 
 jobs:
   publish:

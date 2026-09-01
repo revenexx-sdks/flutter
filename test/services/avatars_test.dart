@@ -77,20 +77,7 @@ void main() {
 
 
             final response = await avatars.avatarsGetCreditCard(
-                code: enums.Code.amex,
-            );
-        });
-
-        test('test method avatarsGetFavicon()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await avatars.avatarsGetFavicon(
-                url: '',
+                code: enums.AvatarsGetCreditCardCode.amex,
             );
         });
 
@@ -103,7 +90,7 @@ void main() {
 
 
             final response = await avatars.avatarsGetFlag(
-                code: enums.Code.af,
+                code: enums.AvatarsGetFlagCode.af,
             );
         });
 
@@ -116,7 +103,7 @@ void main() {
 
 
             final response = await avatars.avatarsGetImage(
-                url: '',
+                url: 'https://www.revenexx.com/img/hero-revenexx-poster.webp',
             );
         });
 
@@ -154,7 +141,7 @@ void main() {
 
 
             final response = await avatars.avatarsGetScreenshot(
-                url: '',
+                url: 'https://example.com',
             );
         });
 

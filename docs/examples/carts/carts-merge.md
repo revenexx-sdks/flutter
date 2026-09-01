@@ -7,7 +7,7 @@ Client client = Client()
 
 Carts carts = Carts(client);
 
- result = await carts.cartsMerge(
+Error result = await carts.cartsMerge(
     sourceCartId: '',
     targetCartId: '',
 );

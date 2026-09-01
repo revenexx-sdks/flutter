@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = RuntimeList(
         runtimes: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = RuntimeList.fromMap(map);
 
             expect(result.runtimes, []);
-                  expect(result.total, );
+                  expect(result.total, 0);
           });
   });
 }

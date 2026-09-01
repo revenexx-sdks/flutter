@@ -80,7 +80,7 @@ void main() {
 
 
             final response = await storage.assetStore(
-                file: '',
+                file: InputFile.fromPath(path: './image.png'),
             );
         });
 
@@ -298,6 +298,8 @@ void main() {
 
 
             final response = await storage.syncRuleStore(
+                sftpAccountId: '',
+                sourcePath: '/uploads',
             );
         });
 

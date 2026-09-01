@@ -7,7 +7,7 @@ Client client = Client()
 
 Customers customers = Customers(client);
 
-AuthMeResponse result = await customers.customersAuthMe(
+Error result = await customers.customersAuthMe(
     userId: '',
     sessionId: '', // optional
 );

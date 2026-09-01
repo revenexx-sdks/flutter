@@ -9,7 +9,7 @@ Storage storage = Storage(client);
 
  result = await storage.assetUnpack(
     id: '',
-    keepArchive: false, // optional
+    keepArchive: true, // optional
     targetFolderId: '', // optional
 );
 ```

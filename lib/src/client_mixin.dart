@@ -87,7 +87,7 @@ mixin ClientMixin {
   Response prepareResponse(http.Response res, {ResponseType? responseType}) {
     responseType ??= ResponseType.json;
 
-    String? warnings = res.headers['x-revenexx api — revenexx-warning'];
+    String? warnings = res.headers['x-revenexx-warning'];
     if (warnings != null) {
       warnings.split(';').forEach((warning) => log('Warning: $warning'));
     }
@@ -95,14 +95,14 @@ mixin ClientMixin {
     if (res.statusCode >= 400) {
       if ((res.headers['content-type'] ?? '').contains('application/json')) {
         final response = json.decode(res.body);
-        throw RevenexxAPIRevenexxException(
+        throw RevenexxException(
           response['message'],
           response['code'],
           response['type'],
           res.body,
         );
       } else {
-        throw RevenexxAPIRevenexxException(res.body, res.statusCode, '', res.body);
+        throw RevenexxException(res.body, res.statusCode, '', res.body);
       }
     }
     dynamic data;

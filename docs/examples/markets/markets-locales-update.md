@@ -7,13 +7,13 @@ Client client = Client()
 
 Markets markets = Markets(client);
 
-MarketLocale result = await markets.marketsLocalesUpdate(
+Error result = await markets.marketsLocalesUpdate(
     marketId: '',
     id: '',
-    code: '', // optional
-    country: '', // optional
-    isDefault: false, // optional
-    language: '', // optional
+    code: 'de-DE', // optional
+    country: 'DE', // optional
+    isDefault: true, // optional
+    language: 'de', // optional
     position: 0, // optional
 );
 ```

@@ -7,7 +7,7 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-NumberRange result = await orders.ordersNumberRangesGet(
+Error result = await orders.ordersNumberRangesGet(
     id: '',
 );
 ```

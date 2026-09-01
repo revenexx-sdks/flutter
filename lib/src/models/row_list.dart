@@ -29,5 +29,5 @@ class RowList implements Model {
     }
 
     List<T> convertTo<T>(T Function(Map) fromJson) =>
-        rows.map((d) => d.convertTo<T>(fromJson)).toList();
+        (rows).map((d) => d.convertTo<T>(fromJson)).toList();
 }

@@ -11,10 +11,10 @@ void main() {
         $updatedAt: '',
         activate: true,
         billingJson: '',
-        buildDuration: ,
+        buildDuration: 0,
         buildId: '',
         buildLogs: '',
-        buildSize: ,
+        buildSize: 0,
         entrypoint: '',
         manifestJson: '',
         providerBranch: '',
@@ -31,9 +31,9 @@ void main() {
         resourceType: '',
         screenshotDark: '',
         screenshotLight: '',
-        sourceSize: ,
+        sourceSize: 0,
         status: DeploymentStatus.waiting,
-        totalSize: ,
+        totalSize: 0,
         type: '',
       );
 
@@ -45,10 +45,10 @@ void main() {
                   expect(result.$updatedAt, '');
                   expect(result.activate, true);
                   expect(result.billingJson, '');
-                  expect(result.buildDuration, );
+                  expect(result.buildDuration, 0);
                   expect(result.buildId, '');
                   expect(result.buildLogs, '');
-                  expect(result.buildSize, );
+                  expect(result.buildSize, 0);
                   expect(result.entrypoint, '');
                   expect(result.manifestJson, '');
                   expect(result.providerBranch, '');
@@ -65,9 +65,9 @@ void main() {
                   expect(result.resourceType, '');
                   expect(result.screenshotDark, '');
                   expect(result.screenshotLight, '');
-                  expect(result.sourceSize, );
+                  expect(result.sourceSize, 0);
                   expect(result.status, DeploymentStatus.waiting);
-                  expect(result.totalSize, );
+                  expect(result.totalSize, 0);
                   expect(result.type, '');
           });
   });

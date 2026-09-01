@@ -1,6 +1,7 @@
 part of '../revenexx.dart';
 
-  /// Generated avatars, initials, QR codes, country flags and favicons.
+  /// Generated images: initials, QR codes, country flags, browser and
+  /// credit-card icons. Every operation answers image bytes, not JSON.
 class Avatars extends Service {
   /// Initializes a [Avatars] service
   Avatars(super.client);
@@ -46,7 +47,7 @@ class Avatars extends Service {
   /// image at source quality. If dimensions are not specified, the default size
   /// of image returned is 100x100px.
   /// 
-  Future avatarsGetCreditCard({required enums.Code code, int? width, int? height, int? quality}) async {
+  Future avatarsGetCreditCard({required enums.AvatarsGetCreditCardCode code, int? width, int? height, int? quality}) async {
     final String apiPath = '/v1/avatars/credit-cards/{code}'.replaceAll('{code}', code.value);
 
         final Map<String, dynamic> apiParams = {
@@ -55,28 +56,6 @@ class Avatars extends Service {
             if (height != null) 'height': height,
 
             if (quality != null) 'quality': quality,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
-  }
-
-  /// Use this endpoint to fetch the favorite icon (AKA favicon) of any remote
-  /// website URL.
-  /// 
-  /// This endpoint does not follow HTTP redirects.
-  Future avatarsGetFavicon({required String url}) async {
-    const String apiPath = '/v1/avatars/favicon';
-
-        final Map<String, dynamic> apiParams = {
-            'url': url,
 
         };
 
@@ -100,7 +79,7 @@ class Avatars extends Service {
   /// image at source quality. If dimensions are not specified, the default size
   /// of image returned is 100x100px.
   /// 
-  Future avatarsGetFlag({required enums.Code code, int? width, int? height, int? quality}) async {
+  Future avatarsGetFlag({required enums.AvatarsGetFlagCode code, int? width, int? height, int? quality}) async {
     final String apiPath = '/v1/avatars/flags/{code}'.replaceAll('{code}', code.value);
 
         final Map<String, dynamic> apiParams = {

@@ -7,5 +7,5 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
- result = await orders.ordersNumberRangesDefaults();
+OrderNumberRangesSeeded result = await orders.ordersNumberRangesDefaults();
 ```

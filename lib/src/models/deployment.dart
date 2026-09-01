@@ -80,7 +80,7 @@ class Deployment implements Model {
     /// The code size in bytes.
     final int sourceSize;
 
-    /// The deployment status. Possible values are &quot;waiting&quot;, &quot;processing&quot;, &quot;building&quot;, &quot;ready&quot;, &quot;canceled&quot; and &quot;failed&quot;.
+    /// The deployment status. Possible values are "waiting", "processing", "building", "ready", "canceled" and "failed".
     final enums.DeploymentStatus status;
 
     /// The total size in bytes (source and build output).

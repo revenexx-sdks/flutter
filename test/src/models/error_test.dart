@@ -5,15 +5,13 @@ void main() {
   group('Error', () {
     test('model', () {
       final model = Error(
-        error: true,
-        message: '',
+        error: '',
       );
 
       final map = model.toMap();
       final result = Error.fromMap(map);
 
-            expect(result.error, true);
-                  expect(result.message, '');
+            expect(result.error, '');
           });
   });
 }

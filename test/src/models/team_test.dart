@@ -10,7 +10,7 @@ void main() {
         $updatedAt: '',
         name: '',
         prefs: Preferences(data: {}),
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
@@ -20,7 +20,7 @@ void main() {
                   expect(result.$id, '');
                   expect(result.$updatedAt, '');
                   expect(result.name, '');
-                        expect(result.total, );
+                        expect(result.total, 0);
           });
   });
 }

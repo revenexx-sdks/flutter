@@ -8,8 +8,8 @@ Client client = Client()
 Avatars avatars = Avatars(client);
 
  result = await avatars.avatarsGetImage(
-    url: '',
-    width: 0, // optional
-    height: 0, // optional
+    url: 'https://www.revenexx.com/img/hero-revenexx-poster.webp',
+    width: 1, // optional
+    height: 1, // optional
 );
 ```

@@ -7,7 +7,7 @@ Client client = Client()
 
 Markets markets = Markets(client);
 
-MarketLocale result = await markets.marketsLocalesGet(
+Error result = await markets.marketsLocalesGet(
     marketId: '',
     id: '',
 );

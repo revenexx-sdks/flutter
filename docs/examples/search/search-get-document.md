@@ -8,8 +8,8 @@ Client client = Client()
 
 Search search = Search(client);
 
- result = await search.searchGetDocument(
-    collection: enums.Collection.greetings,
+Error result = await search.searchGetDocument(
+    collection: enums.Collection.products,
     documentId: '',
 );
 ```

@@ -8,13 +8,17 @@ Client client = Client()
 
 Channels channels = Channels(client);
 
-Channel result = await channels.channelsCreate(
-    code: '',
-    name: '',
-    isDefault: false, // optional
-    labels: {}, // optional
-    position: 0, // optional
+Error result = await channels.channelsCreate(
+    code: 'shop',
+    name: 'Shop',
+    isDefault: true, // optional
+    labels: {
+        "de": "Shop",
+        "en": "Shop"
+    }, // optional
+    position: 1, // optional
     status: enums.ChannelStatus.active, // optional
-    type: enums.ChannelType.storefront, // optional
+    type: 'storefront', // optional
+    unassignedVisibility: enums.ChannelUnassignedVisibility.inherit, // optional
 );
 ```

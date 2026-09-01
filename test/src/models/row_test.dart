@@ -9,7 +9,7 @@ void main() {
         $databaseId: '',
         $id: '',
         $permissions: [],
-        $sequence: ,
+        $sequence: 0,
         $tableId: '',
         $updatedAt: '',
         data: {},
@@ -22,7 +22,7 @@ void main() {
                   expect(result.$databaseId, '');
                   expect(result.$id, '');
                   expect(result.$permissions, []);
-                  expect(result.$sequence, );
+                  expect(result.$sequence, 0);
                   expect(result.$tableId, '');
                   expect(result.$updatedAt, '');
           });

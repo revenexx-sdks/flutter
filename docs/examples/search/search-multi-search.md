@@ -7,7 +7,7 @@ Client client = Client()
 
 Search search = Search(client);
 
- result = await search.searchMultiSearch(
+Error result = await search.searchMultiSearch(
     searches: [],
 );
 ```

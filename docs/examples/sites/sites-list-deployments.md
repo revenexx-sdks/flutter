@@ -11,6 +11,6 @@ DeploymentList result = await sites.sitesListDeployments(
     siteId: '',
     queries: [], // optional
     search: '', // optional
-    total: false, // optional
+    total: true, // optional
 );
 ```

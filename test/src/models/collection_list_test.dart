@@ -6,14 +6,12 @@ void main() {
     test('model', () {
       final model = CollectionList(
         collections: [],
-        total: ,
       );
 
       final map = model.toMap();
       final result = CollectionList.fromMap(map);
 
             expect(result.collections, []);
-                  expect(result.total, );
           });
   });
 }

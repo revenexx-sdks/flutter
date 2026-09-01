@@ -1,5 +1,6 @@
 ```dart
 import 'package:revenexx/revenexx.dart';
+import 'package:revenexx/enums.dart' as enums;
 
 Client client = Client()
     .setEndpoint('https://api.revenexx.com') // Your API Endpoint
@@ -7,8 +8,9 @@ Client client = Client()
 
 Prices prices = Prices(client);
 
- result = await prices.pricesEntriesBulk(
+Error result = await prices.pricesEntriesBulk(
     listId: '',
     entries: [],
+    mode: enums.PriceEntriesBulkMode.upsert, // optional
 );
 ```

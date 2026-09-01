@@ -1,9 +1,9 @@
 name: revenexx
-version: 0.0.1
+version: 0.0.2
 description: Revenexx Flutter SDK.
 homepage: https://revenexx.com
 repository: https://github.com/revenexx-sdks/flutter
-issue_tracker: https://github.com/appwrite/sdk-generator/issues
+issue_tracker: https://github.com/revenexx-sdks/flutter/issues
 documentation: https://revenexx.com
 platforms:
   android:

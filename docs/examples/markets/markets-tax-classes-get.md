@@ -7,7 +7,7 @@ Client client = Client()
 
 Markets markets = Markets(client);
 
-MarketTaxClass result = await markets.marketsTaxClassesGet(
+Error result = await markets.marketsTaxClassesGet(
     marketId: '',
     id: '',
 );

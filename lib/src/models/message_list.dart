@@ -3,7 +3,7 @@ part of '../../models.dart';
 /// Message list
 class MessageList implements Model {
     /// List of messages.
-    final List<Message> messages;
+    final List<Message2> messages;
 
     /// Total number of messages that matched your query.
     final int total;
@@ -15,7 +15,7 @@ class MessageList implements Model {
 
     factory MessageList.fromMap(Map<String, dynamic> map) {
         return MessageList(
-            messages: List<Message>.from(map['messages'].map((p) => Message.fromMap(p))),
+            messages: List<Message2>.from(map['messages'].map((p) => Message2.fromMap(p))),
             total: map['total'],
         );
     }

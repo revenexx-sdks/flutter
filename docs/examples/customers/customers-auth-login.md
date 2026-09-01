@@ -7,8 +7,8 @@ Client client = Client()
 
 Customers customers = Customers(client);
 
-AuthLoginResponse result = await customers.customersAuthLogin(
-    email: '',
+Error result = await customers.customersAuthLogin(
+    email: 'einkauf@example.com',
     password: '',
 );
 ```

@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = FileList(
         files: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = FileList.fromMap(map);
 
             expect(result.files, []);
-                  expect(result.total, );
+                  expect(result.total, 0);
           });
   });
 }

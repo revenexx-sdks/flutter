@@ -29,5 +29,5 @@ class DocumentList implements Model {
     }
 
     List<T> convertTo<T>(T Function(Map) fromJson) =>
-        documents.map((d) => d.convertTo<T>(fromJson)).toList();
+        (documents).map((d) => d.convertTo<T>(fromJson)).toList();
 }

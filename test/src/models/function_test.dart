@@ -30,7 +30,7 @@ void main() {
         schedule: '',
         scopes: [],
         specification: '',
-        timeout: ,
+        timeout: 0,
         vars: [],
         version: '',
       );
@@ -63,7 +63,7 @@ void main() {
                   expect(result.schedule, '');
                   expect(result.scopes, []);
                   expect(result.specification, '');
-                  expect(result.timeout, );
+                  expect(result.timeout, 0);
                   expect(result.vars, []);
                   expect(result.version, '');
           });

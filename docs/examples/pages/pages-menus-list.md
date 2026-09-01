@@ -7,5 +7,9 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
- result = await pages.pagesMenusList();
+ result = await pages.pagesMenusList(
+    limit: 1, // optional
+    offset: 1, // optional
+    order: 'created_at.desc', // optional
+);
 ```

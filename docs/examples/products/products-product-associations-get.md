@@ -7,7 +7,7 @@ Client client = Client()
 
 Products products = Products(client);
 
-ProductAssociations result = await products.productsProductAssociationsGet(
+Error result = await products.productsProductAssociationsGet(
     id: '',
 );
 ```

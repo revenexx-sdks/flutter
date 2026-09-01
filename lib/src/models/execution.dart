@@ -14,7 +14,7 @@ class Execution implements Model {
     /// Execution update date in ISO 8601 format.
     final String $updatedAt;
 
-    /// Function&#039;s deployment ID used to create the execution.
+    /// Function's deployment ID used to create the execution.
     final String deploymentId;
 
     /// Resource(function/site) execution duration in seconds.

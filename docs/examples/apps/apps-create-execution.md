@@ -10,11 +10,11 @@ Apps apps = Apps(client);
 
 Execution result = await apps.appsCreateExecution(
     functionId: '',
-    xasync: false, // optional
+    xasync: true, // optional
     body: '', // optional
     headers: {}, // optional
     method: enums.Method.gET, // optional
-    path: '', // optional
+    path: '/', // optional
     scheduledAt: '', // optional
 );
 ```

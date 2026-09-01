@@ -1,24 +1,24 @@
 part of '../../models.dart';
 
-/// 
+/// A note on an order, either internal between operators or meant for the customer to see.
 class OrderComment implements Model {
-    /// 
+    /// Who wrote it, as the caller reported it. Free text; not resolved against a user directory.
     final String? author;
 
-    /// 
+    /// The comment itself. Plain text; this app neither renders nor sanitizes it.
     final String? body;
 
-    /// 
+    /// When the comment was written. Comments come back oldest first.
     final String? created_at;
 
-    /// 
+    /// Primary key of the comment.
     final String? id;
 
-    /// 
+    /// The order the comment hangs on.
     final String? order_id;
 
-    /// 
-    final String? visibility;
+    /// Who may see it: 'internal' is a note between operators, 'customer' is meant to be shown in the customer's order view. Nothing here enforces that — this app labels the comment and the client showing it decides. Defaults to the tenant's default_comment_visibility.
+    final enums.OrderCommentVisibility? visibility;
 
     OrderComment({
         this.author,
@@ -36,7 +36,7 @@ class OrderComment implements Model {
             created_at: map['created_at']?.toString(),
             id: map['id']?.toString(),
             order_id: map['order_id']?.toString(),
-            visibility: map['visibility']?.toString(),
+            visibility: map['visibility'] != null ? enums.OrderCommentVisibility.values.firstWhere((e) => e.value == map['visibility']) : null,
         );
     }
 
@@ -48,7 +48,7 @@ class OrderComment implements Model {
             "created_at": created_at,
             "id": id,
             "order_id": order_id,
-            "visibility": visibility,
+            "visibility": visibility?.value,
         };
     }
 }

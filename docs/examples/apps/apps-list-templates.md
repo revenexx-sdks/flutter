@@ -11,8 +11,8 @@ Apps apps = Apps(client);
 TemplateFunctionList result = await apps.appsListTemplates(
     runtimes: [enums.Runtimes.node180], // optional
     useCases: [enums.UseCases.starter], // optional
-    limit: 0, // optional
-    offset: 0, // optional
-    total: false, // optional
+    limit: 1, // optional
+    offset: 1, // optional
+    total: true, // optional
 );
 ```

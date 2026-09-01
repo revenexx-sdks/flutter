@@ -56,7 +56,9 @@ void main() {
         });
 
         test('test method searchListCollections()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -65,10 +67,31 @@ void main() {
 
             final response = await search.searchListCollections(
             );
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method searchGetCollection()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await search.searchGetCollection(
+                collection: enums.Collection.products,
+            );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method searchSearchDocumentsGet()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -76,12 +99,16 @@ void main() {
 
 
             final response = await search.searchSearchDocumentsGet(
-                collection: enums.Collection.greetings,
+                collection: enums.Collection.products,
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method searchSearchDocuments()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -89,12 +116,16 @@ void main() {
 
 
             final response = await search.searchSearchDocuments(
-                collection: enums.Collection.greetings,
+                collection: enums.Collection.products,
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method searchGetDocument()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -102,13 +133,29 @@ void main() {
 
 
             final response = await search.searchGetDocument(
-                collection: enums.Collection.greetings,
+                collection: enums.Collection.products,
                 documentId: '',
+            );
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method gatewayFacetResync()', () async {
+            final data = '';
+
+            when(client.call(
+                HttpMethod.post,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await search.gatewayFacetResync(
             );
         });
 
         test('test method searchMultiSearch()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -118,6 +165,8 @@ void main() {
             final response = await search.searchMultiSearch(
                 searches: [],
             );
+            expect(response, isA<models.Error>());
+
         });
 
     });

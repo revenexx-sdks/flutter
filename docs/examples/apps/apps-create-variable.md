@@ -11,6 +11,6 @@ Variable result = await apps.appsCreateVariable(
     functionId: '',
     key: '',
     value: '',
-    secret: false, // optional
+    secret: true, // optional
 );
 ```

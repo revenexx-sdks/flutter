@@ -7,11 +7,11 @@ Client client = Client()
 
 Products products = Products(client);
 
-ProductAssociations result = await products.productsProductAssociationsCreate(
+Error result = await products.productsProductAssociationsCreate(
     associationTypeId: '',
     productId: '',
     targetProductId: '',
-    position: 0, // optional
-    quantity: 0, // optional
+    position: 1, // optional
+    quantity: 4, // optional
 );
 ```

@@ -32,7 +32,7 @@ void main() {
         providerRootDirectory: '',
         providerSilentMode: true,
         specification: '',
-        timeout: ,
+        timeout: 0,
         vars: [],
       );
 
@@ -66,7 +66,7 @@ void main() {
                   expect(result.providerRootDirectory, '');
                   expect(result.providerSilentMode, true);
                   expect(result.specification, '');
-                  expect(result.timeout, );
+                  expect(result.timeout, 0);
                   expect(result.vars, []);
           });
   });

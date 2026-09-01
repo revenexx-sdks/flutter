@@ -58,7 +58,7 @@ class ClientIO extends ClientBase with ClientMixin {
       'x-sdk-name': 'Revenexx Flutter',
       'x-sdk-platform': '',
       'x-sdk-language': 'flutter',
-      'x-sdk-version': '0.0.1',
+      'x-sdk-version': '0.0.2',
     };
 
     config = {};
@@ -92,7 +92,7 @@ class ClientIO extends ClientBase with ClientMixin {
   @override
   ClientIO setBearerAuth(value) {
     config['bearerAuth'] = value;
-    addHeader('Authorization', value);
+    addHeader('Authorization', value.toLowerCase().startsWith('bearer ') ? value : 'Bearer $value');
     return this;
   }
 
@@ -102,6 +102,15 @@ class ClientIO extends ClientBase with ClientMixin {
   ClientIO setTenant(String value) {
     config['tenant'] = value;
     addHeader('X-Revenexx-Tenant', value);
+    return this;
+  }
+
+  /// The market slug to scope requests to, sent as the X-Revenexx-Market
+  /// header. Optional - omit it to see only global rows.
+  @override
+  ClientIO setMarket(String value) {
+    config['market'] = value;
+    addHeader('X-Revenexx-Market', value);
     return this;
   }
 
@@ -116,7 +125,7 @@ class ClientIO extends ClientBase with ClientMixin {
   @override
   ClientIO setEndpoint(String endPoint) {
     if (!endPoint.startsWith('http://') && !endPoint.startsWith('https://')) {
-      throw RevenexxAPIRevenexxException('Invalid endpoint URL: $endPoint');
+      throw RevenexxException('Invalid endpoint URL: $endPoint');
     }
 
     _endPoint = endPoint;
@@ -130,7 +139,7 @@ class ClientIO extends ClientBase with ClientMixin {
   @override
   ClientIO setEndPointRealtime(String endPoint) {
     if (!endPoint.startsWith('ws://') && !endPoint.startsWith('wss://')) {
-      throw RevenexxAPIRevenexxException('Invalid realtime endpoint URL: $endPoint');
+      throw RevenexxException('Invalid realtime endpoint URL: $endPoint');
     }
 
     _endPointRealtime = endPoint;
@@ -156,7 +165,7 @@ class ClientIO extends ClientBase with ClientMixin {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       addHeader(
         'Origin',
-        'appwrite-${Platform.operatingSystem}://${packageInfo.packageName}',
+        'revenexx-${Platform.operatingSystem}://${packageInfo.packageName}',
       );
 
       //creating custom user agent
@@ -237,7 +246,7 @@ class ClientIO extends ClientBase with ClientMixin {
   }) async {
     InputFile file = params[paramName];
     if (file.path == null && file.bytes == null) {
-      throw RevenexxAPIRevenexxException("File path or bytes must be provided");
+      throw RevenexxException("File path or bytes must be provided");
     }
 
     int size = 0;
@@ -252,85 +261,38 @@ class ClientIO extends ClientBase with ClientMixin {
       size = await iofile.length();
     }
 
-    late Response res;
-    if (size <= chunkSize) {
-      if (file.path != null) {
-        params[paramName] = await http.MultipartFile.fromPath(
-          paramName,
-          file.path!,
-          filename: file.filename,
-        );
-      } else {
-        params[paramName] = http.MultipartFile.fromBytes(
-          paramName,
-          file.bytes!,
-          filename: file.filename,
-        );
-      }
-      return call(
-        HttpMethod.post,
-        path: path,
-        params: params,
-        headers: headers,
-      );
-    }
-
-    var offset = 0;
-    if (idParamName.isNotEmpty) {
-      //make a request to check if a file already exists
-      try {
-        res = await call(
-          HttpMethod.get,
-          path: '$path/${params[idParamName]}',
-          headers: headers,
-        );
-        final int chunksUploaded = res.data['chunksUploaded'] as int;
-        offset = chunksUploaded * chunkSize;
-      } on RevenexxAPIRevenexxException catch (_) {}
-    }
-
-    RandomAccessFile? raf;
-    // read chunk and upload each chunk
-    if (iofile != null) {
-      raf = await iofile.open(mode: FileMode.read);
-    }
-
-    while (offset < size) {
-      List<int> chunk = [];
-      if (file.bytes != null) {
-        final end = min(offset + chunkSize, size);
-        chunk = file.bytes!.getRange(offset, end).toList();
-      } else {
-        raf!.setPositionSync(offset);
-        chunk = raf.readSync(chunkSize);
-      }
-      params[paramName] = http.MultipartFile.fromBytes(
+    // The API takes one multipart body per upload. It has no chunked or
+    // resumable protocol — no content-range, no upload id, no per-chunk
+    // endpoint — so the whole file always goes in a single request.
+    if (file.path != null) {
+      params[paramName] = await http.MultipartFile.fromPath(
         paramName,
-        chunk,
+        file.path!,
         filename: file.filename,
       );
-      headers['content-range'] =
-          'bytes $offset-${min<int>((offset + chunkSize - 1), size - 1)}/$size';
-      res = await call(
-        HttpMethod.post,
-        path: path,
-        headers: headers,
-        params: params,
+    } else {
+      params[paramName] = http.MultipartFile.fromBytes(
+        paramName,
+        file.bytes!,
+        filename: file.filename,
       );
-      offset += chunkSize;
-      if (offset < size) {
-        headers['x-revenexx api — revenexx-id'] = res.data['\$id'];
-      }
-      final progress = UploadProgress(
-        $id: res.data['\$id'] ?? '',
-        progress: min(offset, size) / size * 100,
-        sizeUploaded: min(offset, size),
-        chunksTotal: res.data['chunksTotal'] ?? 0,
-        chunksUploaded: res.data['chunksUploaded'] ?? 0,
-      );
-      onProgress?.call(progress);
     }
-    raf?.close();
+
+    final Response res = await call(
+      HttpMethod.post,
+      path: path,
+      params: params,
+      headers: headers,
+    );
+
+    onProgress?.call(UploadProgress(
+      $id: res.data is Map ? (res.data['\$id'] ?? '') : '',
+      progress: 100,
+      sizeUploaded: size,
+      chunksTotal: 1,
+      chunksUploaded: 1,
+    ));
+
     return res;
   }
 
@@ -342,7 +304,7 @@ class ClientIO extends ClientBase with ClientMixin {
       url: url.toString(),
       callbackUrlScheme: callbackUrlScheme != null && _customSchemeAllowed
           ? callbackUrlScheme
-          : "revenexx api — revenexx-callback-${config['project']!}",
+          : "revenexx-callback-${config['tenant']!}",
       options: const FlutterWebAuth2Options(
         intentFlags: ephemeralIntentFlags,
         useWebview: false,
@@ -352,7 +314,7 @@ class ClientIO extends ClientBase with ClientMixin {
       final key = url.queryParameters['key'];
       final secret = url.queryParameters['secret'];
       if (key == null || secret == null) {
-        throw RevenexxAPIRevenexxException(
+        throw RevenexxException(
           "Invalid OAuth2 Response. Key and Secret not available.",
           500,
         );
@@ -398,10 +360,10 @@ class ClientIO extends ClientBase with ClientMixin {
 
       return prepareResponse(res, responseType: responseType);
     } catch (e) {
-      if (e is RevenexxAPIRevenexxException) {
+      if (e is RevenexxException) {
         rethrow;
       }
-      throw RevenexxAPIRevenexxException(e.toString());
+      throw RevenexxException(e.toString());
     }
   }
 }

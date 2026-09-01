@@ -7,7 +7,7 @@ void main() {
     test('model', () {
       final model = HealthStatus(
         name: '',
-        ping: ,
+        ping: 0,
         status: HealthStatusStatus.pass,
       );
 
@@ -15,7 +15,7 @@ void main() {
       final result = HealthStatus.fromMap(map);
 
             expect(result.name, '');
-                  expect(result.ping, );
+                  expect(result.ping, 0);
                   expect(result.status, HealthStatusStatus.pass);
           });
   });

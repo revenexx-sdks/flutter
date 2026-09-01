@@ -8,10 +8,10 @@ void main() {
         $createdAt: '',
         $id: '',
         $updatedAt: '',
-        emailTotal: ,
+        emailTotal: 0,
         name: '',
-        pushTotal: ,
-        smsTotal: ,
+        pushTotal: 0,
+        smsTotal: 0,
         subscribe: [],
       );
 
@@ -21,10 +21,10 @@ void main() {
             expect(result.$createdAt, '');
                   expect(result.$id, '');
                   expect(result.$updatedAt, '');
-                  expect(result.emailTotal, );
+                  expect(result.emailTotal, 0);
                   expect(result.name, '');
-                  expect(result.pushTotal, );
-                  expect(result.smsTotal, );
+                  expect(result.pushTotal, 0);
+                  expect(result.smsTotal, 0);
                   expect(result.subscribe, []);
           });
   });

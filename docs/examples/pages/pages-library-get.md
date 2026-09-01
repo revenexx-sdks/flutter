@@ -7,7 +7,7 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
-LibraryItem result = await pages.pagesLibraryGet(
+Error result = await pages.pagesLibraryGet(
     id: '',
 );
 ```

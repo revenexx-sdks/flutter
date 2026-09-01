@@ -7,9 +7,9 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-Order result = await orders.ordersCancel(
+Error result = await orders.ordersCancel(
     id: '',
-    cancelledBy: '', // optional
-    reason: '', // optional
+    cancelledBy: 'service-desk', // optional
+    reason: 'Customer withdrew the order', // optional
 );
 ```

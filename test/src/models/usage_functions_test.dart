@@ -7,28 +7,28 @@ void main() {
       final model = UsageFunctions(
         builds: [],
         buildsFailed: [],
-        buildsFailedTotal: ,
+        buildsFailedTotal: 0,
         buildsMbSeconds: [],
-        buildsMbSecondsTotal: ,
+        buildsMbSecondsTotal: 0,
         buildsStorage: [],
-        buildsStorageTotal: ,
+        buildsStorageTotal: 0,
         buildsSuccess: [],
-        buildsSuccessTotal: ,
+        buildsSuccessTotal: 0,
         buildsTime: [],
-        buildsTimeTotal: ,
-        buildsTotal: ,
+        buildsTimeTotal: 0,
+        buildsTotal: 0,
         deployments: [],
         deploymentsStorage: [],
-        deploymentsStorageTotal: ,
-        deploymentsTotal: ,
+        deploymentsStorageTotal: 0,
+        deploymentsTotal: 0,
         executions: [],
         executionsMbSeconds: [],
-        executionsMbSecondsTotal: ,
+        executionsMbSecondsTotal: 0,
         executionsTime: [],
-        executionsTimeTotal: ,
-        executionsTotal: ,
+        executionsTimeTotal: 0,
+        executionsTotal: 0,
         functions: [],
-        functionsTotal: ,
+        functionsTotal: 0,
         range: '',
       );
 
@@ -37,28 +37,28 @@ void main() {
 
             expect(result.builds, []);
                   expect(result.buildsFailed, []);
-                  expect(result.buildsFailedTotal, );
+                  expect(result.buildsFailedTotal, 0);
                   expect(result.buildsMbSeconds, []);
-                  expect(result.buildsMbSecondsTotal, );
+                  expect(result.buildsMbSecondsTotal, 0);
                   expect(result.buildsStorage, []);
-                  expect(result.buildsStorageTotal, );
+                  expect(result.buildsStorageTotal, 0);
                   expect(result.buildsSuccess, []);
-                  expect(result.buildsSuccessTotal, );
+                  expect(result.buildsSuccessTotal, 0);
                   expect(result.buildsTime, []);
-                  expect(result.buildsTimeTotal, );
-                  expect(result.buildsTotal, );
+                  expect(result.buildsTimeTotal, 0);
+                  expect(result.buildsTotal, 0);
                   expect(result.deployments, []);
                   expect(result.deploymentsStorage, []);
-                  expect(result.deploymentsStorageTotal, );
-                  expect(result.deploymentsTotal, );
+                  expect(result.deploymentsStorageTotal, 0);
+                  expect(result.deploymentsTotal, 0);
                   expect(result.executions, []);
                   expect(result.executionsMbSeconds, []);
-                  expect(result.executionsMbSecondsTotal, );
+                  expect(result.executionsMbSecondsTotal, 0);
                   expect(result.executionsTime, []);
-                  expect(result.executionsTimeTotal, );
-                  expect(result.executionsTotal, );
+                  expect(result.executionsTimeTotal, 0);
+                  expect(result.executionsTotal, 0);
                   expect(result.functions, []);
-                  expect(result.functionsTotal, );
+                  expect(result.functionsTotal, 0);
                   expect(result.range, '');
           });
   });

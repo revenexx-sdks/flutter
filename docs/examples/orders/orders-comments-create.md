@@ -8,10 +8,10 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-OrderComment result = await orders.ordersCommentsCreate(
+Error result = await orders.ordersCommentsCreate(
     id: '',
-    body: '',
-    author: '', // optional
+    body: 'Called the customer, delivery agreed for next week.',
+    author: 'service-desk', // optional
     visibility: enums.OrderCommentVisibility.internal, // optional
 );
 ```

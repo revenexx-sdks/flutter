@@ -58,7 +58,7 @@ void main() {
         test('test method sitesList()', () async {
             final Map<String, dynamic> data = {
                 'sites': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -101,7 +101,7 @@ void main() {
                 'providerRootDirectory': '',
                 'providerSilentMode': true,
                 'specification': '',
-                'timeout': ,
+                'timeout': 1,
                 'vars': [],};
 
 
@@ -123,7 +123,7 @@ void main() {
         test('test method sitesListFrameworks()', () async {
             final Map<String, dynamic> data = {
                 'frameworks': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -140,7 +140,7 @@ void main() {
         test('test method sitesListSpecifications()', () async {
             final Map<String, dynamic> data = {
                 'specifications': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -196,7 +196,7 @@ void main() {
                 'providerRootDirectory': '',
                 'providerSilentMode': true,
                 'specification': '',
-                'timeout': ,
+                'timeout': 1,
                 'vars': [],};
 
 
@@ -241,7 +241,7 @@ void main() {
                 'providerRootDirectory': '',
                 'providerSilentMode': true,
                 'specification': '',
-                'timeout': ,
+                'timeout': 1,
                 'vars': [],};
 
 
@@ -288,7 +288,7 @@ void main() {
                 'providerRootDirectory': '',
                 'providerSilentMode': true,
                 'specification': '',
-                'timeout': ,
+                'timeout': 1,
                 'vars': [],};
 
 
@@ -308,7 +308,7 @@ void main() {
         test('test method sitesListDeployments()', () async {
             final Map<String, dynamic> data = {
                 'deployments': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -330,10 +330,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -350,9 +350,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -368,7 +368,7 @@ void main() {
             final response = await sites.sitesCreateDeployment(
                 siteId: '',
                 activate: true,
-                code: '',
+                code: InputFile.fromPath(path: './image.png'),
             );
             expect(response, isA<models.Deployment>());
 
@@ -381,10 +381,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -401,9 +401,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -427,10 +427,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -447,9 +447,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -464,7 +464,7 @@ void main() {
                 reference: '',
                 repository: '',
                 rootDirectory: '',
-                type: enums.Type.branch,
+                type: enums.SitesCreateTemplateDeploymentType.branch,
             );
             expect(response, isA<models.Deployment>());
 
@@ -477,10 +477,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -497,9 +497,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -510,8 +510,8 @@ void main() {
 
             final response = await sites.sitesCreateVcsDeployment(
                 siteId: '',
-                reference: '',
-                type: enums.Type.branch,
+                reference: 'main',
+                type: enums.SitesCreateTemplateDeploymentType.branch,
             );
             expect(response, isA<models.Deployment>());
 
@@ -538,10 +538,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -558,9 +558,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -598,10 +598,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -618,9 +618,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -640,7 +640,7 @@ void main() {
         test('test method sitesListLogs()', () async {
             final Map<String, dynamic> data = {
                 'executions': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -676,7 +676,7 @@ void main() {
                 '\$permissions': [],
                 '\$updatedAt': '',
                 'deploymentId': '',
-                'duration': ,
+                'duration': 9.99,
                 'errors': '',
                 'functionId': '',
                 'logs': '',
@@ -685,9 +685,9 @@ void main() {
                 'requestPath': '',
                 'responseBody': '',
                 'responseHeaders': [],
-                'responseStatusCode': ,
-                'status': '',
-                'trigger': '',};
+                'responseStatusCode': 1,
+                'status': 'waiting',
+                'trigger': 'http',};
 
 
             when(client.call(
@@ -705,7 +705,7 @@ void main() {
 
         test('test method sitesListVariables()', () async {
             final Map<String, dynamic> data = {
-                'total': ,
+                'total': 1,
                 'variables': [],};
 
 

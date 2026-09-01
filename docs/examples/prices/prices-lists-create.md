@@ -8,22 +8,29 @@ Client client = Client()
 
 Prices prices = Prices(client);
 
-PriceList result = await prices.pricesListsCreate(
-    code: '',
-    name: '',
+Error result = await prices.pricesListsCreate(
+    code: 'dealer-de',
+    name: 'Dealer prices',
     channelId: '', // optional
     contactId: '', // optional
-    currency: '', // optional
-    description: '', // optional
-    isDefault: false, // optional
-    labels: {}, // optional
-    marketId: '', // optional
-    metadata: {}, // optional
+    currency: 'EUR', // optional
+    description: 'Contract prices for authorised dealers.', // optional
+    isDefault: true, // optional
+    labels: {
+        "de": "H\u00e4ndlerpreise",
+        "en": "Dealer prices"
+    }, // optional
+    metadata: {
+        "erp_price_group": "A1",
+        "source_system": "erp"
+    }, // optional
     organizationId: '', // optional
-    priority: 0, // optional
+    priority: 1, // optional
+    requiresAuth: true, // optional
     status: enums.PriceListStatus.active, // optional
-    taxIncluded: false, // optional
-    validFrom: '', // optional
-    validUntil: '', // optional
+    taxBasis: enums.PriceListTaxBasis.net, // optional
+    taxIncluded: true, // optional
+    validFrom: '2026-01-01T00:00:00Z', // optional
+    validUntil: '2026-12-31T23:59:59Z', // optional
 );
 ```

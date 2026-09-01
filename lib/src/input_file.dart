@@ -10,13 +10,13 @@ class InputFile {
   @Deprecated('Use `InputFile.fromPath` or `InputFile.fromBytes` instead.')
   InputFile({this.path, this.filename, this.contentType, this.bytes}) {
     if (path == null && bytes == null) {
-      throw RevenexxAPIRevenexxException('One of `path` or `bytes` is required');
+      throw RevenexxException('One of `path` or `bytes` is required');
     }
   }
 
   InputFile._({this.path, this.filename, this.contentType, this.bytes}) {
     if (path == null && bytes == null) {
-      throw RevenexxAPIRevenexxException('One of `path` or `bytes` is required');
+      throw RevenexxException('One of `path` or `bytes` is required');
     }
   }
 

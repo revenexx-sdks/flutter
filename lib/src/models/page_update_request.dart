@@ -1,20 +1,20 @@
 part of '../../models.dart';
 
-/// Partial update — only title, slug, status, meta and bundle are applied; other keys are ignored.
+/// Partial update — only title, slug, status, meta and bundle are applied; other keys are ignored. The page's CONTENT is never edited here: blocks change through the editor's mutation log.
 class PageUpdateRequest implements Model {
-    /// 
+    /// The page type. Changing it changes which template the theme renders.
     final String? bundle;
 
-    /// 
-    final Map? meta;
+    /// The page's metadata bag. Replaced wholesale, not merged.
+    final Map<String, dynamic>? meta;
 
-    /// 
+    /// The path segment the storefront routes it under. Sending a slug another live page holds answers 409; sending null makes the page unreachable by path.
     final String? slug;
 
-    /// 
+    /// The lifecycle status. Setting `published` here does NOT publish content — delivery still needs a revision, which only `POST /pages/editor/{page_id}/publish` writes.
     final enums.PageStatus? status;
 
-    /// 
+    /// The page title in its source language.
     final String? title;
 
     PageUpdateRequest({

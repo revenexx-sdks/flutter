@@ -1,14 +1,14 @@
 part of '../../models.dart';
 
-/// An item and its quantity: &#039;product_id&#039; or &#039;sku&#039;.
+/// One item and how much of it: 'product_id' or 'sku', plus a positive quantity.
 class InventoryStockItem implements Model {
-    /// 
+    /// The product to move, as the products app knows it. Give this OR `sku` — an item that names neither is answered 400. Matching is exact: a stock row keyed by SKU is not found by product id.
     final String? product_id;
 
-    /// 
+    /// How many units this booking moves. Always POSITIVE here — the direction is the route (receive adds, reserve holds, restock returns), not the sign. Zero or a negative number is answered 400; a signed correction is what POST /inventories/adjust is for.
     final double quantity;
 
-    /// 
+    /// The article number to move, when the item has no product id. Give this OR `product_id`.
     final String? sku;
 
     InventoryStockItem({

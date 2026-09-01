@@ -7,7 +7,7 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-Order result = await orders.ordersUnhold(
+Error result = await orders.ordersUnhold(
     id: '',
     data: {},
 );

@@ -15,6 +15,8 @@ abstract class ClientBase implements Client {
   @override
   ClientBase setTenant(String value);
 
+  ClientBase setMarket(String value);
+
   @override
   ClientBase setSelfSigned({bool status = true});
 

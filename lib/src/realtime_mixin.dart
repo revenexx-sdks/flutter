@@ -165,7 +165,7 @@ mixin RealtimeMixin {
         _retry();
       });
     } catch (e) {
-      if (e is RevenexxAPIRevenexxException) {
+      if (e is RevenexxException) {
         rethrow;
       }
       debugPrint(e.toString());
@@ -201,7 +201,7 @@ mixin RealtimeMixin {
 
   Uri _prepareUri() {
     if (client.endPointRealtime == null) {
-      throw RevenexxAPIRevenexxException(
+      throw RevenexxException(
           "Please set endPointRealtime to connect to realtime server");
     }
     var uri = Uri.parse(client.endPointRealtime!);
@@ -305,7 +305,7 @@ mixin RealtimeMixin {
 
   void handleError(RealtimeResponse response) {
     if (response.data['code'] == status.policyViolation) {
-      throw RevenexxAPIRevenexxException(response.data["message"], response.data["code"]);
+      throw RevenexxException(response.data["message"], response.data["code"]);
     } else {
       _retry();
     }

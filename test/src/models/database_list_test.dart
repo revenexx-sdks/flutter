@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = DatabaseList(
         databases: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = DatabaseList.fromMap(map);
 
             expect(result.databases, []);
-                  expect(result.total, );
+                  expect(result.total, 0);
           });
   });
 }

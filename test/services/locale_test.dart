@@ -80,7 +80,7 @@ void main() {
         test('test method localeListCodes()', () async {
             final Map<String, dynamic> data = {
                 'localeCodes': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -97,7 +97,7 @@ void main() {
         test('test method localeListContinents()', () async {
             final Map<String, dynamic> data = {
                 'continents': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -114,7 +114,7 @@ void main() {
         test('test method localeListCountries()', () async {
             final Map<String, dynamic> data = {
                 'countries': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -131,7 +131,7 @@ void main() {
         test('test method localeListCountriesEU()', () async {
             final Map<String, dynamic> data = {
                 'countries': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -148,7 +148,7 @@ void main() {
         test('test method localeListCountriesPhones()', () async {
             final Map<String, dynamic> data = {
                 'phones': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -165,7 +165,7 @@ void main() {
         test('test method localeListCurrencies()', () async {
             final Map<String, dynamic> data = {
                 'currencies': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -182,7 +182,7 @@ void main() {
         test('test method localeListLanguages()', () async {
             final Map<String, dynamic> data = {
                 'languages': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(

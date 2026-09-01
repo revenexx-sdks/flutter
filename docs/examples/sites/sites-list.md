@@ -10,6 +10,6 @@ Sites sites = Sites(client);
 SiteList result = await sites.sitesList(
     queries: [], // optional
     search: '', // optional
-    total: false, // optional
+    total: true, // optional
 );
 ```

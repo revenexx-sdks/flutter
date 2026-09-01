@@ -1,5 +1,6 @@
 ```dart
 import 'package:revenexx/revenexx.dart';
+import 'package:revenexx/enums.dart' as enums;
 
 Client client = Client()
     .setEndpoint('https://api.revenexx.com') // Your API Endpoint
@@ -7,9 +8,10 @@ Client client = Client()
 
 Carts carts = Carts(client);
 
- result = await carts.cartsClaim(
+Error result = await carts.cartsClaim(
     contactId: '',
-    sessionKey: '',
+    sessionKey: 'a1b2c3d4e5f6',
+    strategy: enums.CartMergeStrategy.merge, // optional
     targetCartId: '', // optional
 );
 ```

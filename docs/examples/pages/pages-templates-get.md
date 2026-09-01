@@ -7,7 +7,7 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
-Template result = await pages.pagesTemplatesGet(
+Error result = await pages.pagesTemplatesGet(
     id: '',
 );
 ```

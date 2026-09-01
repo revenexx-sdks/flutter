@@ -7,7 +7,7 @@ Client client = Client()
 
 Markets markets = Markets(client);
 
-MarketContext result = await markets.marketsContext(
+Error result = await markets.marketsContext(
     id: '',
 );
 ```

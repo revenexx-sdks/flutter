@@ -10,8 +10,8 @@ Apps apps = Apps(client);
 
 Deployment result = await apps.appsCreateVcsDeployment(
     functionId: '',
-    reference: '',
-    type: enums.Type.branch,
-    activate: false, // optional
+    reference: 'main',
+    type: enums.AppsCreateVcsDeploymentType.branch,
+    activate: true, // optional
 );
 ```

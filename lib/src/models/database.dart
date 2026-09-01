@@ -11,7 +11,7 @@ class Database implements Model {
     /// Database update date in ISO 8601 format.
     final String $updatedAt;
 
-    /// If database is enabled. Can be &#039;enabled&#039; or &#039;disabled&#039;. When disabled, the database is inaccessible to users, but remains accessible to Server SDKs using API keys.
+    /// If database is enabled. Can be 'enabled' or 'disabled'. When disabled, the database is inaccessible to users, but remains accessible to Server SDKs using API keys.
     final bool enabled;
 
     /// Database name.

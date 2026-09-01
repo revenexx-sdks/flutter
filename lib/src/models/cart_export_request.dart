@@ -2,10 +2,10 @@ part of '../../models.dart';
 
 /// 
 class CartExportRequest implements Model {
-    /// Ad-hoc export format (only without profile_id).
+    /// Format of an ad-hoc export, read only when no profile_id is sent. 'json' returns the whole `{cart, items}` document, 'csv' the lines alone. Default 'json'.
     final enums.CartExportFormat? format;
 
-    /// Export profile to run; ad-hoc JSON/CSV export when omitted.
+    /// The export profile to run — one of the ids `GET /carts/io/profiles?direction=export` lists. Omit it for an ad-hoc export in the canonical shape, which is what `format` is for.
     final String? profile_id;
 
     CartExportRequest({

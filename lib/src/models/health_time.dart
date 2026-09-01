@@ -5,7 +5,7 @@ class HealthTime implements Model {
     /// Difference of unix remote and local timestamps in milliseconds.
     final int diff;
 
-    /// Current unix timestamp of local server where Appwrite runs.
+    /// Current unix timestamp of the core service host.
     final int localTime;
 
     /// Current unix timestamp on trustful remote server.

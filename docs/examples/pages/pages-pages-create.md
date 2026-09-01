@@ -7,12 +7,12 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
-Page result = await pages.pagesPagesCreate(
-    title: '',
-    bundle: '', // optional
+Error result = await pages.pagesPagesCreate(
+    title: 'About us',
+    bundle: 'standard', // optional
     hostOptions: {}, // optional
     meta: {}, // optional
-    slug: '', // optional
-    sourceLanguage: '', // optional
+    slug: 'about-us', // optional
+    sourceLanguage: 'de', // optional
 );
 ```

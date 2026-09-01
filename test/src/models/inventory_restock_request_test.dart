@@ -5,13 +5,11 @@ void main() {
   group('InventoryRestockRequest', () {
     test('model', () {
       final model = InventoryRestockRequest(
-        items: [],
       );
 
       final map = model.toMap();
       final result = InventoryRestockRequest.fromMap(map);
 
-            expect(result.items, []);
-          });
+    });
   });
 }

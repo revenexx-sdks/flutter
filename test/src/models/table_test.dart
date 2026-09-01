@@ -9,8 +9,8 @@ void main() {
         $id: '',
         $permissions: [],
         $updatedAt: '',
-        bytesMax: ,
-        bytesUsed: ,
+        bytesMax: 0,
+        bytesUsed: 0,
         columns: [],
         databaseId: '',
         enabled: true,
@@ -26,8 +26,8 @@ void main() {
                   expect(result.$id, '');
                   expect(result.$permissions, []);
                   expect(result.$updatedAt, '');
-                  expect(result.bytesMax, );
-                  expect(result.bytesUsed, );
+                  expect(result.bytesMax, 0);
+                  expect(result.bytesUsed, 0);
                   expect(result.columns, []);
                   expect(result.databaseId, '');
                   expect(result.enabled, true);

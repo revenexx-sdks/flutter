@@ -7,15 +7,17 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-NumberRange result = await orders.ordersNumberRangesCreate(
-    code: '',
+Error result = await orders.ordersNumberRangesCreate(
+    code: 'order',
     channelId: '', // optional
-    counter: 0, // optional
-    metadata: {}, // optional
-    padding: 0, // optional
-    positionStep: 0, // optional
-    prefix: '', // optional
-    step: 0, // optional
+    counter: 123, // optional
+    metadata: {
+        "owner": "erp-sync"
+    }, // optional
+    padding: 6, // optional
+    positionStep: 10, // optional
+    prefix: 'ORD-', // optional
+    step: 1, // optional
     suffix: '', // optional
 );
 ```

@@ -10,6 +10,6 @@ Apps apps = Apps(client);
 
 UsageFunction result = await apps.appsGetUsage(
     functionId: '',
-    range: enums.Range.24h, // optional
+    range: enums.Range.x24h, // optional
 );
 ```

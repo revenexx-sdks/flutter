@@ -1,26 +1,26 @@
 part of '../../models.dart';
 
-/// Import into an existing cart (&#039;target_cart_id&#039;) or a new cart (owner &#039;contact_id&#039;/&#039;session_key&#039; required).
+/// Import into an existing cart ('target_cart_id') or a new cart (owner 'contact_id'/'session_key' required).
 class CartImportRequest implements Model {
-    /// Owner of a newly created cart.
+    /// Owner of the cart this import creates. Ignored when target_cart_id is sent.
     final String? contact_id;
 
-    /// Raw CSV content (alternative to payload for csv profiles).
+    /// The CSV rows, when that is easier than putting them in `payload`. First line is the header, and its names are the ones the profile's mapping expects (the bundled quick-order template reads sku, name, quantity, unit_price). Numbers are coerced; a JSON column survives as a JSON string.
     final String? csv;
 
-    /// Name for a newly created cart.
+    /// Name for the cart this import creates. A name in the payload's own `cart` block wins over it; without either the cart is called 'Imported cart'.
     final String? name;
 
-    /// The import payload: &#039;{cart, items}&#039; object, or a raw JSON/CSV string in the profile&#039;s format.
+    /// The import itself. As an object: `{ "cart": { name, status, currency, channel_id, metadata }, "items": [ … ] }` — the same document carts.export produces, so an export round-trips. As a string: that document as raw JSON, or CSV rows when the profile is a csv one. A line with neither `name` nor `sku` is dropped, and a payload that leaves no line at all is a 400.
     final Map? payload;
 
-    /// Import profile to run; ad-hoc import when omitted.
+    /// The import profile to run — one of the ids `GET /carts/io/profiles?direction=import` lists. Omit it for an ad-hoc import: the payload is then read in the canonical shape, and as CSV if `csv` is what carried it.
     final String? profile_id;
 
-    /// Guest owner of a newly created cart.
+    /// Guest owner of the cart this import creates — the storefront's own session key. Ignored when target_cart_id is sent.
     final String? session_key;
 
-    /// Existing active cart to import into.
+    /// An existing ACTIVE cart to import into. The lines are added to it (merging identical product lines), unless the profile says `apply_mode: replace`, which clears it first. Without this a new cart is created and an owner is required.
     final String? target_cart_id;
 
     CartImportRequest({

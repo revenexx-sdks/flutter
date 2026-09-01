@@ -55,446 +55,6 @@ void main() {
             pages = Pages(client);
         });
 
-        test('test method pagesDeliveryMenus()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesDeliveryMenus(
-            );
-        });
-
-        test('test method pagesDeliveryPage()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesDeliveryPage(
-            );
-            expect(response, isA<models.DeliveryPage>());
-
-        });
-
-        test('test method pagesDeliveryPages()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesDeliveryPages(
-            );
-        });
-
-        test('test method pagesDeliveryPreview()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesDeliveryPreview(
-                token: '',
-            );
-            expect(response, isA<models.DeliveryPage>());
-
-        });
-
-        test('test method pagesEditorEditStates()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorEditStates(
-            );
-        });
-
-        test('test method pagesEditorNotificationsList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorNotificationsList(
-            );
-        });
-
-        test('test method pagesEditorNotificationsMarkAllRead()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorNotificationsMarkAllRead(
-            );
-        });
-
-        test('test method pagesEditorNotificationsUnreadCount()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorNotificationsUnreadCount(
-            );
-        });
-
-        test('test method pagesEditorTranslate()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorTranslate(
-            );
-        });
-
-        test('test method pagesEditorUserSettingsGet()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorUserSettingsGet(
-            );
-        });
-
-        test('test method pagesEditorUserSettingsPut()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorUserSettingsPut(
-            );
-        });
-
-        test('test method pagesEditorUsers()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorUsers(
-            );
-        });
-
-        test('test method pagesEditorCommentsList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorCommentsList(
-                pageId: '',
-            );
-        });
-
-        test('test method pagesEditorCommentsCreate()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorCommentsCreate(
-                pageId: '',
-                body: '',
-            );
-        });
-
-        test('test method pagesEditorCommentsDelete()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorCommentsDelete(
-                pageId: '',
-                uuid: '',
-            );
-        });
-
-        test('test method pagesEditorCommentsUpdate()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorCommentsUpdate(
-                pageId: '',
-                uuid: '',
-                body: '',
-            );
-        });
-
-        test('test method pagesEditorCommentsResolve()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorCommentsResolve(
-                pageId: '',
-                uuid: '',
-            );
-        });
-
-        test('test method pagesEditorCommentsToggleTask()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorCommentsToggleTask(
-                pageId: '',
-                uuid: '',
-                taskIndex: 1,
-            );
-            expect(response, isA<models.Comment>());
-
-        });
-
-        test('test method pagesEditorCommentsUnresolve()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorCommentsUnresolve(
-                pageId: '',
-                uuid: '',
-            );
-        });
-
-        test('test method pagesEditorHistory()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorHistory(
-                pageId: '',
-                index: 1,
-            );
-            expect(response, isA<models.MutationResponse>());
-
-        });
-
-        test('test method pagesEditorLastChanged()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorLastChanged(
-                pageId: '',
-            );
-        });
-
-        test('test method pagesEditorMutationStatus()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorMutationStatus(
-                pageId: '',
-                enabled: true,
-                index: 1,
-            );
-            expect(response, isA<models.MutationResponse>());
-
-        });
-
-        test('test method pagesEditorMutate()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorMutate(
-                pageId: '',
-                plugin: '',
-            );
-            expect(response, isA<models.MutationResponse>());
-
-        });
-
-        test('test method pagesEditorPreviewGrant()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorPreviewGrant(
-                pageId: '',
-            );
-        });
-
-        test('test method pagesEditorPublish()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorPublish(
-                pageId: '',
-            );
-            expect(response, isA<models.MutationResponse>());
-
-        });
-
-        test('test method pagesEditorRevert()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorRevert(
-                pageId: '',
-            );
-            expect(response, isA<models.MutationResponse>());
-
-        });
-
-        test('test method pagesEditorSchedule()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorSchedule(
-                pageId: '',
-                scheduledAt: '',
-            );
-        });
-
-        test('test method pagesEditorState()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorState(
-                pageId: '',
-            );
-            expect(response, isA<models.EditorState>());
-
-        });
-
-        test('test method pagesEditorTakeOwnership()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorTakeOwnership(
-                pageId: '',
-            );
-            expect(response, isA<models.MutationResponse>());
-
-        });
-
-        test('test method pagesEditorTemplatesCreate()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorTemplatesCreate(
-                pageId: '',
-                label: '',
-                uuids: [],
-            );
-            expect(response, isA<models.Template>());
-
-        });
-
-        test('test method pagesEditorUnschedule()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await pages.pagesEditorUnschedule(
-                pageId: '',
-            );
-        });
-
         test('test method pagesLibraryList()', () async {
             final data = '';
 
@@ -508,7 +68,9 @@ void main() {
         });
 
         test('test method pagesLibraryDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -518,10 +80,13 @@ void main() {
             final response = await pages.pagesLibraryDelete(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pagesLibraryGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -532,12 +97,13 @@ void main() {
             final response = await pages.pagesLibraryGet(
                 id: '',
             );
-            expect(response, isA<models.LibraryItem>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pagesLibraryUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -548,7 +114,7 @@ void main() {
             final response = await pages.pagesLibraryUpdate(
                 id: '',
             );
-            expect(response, isA<models.LibraryItem>());
+            expect(response, isA<models.Error>());
 
         });
 
@@ -565,7 +131,8 @@ void main() {
         });
 
         test('test method pagesMenusUpsert()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -574,15 +141,17 @@ void main() {
 
 
             final response = await pages.pagesMenusUpsert(
-                label: '',
-                menuKey: '',
+                label: 'Main navigation',
+                menuKey: 'main',
             );
-            expect(response, isA<models.Menu>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pagesMenusDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -592,10 +161,13 @@ void main() {
             final response = await pages.pagesMenusDelete(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pagesMenusGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -606,12 +178,13 @@ void main() {
             final response = await pages.pagesMenusGet(
                 id: '',
             );
-            expect(response, isA<models.Menu>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pagesMenusUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -622,7 +195,7 @@ void main() {
             final response = await pages.pagesMenusUpdate(
                 id: '',
             );
-            expect(response, isA<models.Menu>());
+            expect(response, isA<models.Error>());
 
         });
 
@@ -639,7 +212,8 @@ void main() {
         });
 
         test('test method pagesPagesCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -648,14 +222,16 @@ void main() {
 
 
             final response = await pages.pagesPagesCreate(
-                title: '',
+                title: 'About us',
             );
-            expect(response, isA<models.Page>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pagesPagesDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -665,10 +241,13 @@ void main() {
             final response = await pages.pagesPagesDelete(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pagesPagesGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -679,12 +258,13 @@ void main() {
             final response = await pages.pagesPagesGet(
                 id: '',
             );
-            expect(response, isA<models.Page>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pagesPagesUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -695,12 +275,14 @@ void main() {
             final response = await pages.pagesPagesUpdate(
                 id: '',
             );
-            expect(response, isA<models.Page>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pagesPagesRevisions()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -710,10 +292,13 @@ void main() {
             final response = await pages.pagesPagesRevisions(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pagesSeed()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -722,6 +307,8 @@ void main() {
 
             final response = await pages.pagesSeed(
             );
+            expect(response, isA<models.SeedResult>());
+
         });
 
         test('test method pagesTemplatesList()', () async {
@@ -737,7 +324,9 @@ void main() {
         });
 
         test('test method pagesTemplatesDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -747,10 +336,13 @@ void main() {
             final response = await pages.pagesTemplatesDelete(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pagesTemplatesGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -761,12 +353,13 @@ void main() {
             final response = await pages.pagesTemplatesGet(
                 id: '',
             );
-            expect(response, isA<models.Template>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pagesTemplatesUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -777,7 +370,39 @@ void main() {
             final response = await pages.pagesTemplatesUpdate(
                 id: '',
             );
-            expect(response, isA<models.Template>());
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method pagesVocabulariesList()', () async {
+            final Map<String, dynamic> data = {};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await pages.pagesVocabulariesList(
+            );
+            expect(response, isA<models.PagesVocabularyIndex>());
+
+        });
+
+        test('test method pagesVocabulariesGet()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await pages.pagesVocabulariesGet(
+                name: enums.PagesVocabulariesGetName.editStateStatuses,
+            );
+            expect(response, isA<models.Error>());
 
         });
 

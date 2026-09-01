@@ -2,10 +2,10 @@ part of '../../models.dart';
 
 /// 
 class AuthLoginRequest implements Model {
-    /// 
+    /// The buyer's login address — the same one the contact carries.
     final String email;
 
-    /// 
+    /// The password from registration or recovery. Wrong credentials are a 401; a correct one on an undecided application is a 403.
     final String password;
 
     AuthLoginRequest({

@@ -9,6 +9,6 @@ Storage storage = Storage(client);
 
 await storage.folderDestroy(
     id: '',
-    recursive: false, // optional
+    recursive: true, // optional
 );
 ```

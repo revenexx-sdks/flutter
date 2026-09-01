@@ -11,7 +11,7 @@ void main() {
         $permissions: [],
         $updatedAt: '',
         deploymentId: '',
-        duration: ,
+        duration: 0,
         errors: '',
         functionId: '',
         logs: '',
@@ -20,7 +20,7 @@ void main() {
         requestPath: '',
         responseBody: '',
         responseHeaders: [],
-        responseStatusCode: ,
+        responseStatusCode: 0,
         status: ExecutionStatus.waiting,
         trigger: ExecutionTrigger.http,
       );
@@ -33,7 +33,7 @@ void main() {
                   expect(result.$permissions, []);
                   expect(result.$updatedAt, '');
                   expect(result.deploymentId, '');
-                  expect(result.duration, );
+                  expect(result.duration, 0);
                   expect(result.errors, '');
                   expect(result.functionId, '');
                   expect(result.logs, '');
@@ -42,7 +42,7 @@ void main() {
                   expect(result.requestPath, '');
                   expect(result.responseBody, '');
                   expect(result.responseHeaders, []);
-                  expect(result.responseStatusCode, );
+                  expect(result.responseStatusCode, 0);
                   expect(result.status, ExecutionStatus.waiting);
                   expect(result.trigger, ExecutionTrigger.http);
           });

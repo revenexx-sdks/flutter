@@ -2,13 +2,13 @@ part of '../../models.dart';
 
 /// 
 class ReferenceEntitiesCreateRequest implements Model {
-    /// 
+    /// The entity's stable identifier — a domain of records the catalog POINTS AT instead of duplicating, so a brand is edited once and not on nine thousand products. Unique per tenant.
     final String code;
 
-    /// 
+    /// A delivery path or URL for the entity's own icon. Cosmetic — nothing in this app resolves it.
     final String? image;
 
-    /// 
+    /// What the entity is called, per language tag — the heading over its record list.
     final Map? labels;
 
     ReferenceEntitiesCreateRequest({

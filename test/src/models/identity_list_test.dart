@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = IdentityList(
         identities: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = IdentityList.fromMap(map);
 
             expect(result.identities, []);
-                  expect(result.total, );
+                  expect(result.total, 0);
           });
   });
 }

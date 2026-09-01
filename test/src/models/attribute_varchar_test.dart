@@ -11,7 +11,7 @@ void main() {
         error: '',
         key: '',
         xrequired: true,
-        size: ,
+        size: 0,
         status: AttributeVarcharStatus.available,
         type: '',
       );
@@ -24,7 +24,7 @@ void main() {
                   expect(result.error, '');
                   expect(result.key, '');
                   expect(result.xrequired, true);
-                  expect(result.size, );
+                  expect(result.size, 0);
                   expect(result.status, AttributeVarcharStatus.available);
                   expect(result.type, '');
           });

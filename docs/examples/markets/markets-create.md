@@ -8,12 +8,15 @@ Client client = Client()
 
 Markets markets = Markets(client);
 
-Market result = await markets.marketsCreate(
-    code: '',
-    name: '',
-    currency: '', // optional
+Error result = await markets.marketsCreate(
+    code: 'northwind',
+    name: 'Northwind',
+    currency: 'EUR', // optional
     isDefault: false, // optional
-    labels: {}, // optional
+    labels: {
+        "de-DE": "Nordwind",
+        "en-GB": "Northwind"
+    }, // optional
     position: 0, // optional
     status: enums.MarketStatus.active, // optional
 );

@@ -15,9 +15,9 @@ void main() {
         enabled: true,
         encryption: true,
         fileSecurity: true,
-        maximumFileSize: ,
+        maximumFileSize: 0,
         name: '',
-        totalSize: ,
+        totalSize: 0,
         transformations: true,
       );
 
@@ -34,9 +34,9 @@ void main() {
                   expect(result.enabled, true);
                   expect(result.encryption, true);
                   expect(result.fileSecurity, true);
-                  expect(result.maximumFileSize, );
+                  expect(result.maximumFileSize, 0);
                   expect(result.name, '');
-                  expect(result.totalSize, );
+                  expect(result.totalSize, 0);
                   expect(result.transformations, true);
           });
   });

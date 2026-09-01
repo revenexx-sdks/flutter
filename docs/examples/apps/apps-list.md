@@ -10,6 +10,6 @@ Apps apps = Apps(client);
 FunctionList result = await apps.appsList(
     queries: [], // optional
     search: '', // optional
-    total: false, // optional
+    total: true, // optional
 );
 ```

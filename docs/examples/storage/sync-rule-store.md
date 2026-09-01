@@ -7,5 +7,12 @@ Client client = Client()
 
 Storage storage = Storage(client);
 
- result = await storage.syncRuleStore();
+ result = await storage.syncRuleStore(
+    sftpAccountId: '',
+    sourcePath: '/uploads',
+    enabled: true, // optional
+    options: [], // optional
+    schedule: '0 3 * * *', // optional
+    targetFolderId: '', // optional
+);
 ```

@@ -23,7 +23,7 @@ class Site implements Model {
     /// Active deployment creation date in ISO 8601 format.
     final String deploymentCreatedAt;
 
-    /// Site&#039;s active deployment ID.
+    /// Site's active deployment ID.
     final String deploymentId;
 
     /// Screenshot of active deployment with dark theme preference file ID.
@@ -35,7 +35,7 @@ class Site implements Model {
     /// Site enabled.
     final bool enabled;
 
-    /// Name of fallback file to use instead of 404 page. If null, Appwrite 404 page will be displayed.
+    /// Name of the fallback file to serve instead of a 404 page. If null, the site runtime's built-in 404 page is served.
     final String fallbackFile;
 
     /// Site framework.
@@ -50,13 +50,13 @@ class Site implements Model {
     /// Latest deployment creation date in ISO 8601 format.
     final String latestDeploymentCreatedAt;
 
-    /// Site&#039;s latest deployment ID.
+    /// Site's latest deployment ID.
     final String latestDeploymentId;
 
-    /// Status of latest deployment. Possible values are &quot;waiting&quot;, &quot;processing&quot;, &quot;building&quot;, &quot;ready&quot;, and &quot;failed&quot;.
+    /// Status of latest deployment. Possible values are "waiting", "processing", "building", "ready", and "failed".
     final String latestDeploymentStatus;
 
-    /// Is the site deployed with the latest configuration? This is set to false if you&#039;ve changed an environment variables, entrypoint, commands, or other settings that needs redeploy to be applied. When the value is false, redeploy the site to update it with the latest configuration.
+    /// Is the site deployed with the latest configuration? This is set to false if you've changed an environment variables, entrypoint, commands, or other settings that needs redeploy to be applied. When the value is false, redeploy the site to update it with the latest configuration.
     final bool live;
 
     /// When disabled, request logs will exclude logs and errors, and site responses will be slightly faster.

@@ -9,6 +9,6 @@ Storage storage = Storage(client);
 
  result = await storage.assetSign(
     id: '',
-    ttlSeconds: 0, // optional
+    ttlSeconds: 1, // optional
 );
 ```

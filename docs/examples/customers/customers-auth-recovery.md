@@ -7,8 +7,8 @@ Client client = Client()
 
 Customers customers = Customers(client);
 
- result = await customers.customersAuthRecovery(
-    email: '',
-    url: '',
+Error result = await customers.customersAuthRecovery(
+    email: 'einkauf@example.com',
+    url: 'https://example.com',
 );
 ```

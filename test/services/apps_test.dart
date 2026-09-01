@@ -58,7 +58,7 @@ void main() {
         test('test method appsList()', () async {
             final Map<String, dynamic> data = {
                 'functions': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -99,7 +99,7 @@ void main() {
                 'schedule': '',
                 'scopes': [],
                 'specification': '',
-                'timeout': ,
+                'timeout': 1,
                 'vars': [],
                 'version': '',};
 
@@ -147,7 +147,7 @@ void main() {
         test('test method appsListRuntimes()', () async {
             final Map<String, dynamic> data = {
                 'runtimes': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -164,7 +164,7 @@ void main() {
         test('test method appsListSpecifications()', () async {
             final Map<String, dynamic> data = {
                 'specifications': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -181,7 +181,7 @@ void main() {
         test('test method appsListTemplates()', () async {
             final Map<String, dynamic> data = {
                 'templates': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -210,7 +210,7 @@ void main() {
                 'runtimes': [],
                 'scopes': [],
                 'tagline': '',
-                'timeout': ,
+                'timeout': 1,
                 'useCases': [],
                 'variables': [],
                 'vcsProvider': '',};
@@ -232,28 +232,28 @@ void main() {
             final Map<String, dynamic> data = {
                 'builds': [],
                 'buildsFailed': [],
-                'buildsFailedTotal': ,
+                'buildsFailedTotal': 1,
                 'buildsMbSeconds': [],
-                'buildsMbSecondsTotal': ,
+                'buildsMbSecondsTotal': 1,
                 'buildsStorage': [],
-                'buildsStorageTotal': ,
+                'buildsStorageTotal': 1,
                 'buildsSuccess': [],
-                'buildsSuccessTotal': ,
+                'buildsSuccessTotal': 1,
                 'buildsTime': [],
-                'buildsTimeTotal': ,
-                'buildsTotal': ,
+                'buildsTimeTotal': 1,
+                'buildsTotal': 1,
                 'deployments': [],
                 'deploymentsStorage': [],
-                'deploymentsStorageTotal': ,
-                'deploymentsTotal': ,
+                'deploymentsStorageTotal': 1,
+                'deploymentsTotal': 1,
                 'executions': [],
                 'executionsMbSeconds': [],
-                'executionsMbSecondsTotal': ,
+                'executionsMbSecondsTotal': 1,
                 'executionsTime': [],
-                'executionsTimeTotal': ,
-                'executionsTotal': ,
+                'executionsTimeTotal': 1,
+                'executionsTotal': 1,
                 'functions': [],
-                'functionsTotal': ,
+                'functionsTotal': 1,
                 'range': '',};
 
 
@@ -308,7 +308,7 @@ void main() {
                 'schedule': '',
                 'scopes': [],
                 'specification': '',
-                'timeout': ,
+                'timeout': 1,
                 'vars': [],
                 'version': '',};
 
@@ -352,7 +352,7 @@ void main() {
                 'schedule': '',
                 'scopes': [],
                 'specification': '',
-                'timeout': ,
+                'timeout': 1,
                 'vars': [],
                 'version': '',};
 
@@ -397,7 +397,7 @@ void main() {
                 'schedule': '',
                 'scopes': [],
                 'specification': '',
-                'timeout': ,
+                'timeout': 1,
                 'vars': [],
                 'version': '',};
 
@@ -418,7 +418,7 @@ void main() {
         test('test method appsListDeployments()', () async {
             final Map<String, dynamic> data = {
                 'deployments': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -440,10 +440,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -460,9 +460,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -478,7 +478,7 @@ void main() {
             final response = await apps.appsCreateDeployment(
                 functionId: '',
                 activate: true,
-                code: '',
+                code: InputFile.fromPath(path: './image.png'),
             );
             expect(response, isA<models.Deployment>());
 
@@ -491,10 +491,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -511,9 +511,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -537,10 +537,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -557,9 +557,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -587,10 +587,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -607,9 +607,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -620,8 +620,8 @@ void main() {
 
             final response = await apps.appsCreateVcsDeployment(
                 functionId: '',
-                reference: '',
-                type: enums.Type.branch,
+                reference: 'main',
+                type: enums.AppsCreateVcsDeploymentType.branch,
             );
             expect(response, isA<models.Deployment>());
 
@@ -648,10 +648,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -668,9 +668,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -708,10 +708,10 @@ void main() {
                 '\$updatedAt': '',
                 'activate': true,
                 'billingJson': '',
-                'buildDuration': ,
+                'buildDuration': 1,
                 'buildId': '',
                 'buildLogs': '',
-                'buildSize': ,
+                'buildSize': 1,
                 'entrypoint': '',
                 'manifestJson': '',
                 'providerBranch': '',
@@ -728,9 +728,9 @@ void main() {
                 'resourceType': '',
                 'screenshotDark': '',
                 'screenshotLight': '',
-                'sourceSize': ,
-                'status': '',
-                'totalSize': ,
+                'sourceSize': 1,
+                'status': 'waiting',
+                'totalSize': 1,
                 'type': '',};
 
 
@@ -750,7 +750,7 @@ void main() {
         test('test method appsListExecutions()', () async {
             final Map<String, dynamic> data = {
                 'executions': [],
-                'total': ,};
+                'total': 1,};
 
 
             when(client.call(
@@ -772,7 +772,7 @@ void main() {
                 '\$permissions': [],
                 '\$updatedAt': '',
                 'deploymentId': '',
-                'duration': ,
+                'duration': 9.99,
                 'errors': '',
                 'functionId': '',
                 'logs': '',
@@ -781,9 +781,9 @@ void main() {
                 'requestPath': '',
                 'responseBody': '',
                 'responseHeaders': [],
-                'responseStatusCode': ,
-                'status': '',
-                'trigger': '',};
+                'responseStatusCode': 1,
+                'status': 'waiting',
+                'trigger': 'http',};
 
 
             when(client.call(
@@ -819,7 +819,7 @@ void main() {
                 '\$permissions': [],
                 '\$updatedAt': '',
                 'deploymentId': '',
-                'duration': ,
+                'duration': 9.99,
                 'errors': '',
                 'functionId': '',
                 'logs': '',
@@ -828,9 +828,9 @@ void main() {
                 'requestPath': '',
                 'responseBody': '',
                 'responseHeaders': [],
-                'responseStatusCode': ,
-                'status': '',
-                'trigger': '',};
+                'responseStatusCode': 1,
+                'status': 'waiting',
+                'trigger': 'http',};
 
 
             when(client.call(
@@ -889,27 +889,27 @@ void main() {
             final Map<String, dynamic> data = {
                 'builds': [],
                 'buildsFailed': [],
-                'buildsFailedTotal': ,
+                'buildsFailedTotal': 1,
                 'buildsMbSeconds': [],
-                'buildsMbSecondsTotal': ,
+                'buildsMbSecondsTotal': 1,
                 'buildsStorage': [],
-                'buildsStorageTotal': ,
+                'buildsStorageTotal': 1,
                 'buildsSuccess': [],
-                'buildsSuccessTotal': ,
+                'buildsSuccessTotal': 1,
                 'buildsTime': [],
-                'buildsTimeAverage': ,
-                'buildsTimeTotal': ,
-                'buildsTotal': ,
+                'buildsTimeAverage': 1,
+                'buildsTimeTotal': 1,
+                'buildsTotal': 1,
                 'deployments': [],
                 'deploymentsStorage': [],
-                'deploymentsStorageTotal': ,
-                'deploymentsTotal': ,
+                'deploymentsStorageTotal': 1,
+                'deploymentsTotal': 1,
                 'executions': [],
                 'executionsMbSeconds': [],
-                'executionsMbSecondsTotal': ,
+                'executionsMbSecondsTotal': 1,
                 'executionsTime': [],
-                'executionsTimeTotal': ,
-                'executionsTotal': ,
+                'executionsTimeTotal': 1,
+                'executionsTotal': 1,
                 'range': '',};
 
 
@@ -927,7 +927,7 @@ void main() {
 
         test('test method appsListVariables()', () async {
             final Map<String, dynamic> data = {
-                'total': ,
+                'total': 1,
                 'variables': [],};
 
 

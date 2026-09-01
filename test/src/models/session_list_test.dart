@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = SessionList(
         sessions: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = SessionList.fromMap(map);
 
             expect(result.sessions, []);
-                  expect(result.total, );
+                  expect(result.total, 0);
           });
   });
 }

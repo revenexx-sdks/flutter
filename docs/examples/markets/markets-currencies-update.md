@@ -7,11 +7,11 @@ Client client = Client()
 
 Markets markets = Markets(client);
 
-MarketCurrency result = await markets.marketsCurrenciesUpdate(
+Error result = await markets.marketsCurrenciesUpdate(
     marketId: '',
     id: '',
-    code: '', // optional
-    isDefault: false, // optional
+    code: 'EUR', // optional
+    isDefault: true, // optional
     position: 0, // optional
 );
 ```

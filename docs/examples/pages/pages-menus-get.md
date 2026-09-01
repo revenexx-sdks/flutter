@@ -7,7 +7,7 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
-Menu result = await pages.pagesMenusGet(
+Error result = await pages.pagesMenusGet(
     id: '',
 );
 ```

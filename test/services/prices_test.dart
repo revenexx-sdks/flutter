@@ -56,7 +56,9 @@ void main() {
         });
 
         test('test method pricesListsList()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -65,10 +67,13 @@ void main() {
 
             final response = await prices.pricesListsList(
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pricesListsCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -77,15 +82,16 @@ void main() {
 
 
             final response = await prices.pricesListsCreate(
-                code: '',
-                name: '',
+                code: 'dealer-de',
+                name: 'Dealer prices',
             );
-            expect(response, isA<models.PriceList>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pricesListsDefaults()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -94,10 +100,14 @@ void main() {
 
             final response = await prices.pricesListsDefaults(
             );
+            expect(response, isA<models.PriceListDefaultsResponse>());
+
         });
 
         test('test method pricesListsDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -107,10 +117,13 @@ void main() {
             final response = await prices.pricesListsDelete(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pricesListsGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -121,12 +134,13 @@ void main() {
             final response = await prices.pricesListsGet(
                 id: '',
             );
-            expect(response, isA<models.PriceList>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pricesListsUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -137,12 +151,14 @@ void main() {
             final response = await prices.pricesListsUpdate(
                 id: '',
             );
-            expect(response, isA<models.PriceList>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pricesEntriesList()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -152,10 +168,13 @@ void main() {
             final response = await prices.pricesEntriesList(
                 listId: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pricesEntriesCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -166,12 +185,14 @@ void main() {
             final response = await prices.pricesEntriesCreate(
                 listId: '',
             );
-            expect(response, isA<models.PriceEntry>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pricesEntriesReplace()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.put,
@@ -182,10 +203,31 @@ void main() {
                 listId: '',
                 entries: [],
             );
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method pricesEntriesAdjust()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.post,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await prices.pricesEntriesAdjust(
+                listId: '',
+            );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pricesEntriesBulk()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -196,10 +238,32 @@ void main() {
                 listId: '',
                 entries: [],
             );
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method pricesEntriesLadder()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.post,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await prices.pricesEntriesLadder(
+                listId: '',
+                basePrice: 1.0,
+            );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pricesEntriesDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -210,10 +274,13 @@ void main() {
                 listId: '',
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method pricesEntriesGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -225,12 +292,13 @@ void main() {
                 listId: '',
                 id: '',
             );
-            expect(response, isA<models.PriceEntry>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pricesEntriesUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -242,12 +310,32 @@ void main() {
                 listId: '',
                 id: '',
             );
-            expect(response, isA<models.PriceEntry>());
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method pricesListsMakeDefault()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.post,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await prices.pricesListsMakeDefault(
+                listId: '',
+                data: {},
+            );
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method pricesResolve()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -257,6 +345,40 @@ void main() {
             final response = await prices.pricesResolve(
                 items: [],
             );
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method pricesVocabulariesList()', () async {
+            final Map<String, dynamic> data = {};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await prices.pricesVocabulariesList(
+            );
+            expect(response, isA<models.PriceVocabularyIndex>());
+
+        });
+
+        test('test method pricesVocabulariesGet()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await prices.pricesVocabulariesGet(
+                name: enums.PricesVocabulariesGetName.listStatuses,
+            );
+            expect(response, isA<models.Error>());
+
         });
 
     });

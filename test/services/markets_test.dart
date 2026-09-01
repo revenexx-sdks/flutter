@@ -56,7 +56,9 @@ void main() {
         });
 
         test('test method marketsList()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -65,10 +67,13 @@ void main() {
 
             final response = await markets.marketsList(
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method marketsCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -77,15 +82,64 @@ void main() {
 
 
             final response = await markets.marketsCreate(
-                code: '',
-                name: '',
+                code: 'northwind',
+                name: 'Northwind',
             );
-            expect(response, isA<models.Market>());
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method marketsLocalePolicy()', () async {
+            final Map<String, dynamic> data = {};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await markets.marketsLocalePolicy(
+            );
+            expect(response, isA<models.TenantLocalePolicy>());
+
+        });
+
+        test('test method marketsVocabularies()', () async {
+            final Map<String, dynamic> data = {};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await markets.marketsVocabularies(
+            );
+            expect(response, isA<models.MarketsVocabularyIndex>());
+
+        });
+
+        test('test method marketsVocabulary()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await markets.marketsVocabulary(
+                name: enums.MarketsVocabularyName.marketStatuses,
+            );
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -95,10 +149,13 @@ void main() {
             final response = await markets.marketsDelete(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method marketsGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -109,12 +166,13 @@ void main() {
             final response = await markets.marketsGet(
                 id: '',
             );
-            expect(response, isA<models.Market>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -125,12 +183,49 @@ void main() {
             final response = await markets.marketsUpdate(
                 id: '',
             );
-            expect(response, isA<models.Market>());
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method marketsBackfill()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.post,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await markets.marketsBackfill(
+                id: 'northwind',
+                source: 'northwind',
+            );
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method marketsClone()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.post,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await markets.marketsClone(
+                id: 'northwind',
+                code: 'northwind-b2b',
+            );
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsContext()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -141,12 +236,49 @@ void main() {
             final response = await markets.marketsContext(
                 id: '',
             );
-            expect(response, isA<models.MarketContext>());
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method marketsMakeDefault()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.post,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await markets.marketsMakeDefault(
+                id: 'northwind',
+                data: {},
+            );
+            expect(response, isA<models.Error>());
+
+        });
+
+        test('test method marketsReadiness()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
+
+            when(client.call(
+                HttpMethod.get,
+            )).thenAnswer((_) async => Response(data: data));
+
+
+            final response = await markets.marketsReadiness(
+                id: 'northwind',
+            );
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsCurrenciesList()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -156,10 +288,13 @@ void main() {
             final response = await markets.marketsCurrenciesList(
                 marketId: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method marketsCurrenciesCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -169,14 +304,16 @@ void main() {
 
             final response = await markets.marketsCurrenciesCreate(
                 marketId: '',
-                code: '',
+                code: 'EUR',
             );
-            expect(response, isA<models.MarketCurrency>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsCurrenciesDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -187,10 +324,13 @@ void main() {
                 marketId: '',
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method marketsCurrenciesGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -202,12 +342,13 @@ void main() {
                 marketId: '',
                 id: '',
             );
-            expect(response, isA<models.MarketCurrency>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsCurrenciesUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -219,12 +360,14 @@ void main() {
                 marketId: '',
                 id: '',
             );
-            expect(response, isA<models.MarketCurrency>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsLocalesList()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -234,10 +377,13 @@ void main() {
             final response = await markets.marketsLocalesList(
                 marketId: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method marketsLocalesCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -247,16 +393,18 @@ void main() {
 
             final response = await markets.marketsLocalesCreate(
                 marketId: '',
-                code: '',
-                country: '',
-                language: '',
+                code: 'de-DE',
+                country: 'DE',
+                language: 'de',
             );
-            expect(response, isA<models.MarketLocale>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsLocalesDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -267,10 +415,13 @@ void main() {
                 marketId: '',
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method marketsLocalesGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -282,12 +433,13 @@ void main() {
                 marketId: '',
                 id: '',
             );
-            expect(response, isA<models.MarketLocale>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsLocalesUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -299,12 +451,14 @@ void main() {
                 marketId: '',
                 id: '',
             );
-            expect(response, isA<models.MarketLocale>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsTaxClassesList()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -314,10 +468,13 @@ void main() {
             final response = await markets.marketsTaxClassesList(
                 marketId: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method marketsTaxClassesCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -327,15 +484,17 @@ void main() {
 
             final response = await markets.marketsTaxClassesCreate(
                 marketId: '',
-                code: '',
-                name: '',
+                code: 'standard',
+                name: 'Standard rate',
             );
-            expect(response, isA<models.MarketTaxClass>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsTaxClassesDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -346,10 +505,13 @@ void main() {
                 marketId: '',
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method marketsTaxClassesGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -361,12 +523,13 @@ void main() {
                 marketId: '',
                 id: '',
             );
-            expect(response, isA<models.MarketTaxClass>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method marketsTaxClassesUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -378,7 +541,7 @@ void main() {
                 marketId: '',
                 id: '',
             );
-            expect(response, isA<models.MarketTaxClass>());
+            expect(response, isA<models.Error>());
 
         });
 

@@ -45,6 +45,9 @@ class AssetResource implements Model {
     final String mime_type;
 
     /// 
+    final String model_url;
+
+    /// 
     final String original_name;
 
     /// 
@@ -52,6 +55,9 @@ class AssetResource implements Model {
 
     /// 
     final String path_name;
+
+    /// 3D derivatives (null unless rendered): preview image + .glb mesh.
+    final String preview_url;
 
     /// 
     final String processed_at;
@@ -71,8 +77,12 @@ class AssetResource implements Model {
     /// 
     final String updated_at;
 
-    /// 
+    /// Null for a private asset — it is only reachable through a signed
+    /// URL, so there is no path-addressed public URL to hand out.
     final String url;
+
+    /// 
+    final String usdz_url;
 
     /// 
     final String visibility;
@@ -95,9 +105,11 @@ class AssetResource implements Model {
         required this.kind,
         required this.metadata,
         required this.mime_type,
+        required this.model_url,
         required this.original_name,
         required this.page_count,
         required this.path_name,
+        required this.preview_url,
         required this.processed_at,
         required this.size_bytes,
         required this.status,
@@ -105,6 +117,7 @@ class AssetResource implements Model {
         required this.tenant_id,
         required this.updated_at,
         required this.url,
+        required this.usdz_url,
         required this.visibility,
         required this.width,
     });
@@ -125,9 +138,11 @@ class AssetResource implements Model {
             kind: map['kind'].toString(),
             metadata: List.from(map['metadata'] ?? []),
             mime_type: map['mime_type'].toString(),
+            model_url: map['model_url'].toString(),
             original_name: map['original_name'].toString(),
             page_count: map['page_count'],
             path_name: map['path_name'].toString(),
+            preview_url: map['preview_url'].toString(),
             processed_at: map['processed_at'].toString(),
             size_bytes: map['size_bytes'],
             status: map['status'].toString(),
@@ -135,6 +150,7 @@ class AssetResource implements Model {
             tenant_id: map['tenant_id'].toString(),
             updated_at: map['updated_at'].toString(),
             url: map['url'].toString(),
+            usdz_url: map['usdz_url'].toString(),
             visibility: map['visibility'].toString(),
             width: map['width'],
         );
@@ -157,9 +173,11 @@ class AssetResource implements Model {
             "kind": kind,
             "metadata": metadata,
             "mime_type": mime_type,
+            "model_url": model_url,
             "original_name": original_name,
             "page_count": page_count,
             "path_name": path_name,
+            "preview_url": preview_url,
             "processed_at": processed_at,
             "size_bytes": size_bytes,
             "status": status,
@@ -167,6 +185,7 @@ class AssetResource implements Model {
             "tenant_id": tenant_id,
             "updated_at": updated_at,
             "url": url,
+            "usdz_url": usdz_url,
             "visibility": visibility,
             "width": width,
         };

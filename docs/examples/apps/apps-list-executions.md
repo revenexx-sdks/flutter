@@ -10,6 +10,6 @@ Apps apps = Apps(client);
 ExecutionList result = await apps.appsListExecutions(
     functionId: '',
     queries: [], // optional
-    total: false, // optional
+    total: true, // optional
 );
 ```

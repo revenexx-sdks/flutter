@@ -7,9 +7,9 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
-Menu result = await pages.pagesMenusUpdate(
+Error result = await pages.pagesMenusUpdate(
     id: '',
     items: [], // optional
-    label: '', // optional
+    label: 'Main navigation', // optional
 );
 ```

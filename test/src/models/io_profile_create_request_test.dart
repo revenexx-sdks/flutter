@@ -6,14 +6,14 @@ void main() {
   group('IoProfileCreateRequest', () {
     test('model', () {
       final model = IoProfileCreateRequest(
-        direction: CartIoDirection.import,
+        direction: CartIoDirection.ximport,
         name: '',
       );
 
       final map = model.toMap();
       final result = IoProfileCreateRequest.fromMap(map);
 
-            expect(result.direction, CartIoDirection.import);
+            expect(result.direction, CartIoDirection.ximport);
                   expect(result.name, '');
           });
   });

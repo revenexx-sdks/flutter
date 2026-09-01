@@ -2,10 +2,10 @@ part of '../../models.dart';
 
 /// 
 class AuthLogoutRequest implements Model {
-    /// 
+    /// The session to revoke — `session.$id` from the login.
     final String session_id;
 
-    /// 
+    /// The platform user — `session.userId` from the login.
     final String user_id;
 
     AuthLogoutRequest({

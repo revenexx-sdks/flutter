@@ -2,10 +2,10 @@ part of '../../models.dart';
 
 /// 
 class AuthMeRequest implements Model {
-    /// Optional session to verify — answers 401 when the session is expired or revoked.
+    /// Optional session to verify. Pass it to ask "is this session still alive?" (a revoked one is then a 401); omit it to only ask who a user is.
     final String? session_id;
 
-    /// 
+    /// The platform user to resolve — `session.userId` from the login.
     final String user_id;
 
     AuthMeRequest({

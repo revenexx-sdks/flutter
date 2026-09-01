@@ -17,7 +17,7 @@ class Func implements Model {
     /// Active deployment creation date in ISO 8601 format.
     final String deploymentCreatedAt;
 
-    /// Function&#039;s active deployment ID.
+    /// Function's active deployment ID.
     final String deploymentId;
 
     /// Function enabled.
@@ -38,13 +38,13 @@ class Func implements Model {
     /// Latest deployment creation date in ISO 8601 format.
     final String latestDeploymentCreatedAt;
 
-    /// Function&#039;s latest deployment ID.
+    /// Function's latest deployment ID.
     final String latestDeploymentId;
 
-    /// Status of latest deployment. Possible values are &quot;waiting&quot;, &quot;processing&quot;, &quot;building&quot;, &quot;ready&quot;, and &quot;failed&quot;.
+    /// Status of latest deployment. Possible values are "waiting", "processing", "building", "ready", and "failed".
     final String latestDeploymentStatus;
 
-    /// Is the function deployed with the latest configuration? This is set to false if you&#039;ve changed an environment variables, entrypoint, commands, or other settings that needs redeploy to be applied. When the value is false, redeploy the function to update it with the latest configuration.
+    /// Is the function deployed with the latest configuration? This is set to false if you've changed an environment variables, entrypoint, commands, or other settings that needs redeploy to be applied. When the value is false, redeploy the function to update it with the latest configuration.
     final bool live;
 
     /// When disabled, executions will exclude logs and errors, and will be slightly faster.

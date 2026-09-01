@@ -10,8 +10,8 @@ Sites sites = Sites(client);
 
 Deployment result = await sites.sitesCreateVcsDeployment(
     siteId: '',
-    reference: '',
-    type: enums.Type.branch,
-    activate: false, // optional
+    reference: 'main',
+    type: enums.SitesCreateTemplateDeploymentType.branch,
+    activate: true, // optional
 );
 ```

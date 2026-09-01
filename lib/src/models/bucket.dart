@@ -8,7 +8,7 @@ class Bucket implements Model {
     /// Bucket ID.
     final String $id;
 
-    /// Bucket permissions. [Learn more about permissions](https://appwrite.io/docs/permissions).
+    /// Bucket permissions. Each entry is a permission string: an action wrapping a role, e.g. `read("any")`, `update("user:abc")`, `delete("team:abc/owner")`. Actions are `read`, `create`, `update`, `delete` and the aggregate `write` (= create + update + delete); the role inside the quotes takes the form described under “Role strings” in this document's introduction.
     final List<String> $permissions;
 
     /// Bucket update date in ISO 8601 format.
@@ -29,7 +29,7 @@ class Bucket implements Model {
     /// Bucket is encrypted.
     final bool encryption;
 
-    /// Whether file-level security is enabled. [Learn more about permissions](https://appwrite.io/docs/permissions).
+    /// Whether file-level security is enabled. When it is, each record's own `$permissions` are enforced on top of the container's.
     final bool fileSecurity;
 
     /// Maximum file size supported.

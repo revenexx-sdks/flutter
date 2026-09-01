@@ -7,10 +7,10 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
-LibraryItem result = await pages.pagesLibraryUpdate(
+Error result = await pages.pagesLibraryUpdate(
     id: '',
-    bundle: '', // optional
-    label: '', // optional
+    bundle: 'teaser', // optional
+    label: 'Newsletter teaser', // optional
     tree: {}, // optional
 );
 ```

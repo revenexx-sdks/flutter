@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-/// RevenexxAPIRevenexx Response
+/// Revenexx Response
 class Response<T> {
   /// Initializes a [Response]
   Response({this.data});
 
-  /// HTTP body returned from RevenexxAPIRevenexx
+  /// HTTP body returned from Revenexx
   T? data;
 
   @override

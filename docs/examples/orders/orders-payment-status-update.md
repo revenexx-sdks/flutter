@@ -8,9 +8,9 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-Order result = await orders.ordersPaymentStatusUpdate(
+Error result = await orders.ordersPaymentStatusUpdate(
     id: '',
     status: enums.OrderPaymentStatus.open,
-    paymentId: '', // optional
+    paymentId: 'pay_000000000001', // optional
 );
 ```

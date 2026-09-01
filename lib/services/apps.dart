@@ -367,7 +367,7 @@ class Apps extends Service {
   /// archive containing the App source. Phase 2 will extract the
   /// manifest from this archive and validate it against the App
   /// Registry before kicking off the build.
-  Future<models.Deployment> appsCreateDeployment({required String functionId, required bool activate, required String code, String? commands, String? entrypoint, Function(UploadProgress)? onProgress}) async {
+  Future<models.Deployment> appsCreateDeployment({required String functionId, required bool activate, required InputFile code, String? commands, String? entrypoint, Function(UploadProgress)? onProgress}) async {
     final String apiPath = '/v1/apps/{functionId}/deployments'.replaceAll('{functionId}', functionId);
 
         final Map<String, dynamic> apiParams = {
@@ -388,6 +388,7 @@ class Apps extends Service {
         };
 
         String idParamName = '';
+        final paramName = 'code';
         final res = await client.chunkedUpload(
             path: apiPath,
             params: apiParams,
@@ -453,7 +454,7 @@ class Apps extends Service {
   }
 
   /// Trigger a new deployment from the App's connected Git repository.
-  Future<models.Deployment> appsCreateVcsDeployment({required String functionId, required String reference, required enums.Type type, bool? activate}) async {
+  Future<models.Deployment> appsCreateVcsDeployment({required String functionId, required String reference, required enums.AppsCreateVcsDeploymentType type, bool? activate}) async {
     final String apiPath = '/v1/apps/{functionId}/deployments/vcs'.replaceAll('{functionId}', functionId);
 
         final Map<String, dynamic> apiParams = {
@@ -512,7 +513,7 @@ class Apps extends Service {
 
   /// Get a redirect URL to download the source archive of an App deployment.
   /// Useful for re-running a build locally or auditing what was deployed.
-  Future appsGetDeploymentDownload({required String functionId, required String deploymentId, enums.Type? type}) async {
+  Future appsGetDeploymentDownload({required String functionId, required String deploymentId, enums.AppsGetDeploymentDownloadType? type}) async {
     final String apiPath = '/v1/apps/{functionId}/deployments/{deploymentId}/download'.replaceAll('{functionId}', functionId).replaceAll('{deploymentId}', deploymentId);
 
         final Map<String, dynamic> apiParams = {

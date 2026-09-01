@@ -7,7 +7,7 @@ Client client = Client()
 
 Channels channels = Channels(client);
 
-Channel result = await channels.channelsGet(
+Error result = await channels.channelsGet(
     id: '',
 );
 ```

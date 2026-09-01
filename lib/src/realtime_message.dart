@@ -15,7 +15,7 @@ class RealtimeMessage {
   final List<String> channels;
 
   /// ISO 8601 formatted timestamp in UTC timezone in
-  /// which the event was sent from RevenexxAPIRevenexx
+  /// which the event was sent from Revenexx
   final String timestamp;
 
   /// Initializes a [RealtimeMessage]

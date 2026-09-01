@@ -6,10 +6,10 @@ void main() {
     test('model', () {
       final model = Currency(
         code: '',
-        decimalDigits: ,
+        decimalDigits: 0,
         name: '',
         namePlural: '',
-        rounding: ,
+        rounding: 0,
         symbol: '',
         symbolNative: '',
       );
@@ -18,10 +18,10 @@ void main() {
       final result = Currency.fromMap(map);
 
             expect(result.code, '');
-                  expect(result.decimalDigits, );
+                  expect(result.decimalDigits, 0);
                   expect(result.name, '');
                   expect(result.namePlural, '');
-                  expect(result.rounding, );
+                  expect(result.rounding, 0);
                   expect(result.symbol, '');
                   expect(result.symbolNative, '');
           });

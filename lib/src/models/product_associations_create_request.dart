@@ -2,19 +2,19 @@ part of '../../models.dart';
 
 /// 
 class ProductAssociationsCreateRequest implements Model {
-    /// 
+    /// Which kind of relation this is — the `association_types` row.
     final String association_type_id;
 
-    /// 
+    /// Order in which the targets are shown, ascending.
     final int? position;
 
-    /// 
+    /// The product the relation starts at — the one whose detail page shows it.
     final String product_id;
 
-    /// 
+    /// How many of the target belong to the source — the 4 in "this bundle contains 4 casters". Only meaningful when the association type carries `is_quantified`; null on an ordinary cross-sell.
     final double? quantity;
 
-    /// 
+    /// The product the relation points at — the accessory, the spare part, the cross-sell.
     final String target_product_id;
 
     ProductAssociationsCreateRequest({

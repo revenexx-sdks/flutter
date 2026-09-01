@@ -8,7 +8,7 @@ class Table implements Model {
     /// Table ID.
     final String $id;
 
-    /// Table permissions. [Learn more about permissions](https://appwrite.io/docs/permissions).
+    /// Table permissions. Each entry is a permission string: an action wrapping a role, e.g. `read("any")`, `update("user:abc")`, `delete("team:abc/owner")`. Actions are `read`, `create`, `update`, `delete` and the aggregate `write` (= create + update + delete); the role inside the quotes takes the form described under “Role strings” in this document's introduction.
     final List<String> $permissions;
 
     /// Table update date in ISO 8601 format.
@@ -26,7 +26,7 @@ class Table implements Model {
     /// Database ID.
     final String databaseId;
 
-    /// Table enabled. Can be &#039;enabled&#039; or &#039;disabled&#039;. When disabled, the table is inaccessible to users, but remains accessible to Server SDKs using API keys.
+    /// Table enabled. Can be 'enabled' or 'disabled'. When disabled, the table is inaccessible to users, but remains accessible to Server SDKs using API keys.
     final bool enabled;
 
     /// Table indexes.
@@ -35,7 +35,7 @@ class Table implements Model {
     /// Table name.
     final String name;
 
-    /// Whether row-level permissions are enabled. [Learn more about permissions](https://appwrite.io/docs/permissions).
+    /// Whether row-level permissions are enabled. When it is, each record's own `$permissions` are enforced on top of the container's.
     final bool rowSecurity;
 
     Table({

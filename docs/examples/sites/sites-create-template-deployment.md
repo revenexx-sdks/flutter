@@ -14,7 +14,7 @@ Deployment result = await sites.sitesCreateTemplateDeployment(
     reference: '',
     repository: '',
     rootDirectory: '',
-    type: enums.Type.branch,
-    activate: false, // optional
+    type: enums.SitesCreateTemplateDeploymentType.branch,
+    activate: true, // optional
 );
 ```

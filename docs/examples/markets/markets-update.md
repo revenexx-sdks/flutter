@@ -8,13 +8,16 @@ Client client = Client()
 
 Markets markets = Markets(client);
 
-Market result = await markets.marketsUpdate(
+Error result = await markets.marketsUpdate(
     id: '',
-    code: '', // optional
-    currency: '', // optional
+    code: 'northwind', // optional
+    currency: 'EUR', // optional
     isDefault: false, // optional
-    labels: {}, // optional
-    name: '', // optional
+    labels: {
+        "de-DE": "Nordwind",
+        "en-GB": "Northwind"
+    }, // optional
+    name: 'Northwind', // optional
     position: 0, // optional
     status: enums.MarketStatus.active, // optional
 );

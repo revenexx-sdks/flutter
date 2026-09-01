@@ -56,7 +56,9 @@ void main() {
         });
 
         test('test method cartsList()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.get,
@@ -65,10 +67,13 @@ void main() {
 
             final response = await carts.cartsList(
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method cartsCreate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -78,12 +83,14 @@ void main() {
 
             final response = await carts.cartsCreate(
             );
-            expect(response, isA<models.Cart>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method cartsClaim()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -92,35 +99,13 @@ void main() {
 
             final response = await carts.cartsClaim(
                 contactId: '',
-                sessionKey: '',
+                sessionKey: 'a1b2c3d4e5f6',
             );
+            expect(response, isA<models.Error>());
+
         });
 
-        test('test method cartsImport()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsImport(
-            );
-        });
-
-        test('test method cartsIoProfilesList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsIoProfilesList(
-            );
-        });
-
-        test('test method cartsIoProfilesCreate()', () async {
+        test('test method cartsMaintenanceRun()', () async {
             final Map<String, dynamic> data = {};
 
 
@@ -129,73 +114,16 @@ void main() {
             )).thenAnswer((_) async => Response(data: data));
 
 
-            final response = await carts.cartsIoProfilesCreate(
-                direction: enums.CartIoDirection.import,
-                name: '',
+            final response = await carts.cartsMaintenanceRun(
             );
-            expect(response, isA<models.IoProfile>());
-
-        });
-
-        test('test method cartsIoProfilesDefaults()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsIoProfilesDefaults(
-            );
-        });
-
-        test('test method cartsIoProfilesDelete()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsIoProfilesDelete(
-                id: '',
-            );
-        });
-
-        test('test method cartsIoProfilesGet()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsIoProfilesGet(
-                id: '',
-            );
-            expect(response, isA<models.IoProfile>());
-
-        });
-
-        test('test method cartsIoProfilesUpdate()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsIoProfilesUpdate(
-                id: '',
-            );
-            expect(response, isA<models.IoProfile>());
+            expect(response, isA<models.CartMaintenanceResult>());
 
         });
 
         test('test method cartsMerge()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.post,
@@ -206,66 +134,11 @@ void main() {
                 sourceCartId: '',
                 targetCartId: '',
             );
-        });
-
-        test('test method cartsItemsList()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsItemsList(
-                cartId: '',
-            );
-        });
-
-        test('test method cartsItemsCreate()', () async {
-            final Map<String, dynamic> data = {};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsItemsCreate(
-                cartId: '',
-            );
-            expect(response, isA<models.CartItem>());
+            expect(response, isA<models.Error>());
 
         });
 
-        test('test method cartsItemsReplace()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.put,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsItemsReplace(
-                cartId: '',
-                items: [],
-            );
-        });
-
-        test('test method cartsItemsDelete()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await carts.cartsItemsDelete(
-                cartId: '',
-                id: '',
-            );
-        });
-
-        test('test method cartsItemsGet()', () async {
+        test('test method cartsVocabulariesList()', () async {
             final Map<String, dynamic> data = {};
 
 
@@ -274,33 +147,33 @@ void main() {
             )).thenAnswer((_) async => Response(data: data));
 
 
-            final response = await carts.cartsItemsGet(
-                cartId: '',
-                id: '',
+            final response = await carts.cartsVocabulariesList(
             );
-            expect(response, isA<models.CartItem>());
+            expect(response, isA<models.CartVocabularyIndex>());
 
         });
 
-        test('test method cartsItemsUpdate()', () async {
-            final Map<String, dynamic> data = {};
+        test('test method cartsVocabulariesGet()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
-                HttpMethod.put,
+                HttpMethod.get,
             )).thenAnswer((_) async => Response(data: data));
 
 
-            final response = await carts.cartsItemsUpdate(
-                cartId: '',
-                id: '',
+            final response = await carts.cartsVocabulariesGet(
+                name: enums.Name.ioApplyModes,
             );
-            expect(response, isA<models.CartItem>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method cartsDelete()', () async {
-            final data = '';
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.delete,
@@ -310,10 +183,13 @@ void main() {
             final response = await carts.cartsDelete(
                 id: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method cartsGet()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -324,12 +200,13 @@ void main() {
             final response = await carts.cartsGet(
                 id: '',
             );
-            expect(response, isA<models.Cart>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method cartsUpdate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -340,12 +217,13 @@ void main() {
             final response = await carts.cartsUpdate(
                 id: '',
             );
-            expect(response, isA<models.Cart>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method cartsAbandon()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -356,12 +234,13 @@ void main() {
             final response = await carts.cartsAbandon(
                 id: '',
             );
-            expect(response, isA<models.Cart>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method cartsActivate()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -372,25 +251,31 @@ void main() {
             final response = await carts.cartsActivate(
                 id: '',
             );
-            expect(response, isA<models.Cart>());
+            expect(response, isA<models.Error>());
 
         });
 
-        test('test method cartsExport()', () async {
-            final data = '';
+        test('test method cartsMergeInto()', () async {
+            final Map<String, dynamic> data = {
+                'error': '',};
+
 
             when(client.call(
                 HttpMethod.post,
             )).thenAnswer((_) async => Response(data: data));
 
 
-            final response = await carts.cartsExport(
+            final response = await carts.cartsMergeInto(
                 id: '',
+                targetCartId: '',
             );
+            expect(response, isA<models.Error>());
+
         });
 
         test('test method cartsOrder()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -401,12 +286,13 @@ void main() {
             final response = await carts.cartsOrder(
                 id: '',
             );
-            expect(response, isA<models.Cart>());
+            expect(response, isA<models.Error>());
 
         });
 
         test('test method cartsReopen()', () async {
-            final Map<String, dynamic> data = {};
+            final Map<String, dynamic> data = {
+                'error': '',};
 
 
             when(client.call(
@@ -417,7 +303,7 @@ void main() {
             final response = await carts.cartsReopen(
                 id: '',
             );
-            expect(response, isA<models.Cart>());
+            expect(response, isA<models.Error>());
 
         });
 
