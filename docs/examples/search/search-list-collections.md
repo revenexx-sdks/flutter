@@ -7,5 +7,5 @@ Client client = Client()
 
 Search search = Search(client);
 
- result = await search.searchListCollections();
+Error result = await search.searchListCollections();
 ```

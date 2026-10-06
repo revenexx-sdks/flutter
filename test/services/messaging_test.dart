@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,923 +40,682 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('Messaging test', () {
-        late MockClient client;
-        late Messaging messaging;
-
-        setUp(() {
-            client = MockClient();
-            messaging = Messaging(client);
-        });
-
-        test('test method messagingListMessages()', () async {
-            final Map<String, dynamic> data = {
-                'messages': [],
-                'total': ,};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingListMessages(
-            );
-            expect(response, isA<models.MessageList>());
-
-        });
-
-        test('test method messagingCreateEmail()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'data': <String, dynamic>{},
-                'deliveredTotal': ,
-                'providerType': '',
-                'status': '',
-                'targets': [],
-                'topics': [],
-                'users': [],};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateEmail(
-                content: '',
-                messageId: '',
-                subject: '',
-            );
-            expect(response, isA<models.Message>());
-
-        });
-
-        test('test method messagingUpdateEmail()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'data': <String, dynamic>{},
-                'deliveredTotal': ,
-                'providerType': '',
-                'status': '',
-                'targets': [],
-                'topics': [],
-                'users': [],};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateEmail(
-                messageId: '',
-            );
-            expect(response, isA<models.Message>());
-
-        });
-
-        test('test method messagingCreatePush()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'data': <String, dynamic>{},
-                'deliveredTotal': ,
-                'providerType': '',
-                'status': '',
-                'targets': [],
-                'topics': [],
-                'users': [],};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreatePush(
-                messageId: '',
-            );
-            expect(response, isA<models.Message>());
-
-        });
-
-        test('test method messagingUpdatePush()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'data': <String, dynamic>{},
-                'deliveredTotal': ,
-                'providerType': '',
-                'status': '',
-                'targets': [],
-                'topics': [],
-                'users': [],};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdatePush(
-                messageId: '',
-            );
-            expect(response, isA<models.Message>());
-
-        });
-
-        test('test method messagingDelete()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingDelete(
-                messageId: '',
-            );
-        });
-
-        test('test method messagingGetMessage()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'data': <String, dynamic>{},
-                'deliveredTotal': ,
-                'providerType': '',
-                'status': '',
-                'targets': [],
-                'topics': [],
-                'users': [],};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingGetMessage(
-                messageId: '',
-            );
-            expect(response, isA<models.Message>());
-
-        });
-
-        test('test method messagingListMessageLogs()', () async {
-            final Map<String, dynamic> data = {
-                'logs': [],
-                'total': ,};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingListMessageLogs(
-                messageId: '',
-            );
-            expect(response, isA<models.LogList>());
-
-        });
-
-        test('test method messagingListTargets()', () async {
-            final Map<String, dynamic> data = {
-                'targets': [],
-                'total': ,};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingListTargets(
-                messageId: '',
-            );
-            expect(response, isA<models.TargetList>());
-
-        });
-
-        test('test method messagingListProviders()', () async {
-            final Map<String, dynamic> data = {
-                'providers': [],
-                'total': ,};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingListProviders(
-            );
-            expect(response, isA<models.ProviderList>());
-
-        });
-
-        test('test method messagingCreateMailgunProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateMailgunProvider(
-                name: '',
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingUpdateMailgunProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateMailgunProvider(
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingCreateMsg91Provider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateMsg91Provider(
-                name: '',
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingUpdateMsg91Provider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateMsg91Provider(
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingCreateResendProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateResendProvider(
-                name: '',
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingUpdateResendProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateResendProvider(
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingCreateSendgridProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateSendgridProvider(
-                name: '',
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingUpdateSendgridProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateSendgridProvider(
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingCreateTelesignProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateTelesignProvider(
-                name: '',
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingUpdateTelesignProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateTelesignProvider(
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingCreateTextmagicProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateTextmagicProvider(
-                name: '',
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingUpdateTextmagicProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateTextmagicProvider(
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingCreateTwilioProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateTwilioProvider(
-                name: '',
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingUpdateTwilioProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateTwilioProvider(
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingCreateVonageProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateVonageProvider(
-                name: '',
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingUpdateVonageProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateVonageProvider(
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingDeleteProvider()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingDeleteProvider(
-                providerId: '',
-            );
-        });
-
-        test('test method messagingGetProvider()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'credentials': <String, dynamic>{},
-                'enabled': true,
-                'name': '',
-                'provider': '',
-                'type': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingGetProvider(
-                providerId: '',
-            );
-            expect(response, isA<models.Provider>());
-
-        });
-
-        test('test method messagingListProviderLogs()', () async {
-            final Map<String, dynamic> data = {
-                'logs': [],
-                'total': ,};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingListProviderLogs(
-                providerId: '',
-            );
-            expect(response, isA<models.LogList>());
-
-        });
-
-        test('test method messagingListSubscriberLogs()', () async {
-            final Map<String, dynamic> data = {
-                'logs': [],
-                'total': ,};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingListSubscriberLogs(
-                subscriberId: '',
-            );
-            expect(response, isA<models.LogList>());
-
-        });
-
-        test('test method messagingListTopics()', () async {
-            final Map<String, dynamic> data = {
-                'topics': [],
-                'total': ,};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingListTopics(
-            );
-            expect(response, isA<models.TopicList>());
-
-        });
-
-        test('test method messagingCreateTopic()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'emailTotal': ,
-                'name': '',
-                'pushTotal': ,
-                'smsTotal': ,
-                'subscribe': [],};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateTopic(
-                name: '',
-                topicId: '',
-            );
-            expect(response, isA<models.Topic>());
-
-        });
-
-        test('test method messagingDeleteTopic()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingDeleteTopic(
-                topicId: '',
-            );
-        });
-
-        test('test method messagingGetTopic()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'emailTotal': ,
-                'name': '',
-                'pushTotal': ,
-                'smsTotal': ,
-                'subscribe': [],};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingGetTopic(
-                topicId: '',
-            );
-            expect(response, isA<models.Topic>());
-
-        });
-
-        test('test method messagingUpdateTopic()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'emailTotal': ,
-                'name': '',
-                'pushTotal': ,
-                'smsTotal': ,
-                'subscribe': [],};
-
-
-            when(client.call(
-                HttpMethod.patch,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingUpdateTopic(
-                topicId: '',
-            );
-            expect(response, isA<models.Topic>());
-
-        });
-
-        test('test method messagingListTopicLogs()', () async {
-            final Map<String, dynamic> data = {
-                'logs': [],
-                'total': ,};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingListTopicLogs(
-                topicId: '',
-            );
-            expect(response, isA<models.LogList>());
-
-        });
-
-        test('test method messagingListSubscribers()', () async {
-            final Map<String, dynamic> data = {
-                'subscribers': [],
-                'total': ,};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingListSubscribers(
-                topicId: '',
-            );
-            expect(response, isA<models.SubscriberList>());
-
-        });
-
-        test('test method messagingCreateSubscriber()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'providerType': '',
-                'target': <String, dynamic>{
-    '\$createdAt': '',
-    '\$id': '',
-    '\$updatedAt': '',
-    'expired': true,
-    'identifier': '',
-    'name': '',
-    'providerType': '',
-    'userId': '',
-  },
-                'targetId': '',
-                'topicId': '',
-                'userId': '',
-                'userName': '',};
-
-
-            when(client.call(
-                HttpMethod.post,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingCreateSubscriber(
-                topicId: '',
-                subscriberId: '',
-                targetId: '',
-            );
-            expect(response, isA<models.Subscriber>());
-
-        });
-
-        test('test method messagingDeleteSubscriber()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.delete,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingDeleteSubscriber(
-                topicId: '',
-                subscriberId: '',
-            );
-        });
-
-        test('test method messagingGetSubscriber()', () async {
-            final Map<String, dynamic> data = {
-                '\$createdAt': '',
-                '\$id': '',
-                '\$updatedAt': '',
-                'providerType': '',
-                'target': <String, dynamic>{
-    '\$createdAt': '',
-    '\$id': '',
-    '\$updatedAt': '',
-    'expired': true,
-    'identifier': '',
-    'name': '',
-    'providerType': '',
-    'userId': '',
-  },
-                'targetId': '',
-                'topicId': '',
-                'userId': '',
-                'userName': '',};
-
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await messaging.messagingGetSubscriber(
-                topicId: '',
-                subscriberId: '',
-            );
-            expect(response, isA<models.Subscriber>());
-
-        });
-
+  group('Messaging test', () {
+    late MockClient client;
+    late Messaging messaging;
+
+    setUp(() {
+      client = MockClient();
+      messaging = Messaging(client);
     });
+
+    test('test method auditIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.auditIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method bindingIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.bindingIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method bindingStore()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.bindingStore(
+        channel: '',
+        eventTopic: '',
+        recipient: '',
+        templateKey: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method bindingDestroy()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.bindingDestroy(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method bindingShow()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.bindingShow(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method bindingUpdatePatch()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.patch,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.bindingUpdatePatch(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method bindingUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.bindingUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method channelCredentialIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.channelCredentialIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method channelCredentialDestroy()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.channelCredentialDestroy(
+        channel: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method channelCredentialUpdatePatch()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.patch,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.channelCredentialUpdatePatch(
+        channel: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method channelCredentialUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.channelCredentialUpdate(
+        channel: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method channelCredentialVerify()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.channelCredentialVerify(
+        channel: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method channelIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.channelIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method configShow()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.configShow();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method configUpdatePatch()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.patch,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.configUpdatePatch();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method configUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.configUpdate();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method layoutIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.layoutIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method layoutStore()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.layoutStore();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method layoutDestroy()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.layoutDestroy(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method layoutShow()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.layoutShow(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method layoutUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.patch,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.layoutUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method libraryIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.libraryIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method messageIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.messageIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method messageShow()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.messageShow(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method sendPreview()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.sendPreview(
+        channel: '',
+        template: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method erasureStore()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.erasureStore(
+        address: '',
+        channel: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method pushSubscriptionDestroy()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.pushSubscriptionDestroy(
+        endpoint: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method pushSubscriptionIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.pushSubscriptionIndex(
+        subscriberId: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method pushSubscriptionStore()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.pushSubscriptionStore(
+        endpoint: 'https://example.com',
+        keys: {},
+        subscriberId: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method sendSend()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.sendSend(
+        channel: '',
+        template: '',
+        to: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method statsIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.statsIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method suppressionIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.suppressionIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method suppressionStore()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.suppressionStore(
+        address: '',
+        channel: '',
+        reason: enums.Reason.hardBounce,
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method suppressionDestroy()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.suppressionDestroy(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method suppressionShow()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.suppressionShow(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateIndex();
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateStore()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateStore(
+        channel: '',
+        key: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateDestroy()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.delete,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateDestroy(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateShow()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateShow(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateUpdatePatch()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.patch,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateUpdatePatch(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateUpdate()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.put,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateUpdate(
+        id: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateVersionStore()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateVersionStore(
+        templateId: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateVersionIndex()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateVersionIndex(
+        templateId: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateVersionShow()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateVersionShow(
+        templateId: '',
+        version: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+
+    test('test method templateVersionRestore()', () async {
+      final Map<String, dynamic> data = {
+        'error': '',
+      };
+
+      when(client.call(
+        HttpMethod.post,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await messaging.templateVersionRestore(
+        templateId: '',
+        version: '',
+      );
+      expect(response, isA<models.Error>());
+    });
+  });
 }

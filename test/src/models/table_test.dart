@@ -9,8 +9,8 @@ void main() {
         $id: '',
         $permissions: [],
         $updatedAt: '',
-        bytesMax: ,
-        bytesUsed: ,
+        bytesMax: 0,
+        bytesUsed: 0,
         columns: [],
         databaseId: '',
         enabled: true,
@@ -22,18 +22,18 @@ void main() {
       final map = model.toMap();
       final result = Table.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$permissions, []);
-                  expect(result.$updatedAt, '');
-                  expect(result.bytesMax, );
-                  expect(result.bytesUsed, );
-                  expect(result.columns, []);
-                  expect(result.databaseId, '');
-                  expect(result.enabled, true);
-                  expect(result.indexes, []);
-                  expect(result.name, '');
-                  expect(result.rowSecurity, true);
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$permissions, []);
+      expect(result.$updatedAt, '');
+      expect(result.bytesMax, 0);
+      expect(result.bytesUsed, 0);
+      expect(result.columns, []);
+      expect(result.databaseId, '');
+      expect(result.enabled, true);
+      expect(result.indexes, []);
+      expect(result.name, '');
+      expect(result.rowSecurity, true);
+    });
   });
 }

@@ -1,5 +1,6 @@
 ```dart
 import 'package:revenexx/revenexx.dart';
+import 'package:revenexx/enums.dart' as enums;
 
 Client client = Client()
     .setEndpoint('https://api.revenexx.com') // Your API Endpoint
@@ -7,9 +8,9 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-OrderReturn result = await orders.ordersReturnsComplete(
+Error result = await orders.ordersReturnsComplete(
     id: '',
     rid: '',
-    resolution: '', // optional
+    resolution: enums.OrderReturnSettlement.refund, // optional
 );
 ```

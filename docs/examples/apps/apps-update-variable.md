@@ -11,7 +11,7 @@ Variable result = await apps.appsUpdateVariable(
     functionId: '',
     variableId: '',
     key: '',
-    secret: false, // optional
+    secret: true, // optional
     value: '', // optional
 );
 ```

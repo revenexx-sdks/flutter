@@ -16,12 +16,12 @@ void main() {
       final map = model.toMap();
       final result = HealthCertificate.fromMap(map);
 
-            expect(result.issuerOrganisation, '');
-                  expect(result.name, '');
-                  expect(result.signatureTypeSN, '');
-                  expect(result.subjectSN, '');
-                  expect(result.validFrom, '');
-                  expect(result.validTo, '');
-          });
+      expect(result.issuerOrganisation, '');
+      expect(result.name, '');
+      expect(result.signatureTypeSN, '');
+      expect(result.subjectSN, '');
+      expect(result.validFrom, '');
+      expect(result.validTo, '');
+    });
   });
 }

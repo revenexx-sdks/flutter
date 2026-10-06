@@ -5,13 +5,13 @@ void main() {
   group('HealthQueue', () {
     test('model', () {
       final model = HealthQueue(
-        size: ,
+        size: 0,
       );
 
       final map = model.toMap();
       final result = HealthQueue.fromMap(map);
 
-            expect(result.size, );
-          });
+      expect(result.size, 0);
+    });
   });
 }

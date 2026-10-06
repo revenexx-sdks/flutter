@@ -11,6 +11,6 @@ Sites sites = Sites(client);
  result = await sites.sitesGetDeploymentDownload(
     siteId: '',
     deploymentId: '',
-    type: enums.Type.source, // optional
+    type: enums.AppsGetDeploymentDownloadType.source, // optional
 );
 ```

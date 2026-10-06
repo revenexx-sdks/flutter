@@ -5,21 +5,21 @@ void main() {
   group('AlgoScrypt', () {
     test('model', () {
       final model = AlgoScrypt(
-        costCpu: ,
-        costMemory: ,
-        costParallel: ,
-        length: ,
+        costCpu: 0,
+        costMemory: 0,
+        costParallel: 0,
+        length: 0,
         type: '',
       );
 
       final map = model.toMap();
       final result = AlgoScrypt.fromMap(map);
 
-            expect(result.costCpu, );
-                  expect(result.costMemory, );
-                  expect(result.costParallel, );
-                  expect(result.length, );
-                  expect(result.type, '');
-          });
+      expect(result.costCpu, 0);
+      expect(result.costMemory, 0);
+      expect(result.costParallel, 0);
+      expect(result.length, 0);
+      expect(result.type, '');
+    });
   });
 }

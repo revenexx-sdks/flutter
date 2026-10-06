@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = AuthLogoutRequest.fromMap(map);
 
-            expect(result.session_id, '');
-                  expect(result.user_id, '');
-          });
+      expect(result.session_id, '');
+      expect(result.user_id, '');
+    });
   });
 }

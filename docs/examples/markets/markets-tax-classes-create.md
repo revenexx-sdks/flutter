@@ -7,13 +7,16 @@ Client client = Client()
 
 Markets markets = Markets(client);
 
-MarketTaxClass result = await markets.marketsTaxClassesCreate(
+Error result = await markets.marketsTaxClassesCreate(
     marketId: '',
-    code: '',
-    name: '',
-    isDefault: false, // optional
-    labels: {}, // optional
+    code: 'standard',
+    name: 'Standard rate',
+    isDefault: true, // optional
+    labels: {
+        "de-DE": "Regelsatz",
+        "en-GB": "Standard rate"
+    }, // optional
     position: 0, // optional
-    rate: 0, // optional
+    rate: 20, // optional
 );
 ```

@@ -7,14 +7,17 @@ Client client = Client()
 
 Carts carts = Carts(client);
 
-Cart result = await carts.cartsCreate(
+Error result = await carts.cartsCreate(
     channelId: '', // optional
     contactId: '', // optional
-    currency: '', // optional
-    isCurrent: false, // optional
-    marketId: '', // optional
-    metadata: {}, // optional
-    name: '', // optional
-    sessionKey: '', // optional
+    currency: 'EUR', // optional
+    isCurrent: true, // optional
+    metadata: {
+        "campaign": "spring-catalogue",
+        "locale": "de-DE",
+        "source": "storefront"
+    }, // optional
+    name: 'Weekly order', // optional
+    sessionKey: 'a1b2c3d4e5f6', // optional
 );
 ```

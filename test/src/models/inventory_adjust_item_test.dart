@@ -5,13 +5,13 @@ void main() {
   group('InventoryAdjustItem', () {
     test('model', () {
       final model = InventoryAdjustItem(
-        quantity: ,
+        quantity: 0,
       );
 
       final map = model.toMap();
       final result = InventoryAdjustItem.fromMap(map);
 
-            expect(result.quantity, );
-          });
+      expect(result.quantity, 0);
+    });
   });
 }

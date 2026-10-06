@@ -9,9 +9,9 @@ Client client = Client()
 Avatars avatars = Avatars(client);
 
  result = await avatars.avatarsGetCreditCard(
-    code: enums.Code.amex,
-    width: 0, // optional
-    height: 0, // optional
-    quality: 0, // optional
+    code: enums.AvatarsGetCreditCardCode.amex,
+    width: 1, // optional
+    height: 1, // optional
+    quality: 1, // optional
 );
 ```

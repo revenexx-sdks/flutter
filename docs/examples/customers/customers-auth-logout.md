@@ -7,7 +7,7 @@ Client client = Client()
 
 Customers customers = Customers(client);
 
- result = await customers.customersAuthLogout(
+Error result = await customers.customersAuthLogout(
     sessionId: '',
     userId: '',
 );

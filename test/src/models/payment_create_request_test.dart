@@ -5,15 +5,15 @@ void main() {
   group('PaymentCreateRequest', () {
     test('model', () {
       final model = PaymentCreateRequest(
-        amount: ,
+        amount: 0,
         method_code: '',
       );
 
       final map = model.toMap();
       final result = PaymentCreateRequest.fromMap(map);
 
-            expect(result.amount, );
-                  expect(result.method_code, '');
-          });
+      expect(result.amount, 0);
+      expect(result.method_code, '');
+    });
   });
 }

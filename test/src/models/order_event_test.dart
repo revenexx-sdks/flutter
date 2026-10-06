@@ -4,12 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrderEvent', () {
     test('model', () {
-      final model = OrderEvent(
-      );
+      final model = OrderEvent();
 
       final map = model.toMap();
       final result = OrderEvent.fromMap(map);
-
     });
   });
 }

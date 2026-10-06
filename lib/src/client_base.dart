@@ -6,6 +6,7 @@ abstract class ClientBase implements Client {
   /// A gateway-managed scoped API key (rvxk_…).
   @override
   ClientBase setApiKeyAuth(value);
+
   /// A Zitadel-issued JWT (Cockpit / interactive callers).
   @override
   ClientBase setBearerAuth(value);
@@ -14,6 +15,8 @@ abstract class ClientBase implements Client {
   /// X-Revenexx-Tenant header on every request.
   @override
   ClientBase setTenant(String value);
+
+  ClientBase setMarket(String value);
 
   @override
   ClientBase setSelfSigned({bool status = true});

@@ -9,5 +9,11 @@ Storage storage = Storage(client);
 
  result = await storage.syncRuleUpdate(
     id: '',
+    enabled: true, // optional
+    options: [], // optional
+    schedule: '0 3 * * *', // optional
+    sftpAccountId: '', // optional
+    sourcePath: '/uploads', // optional
+    targetFolderId: '', // optional
 );
 ```

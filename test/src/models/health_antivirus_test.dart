@@ -13,8 +13,8 @@ void main() {
       final map = model.toMap();
       final result = HealthAntivirus.fromMap(map);
 
-            expect(result.status, HealthAntivirusStatus.disabled);
-                  expect(result.version, '');
-          });
+      expect(result.status, HealthAntivirusStatus.disabled);
+      expect(result.version, '');
+    });
   });
 }

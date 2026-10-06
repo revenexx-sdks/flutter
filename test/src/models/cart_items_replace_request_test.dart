@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = CartItemsReplaceRequest.fromMap(map);
 
-            expect(result.items, []);
-          });
+      expect(result.items, []);
+    });
   });
 }

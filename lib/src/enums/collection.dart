@@ -1,14 +1,11 @@
 part of '../../enums.dart';
 
 enum Collection {
-    greetings(value: 'greetings'),
-    products(value: 'products');
+  products(value: 'products');
 
-    const Collection({
-        required this.value
-    });
+  const Collection({required this.value});
 
-    final String value;
+  final String value;
 
-    String toJson() => value;
+  String toJson() => value;
 }

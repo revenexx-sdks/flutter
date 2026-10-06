@@ -11,7 +11,7 @@ void main() {
         error: '',
         key: '',
         xrequired: true,
-        size: ,
+        size: 0,
         status: AttributeStringStatus.available,
         type: '',
       );
@@ -19,14 +19,14 @@ void main() {
       final map = model.toMap();
       final result = AttributeString.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.error, '');
-                  expect(result.key, '');
-                  expect(result.xrequired, true);
-                  expect(result.size, );
-                  expect(result.status, AttributeStringStatus.available);
-                  expect(result.type, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$updatedAt, '');
+      expect(result.error, '');
+      expect(result.key, '');
+      expect(result.xrequired, true);
+      expect(result.size, 0);
+      expect(result.status, AttributeStringStatus.available);
+      expect(result.type, '');
+    });
   });
 }

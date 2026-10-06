@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = AuthRecoveryConfirmRequest.fromMap(map);
 
-            expect(result.password, '');
-                  expect(result.secret, '');
-                  expect(result.user_id, '');
-          });
+      expect(result.password, '');
+      expect(result.secret, '');
+      expect(result.user_id, '');
+    });
   });
 }

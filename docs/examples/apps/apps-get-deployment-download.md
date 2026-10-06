@@ -11,6 +11,6 @@ Apps apps = Apps(client);
  result = await apps.appsGetDeploymentDownload(
     functionId: '',
     deploymentId: '',
-    type: enums.Type.source, // optional
+    type: enums.AppsGetDeploymentDownloadType.source, // optional
 );
 ```

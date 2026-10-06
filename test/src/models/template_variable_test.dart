@@ -17,13 +17,13 @@ void main() {
       final map = model.toMap();
       final result = TemplateVariable.fromMap(map);
 
-            expect(result.description, '');
-                  expect(result.name, '');
-                  expect(result.placeholder, '');
-                  expect(result.xrequired, true);
-                  expect(result.secret, true);
-                  expect(result.type, '');
-                  expect(result.value, '');
-          });
+      expect(result.description, '');
+      expect(result.name, '');
+      expect(result.placeholder, '');
+      expect(result.xrequired, true);
+      expect(result.secret, true);
+      expect(result.type, '');
+      expect(result.value, '');
+    });
   });
 }

@@ -5,19 +5,19 @@ void main() {
   group('Specification', () {
     test('model', () {
       final model = Specification(
-        cpus: ,
+        cpus: 0,
         enabled: true,
-        memory: ,
+        memory: 0,
         slug: '',
       );
 
       final map = model.toMap();
       final result = Specification.fromMap(map);
 
-            expect(result.cpus, );
-                  expect(result.enabled, true);
-                  expect(result.memory, );
-                  expect(result.slug, '');
-          });
+      expect(result.cpus, 0);
+      expect(result.enabled, true);
+      expect(result.memory, 0);
+      expect(result.slug, '');
+    });
   });
 }

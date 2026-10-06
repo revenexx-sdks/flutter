@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = AuthRegisterRequest.fromMap(map);
 
-            expect(result.email, '');
-                  expect(result.password, '');
-          });
+      expect(result.email, '');
+      expect(result.password, '');
+    });
   });
 }

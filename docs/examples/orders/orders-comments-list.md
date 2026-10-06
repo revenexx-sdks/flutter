@@ -1,5 +1,6 @@
 ```dart
 import 'package:revenexx/revenexx.dart';
+import 'package:revenexx/enums.dart' as enums;
 
 Client client = Client()
     .setEndpoint('https://api.revenexx.com') // Your API Endpoint
@@ -7,7 +8,15 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
- result = await orders.ordersCommentsList(
+Error result = await orders.ordersCommentsList(
     id: '',
+    idQuery: '', // optional
+    body: 'Called the customer, delivery agreed for next week.', // optional
+    visibility: enums.OrderCommentVisibility.internal, // optional
+    author: 'service-desk', // optional
+    createdAt: '2026-01-01T12:00:00Z', // optional
+    limit: 50, // optional
+    offset: 0, // optional
+    order: 'created_at.desc', // optional
 );
 ```

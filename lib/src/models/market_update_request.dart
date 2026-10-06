@@ -2,59 +2,62 @@ part of '../../models.dart';
 
 /// Partial update — omitted fields keep their current value.
 class MarketUpdateRequest implements Model {
-    /// Market code (unique per tenant).
-    final String? code;
+  /// Market code, unique per tenant, and the single most load-bearing string in this app: it IS the market scope slug. The Entity Scoping Engine publishes it as the `market` dimension (`scope_context.market` in the JWT), and every other commerce app — products, prices, orders, customers — stores THIS value to say which market a row belongs to. Renaming it re-keys that scope for everyone, so treat it as permanent. Accepted in place of the uuid on /readiness, /clone, /backfill and /make-default — but not on the item routes or /context, which take a uuid only.
+  final String? code;
 
-    /// ISO 4217 code (default &#039;EUR&#039;).
-    final String? currency;
+  /// Base currency this market quotes in — ISO 4217, and schema.json's own default is 'EUR'. This is the single currency prices are STATED in; the currencies collection under the market is the wider set it accepts. A base currency missing from that collection is a blocking readiness failure.
+  final String? currency;
 
-    /// 
-    final bool? is_default;
+  /// The tenant default market — what a call naming no market falls back to. Exactly one market holds it; move it with POST /markets/{id}/make-default rather than by writing this flag, which does not demote the market that currently holds it.
+  final bool? is_default;
 
-    /// Localized display names ({locale: label}).
-    final Map? labels;
+  /// Localized display names for storefronts, keyed by locale: a flat {locale: label} map, one level deep, string values. WHICH key to write is not free — GET /markets/{id}/context returns `locale_policy`, whose `write` is the key this tenant keys by (a full locale under regional granularity, a bare language under language granularity) and whose `read` is the order to try. Null means nothing is translated and `name` is all there is.
+  final Map? labels;
 
-    /// 
-    final String? name;
+  /// Display name, in the operator's own language. Cockpit copy only — nothing resolves a market by it.
+  final String? name;
 
-    /// Sort position (default 0).
-    final int? position;
+  /// Sort position among the tenant's markets, ascending, default 0. Presentation only — it decides the order the Cockpit and a market picker list them in, and nothing resolves a market by it.
+  final int? position;
 
-    /// Default &#039;active&#039;.
-    final enums.MarketStatus? status;
+  /// Default 'active'. Only an active market serves a storefront; 'inactive' keeps the market and all its configuration but takes it out of service. Readiness reports an active market that cannot trade as `serving: true, ready: false` — live and broken.
+  final enums.MarketStatus? status;
 
-    MarketUpdateRequest({
-        this.code,
-        this.currency,
-        this.is_default,
-        this.labels,
-        this.name,
-        this.position,
-        this.status,
-    });
+  MarketUpdateRequest({
+    this.code,
+    this.currency,
+    this.is_default,
+    this.labels,
+    this.name,
+    this.position,
+    this.status,
+  });
 
-    factory MarketUpdateRequest.fromMap(Map<String, dynamic> map) {
-        return MarketUpdateRequest(
-            code: map['code']?.toString(),
-            currency: map['currency']?.toString(),
-            is_default: map['is_default'],
-            labels: map['labels'],
-            name: map['name']?.toString(),
-            position: map['position'],
-            status: map['status'] != null ? enums.MarketStatus.values.firstWhere((e) => e.value == map['status']) : null,
-        );
-    }
+  factory MarketUpdateRequest.fromMap(Map<String, dynamic> map) {
+    return MarketUpdateRequest(
+      code: map['code']?.toString(),
+      currency: map['currency']?.toString(),
+      is_default: map['is_default'],
+      labels: map['labels'],
+      name: map['name']?.toString(),
+      position: map['position'],
+      status: map['status'] != null
+          ? enums.MarketStatus.values
+              .firstWhere((e) => e.value == map['status'])
+          : null,
+    );
+  }
 
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-            "code": code,
-            "currency": currency,
-            "is_default": is_default,
-            "labels": labels,
-            "name": name,
-            "position": position,
-            "status": status?.value,
-        };
-    }
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      "code": code,
+      "currency": currency,
+      "is_default": is_default,
+      "labels": labels,
+      "name": name,
+      "position": position,
+      "status": status?.value,
+    };
+  }
 }

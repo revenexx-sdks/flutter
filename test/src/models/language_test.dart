@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = Language.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.name, '');
-                  expect(result.nativeName, '');
-          });
+      expect(result.code, '');
+      expect(result.name, '');
+      expect(result.nativeName, '');
+    });
   });
 }

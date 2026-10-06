@@ -7,12 +7,12 @@ Client client = Client()
 
 Products products = Products(client);
 
-ProductAssociations result = await products.productsProductAssociationsUpdate(
+Error result = await products.productsProductAssociationsUpdate(
     id: '',
     associationTypeId: '', // optional
-    position: 0, // optional
+    position: 1, // optional
     productId: '', // optional
-    quantity: 0, // optional
+    quantity: 4, // optional
     targetProductId: '', // optional
 );
 ```

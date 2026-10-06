@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = CartMergeRequest.fromMap(map);
 
-            expect(result.source_cart_id, '');
-                  expect(result.target_cart_id, '');
-          });
+      expect(result.source_cart_id, '');
+      expect(result.target_cart_id, '');
+    });
   });
 }

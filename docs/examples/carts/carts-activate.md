@@ -7,7 +7,7 @@ Client client = Client()
 
 Carts carts = Carts(client);
 
-Cart result = await carts.cartsActivate(
+Error result = await carts.cartsActivate(
     id: '',
 );
 ```

@@ -15,6 +15,6 @@ Deployment result = await apps.appsCreateTemplateDeployment(
     repository: '',
     rootDirectory: '',
     type: enums.Type.commit,
-    activate: false, // optional
+    activate: true, // optional
 );
 ```

@@ -7,7 +7,7 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-OrderReturn result = await orders.ordersReturnsReceive(
+Error result = await orders.ordersReturnsReceive(
     id: '',
     rid: '',
     data: {},

@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = FamilyVariantsCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.family_id, '');
-          });
+      expect(result.code, '');
+      expect(result.family_id, '');
+    });
   });
 }

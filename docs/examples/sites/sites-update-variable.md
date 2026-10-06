@@ -11,7 +11,7 @@ Variable result = await sites.sitesUpdateVariable(
     siteId: '',
     variableId: '',
     key: '',
-    secret: false, // optional
+    secret: true, // optional
     value: '', // optional
 );
 ```

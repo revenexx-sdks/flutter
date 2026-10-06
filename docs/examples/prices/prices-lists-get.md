@@ -7,7 +7,7 @@ Client client = Client()
 
 Prices prices = Prices(client);
 
-PriceList result = await prices.pricesListsGet(
+Error result = await prices.pricesListsGet(
     id: '',
 );
 ```

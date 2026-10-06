@@ -10,15 +10,15 @@ void main() {
         $updatedAt: '',
         providerType: '',
         target: Target(
-    $createdAt: '',
-    $id: '',
-    $updatedAt: '',
-    expired: true,
-    identifier: '',
-    name: '',
-    providerType: '',
-    userId: '',
-  ),
+          $createdAt: '',
+          $id: '',
+          $updatedAt: '',
+          expired: true,
+          identifier: '',
+          name: '',
+          providerType: '',
+          userId: '',
+        ),
         targetId: '',
         topicId: '',
         userId: '',
@@ -28,14 +28,14 @@ void main() {
       final map = model.toMap();
       final result = Subscriber.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.providerType, '');
-                        expect(result.targetId, '');
-                  expect(result.topicId, '');
-                  expect(result.userId, '');
-                  expect(result.userName, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$updatedAt, '');
+      expect(result.providerType, '');
+      expect(result.targetId, '');
+      expect(result.topicId, '');
+      expect(result.userId, '');
+      expect(result.userName, '');
+    });
   });
 }

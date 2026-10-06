@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = CurrencyList(
         currencies: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = CurrencyList.fromMap(map);
 
-            expect(result.currencies, []);
-                  expect(result.total, );
-          });
+      expect(result.currencies, []);
+      expect(result.total, 0);
+    });
   });
 }

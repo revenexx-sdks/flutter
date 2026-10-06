@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = OrderItemsCancelRequest.fromMap(map);
 
-            expect(result.positions, []);
-          });
+      expect(result.positions, []);
+    });
   });
 }

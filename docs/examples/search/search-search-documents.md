@@ -8,12 +8,19 @@ Client client = Client()
 
 Search search = Search(client);
 
- result = await search.searchSearchDocuments(
-    collection: enums.Collection.greetings,
+Error result = await search.searchSearchDocuments(
+    collection: enums.Collection.products,
+    excludeFields: '', // optional
     facetBy: '', // optional
     filterBy: '', // optional
-    page: 0, // optional
-    perPage: 0, // optional
+    groupBy: '', // optional
+    highlightFullFields: '', // optional
+    includeFields: '', // optional
+    maxFacetValues: 1, // optional
+    numTypos: 1, // optional
+    page: 1, // optional
+    perPage: 1, // optional
+    prefix: '', // optional
     q: '', // optional
     queryBy: '', // optional
     sortBy: '', // optional

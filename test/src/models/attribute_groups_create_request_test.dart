@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = AttributeGroupsCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-          });
+      expect(result.code, '');
+    });
   });
 }

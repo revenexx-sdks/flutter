@@ -17,13 +17,13 @@ void main() {
       final map = model.toMap();
       final result = Locale.fromMap(map);
 
-            expect(result.continent, '');
-                  expect(result.continentCode, '');
-                  expect(result.country, '');
-                  expect(result.countryCode, '');
-                  expect(result.currency, '');
-                  expect(result.eu, true);
-                  expect(result.ip, '');
-          });
+      expect(result.continent, '');
+      expect(result.continentCode, '');
+      expect(result.country, '');
+      expect(result.countryCode, '');
+      expect(result.currency, '');
+      expect(result.eu, true);
+      expect(result.ip, '');
+    });
   });
 }

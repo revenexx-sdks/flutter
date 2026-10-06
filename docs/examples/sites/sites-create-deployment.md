@@ -9,8 +9,8 @@ Sites sites = Sites(client);
 
 Deployment result = await sites.sitesCreateDeployment(
     siteId: '',
-    activate: false,
-    code: '',
+    activate: true,
+    code: InputFile(path: './path-to-files/image.jpg', filename: 'image.jpg'),
     buildCommand: '', // optional
     installCommand: '', // optional
     outputDirectory: '', // optional

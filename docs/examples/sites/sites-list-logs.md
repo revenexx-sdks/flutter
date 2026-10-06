@@ -10,6 +10,6 @@ Sites sites = Sites(client);
 ExecutionList result = await sites.sitesListLogs(
     siteId: '',
     queries: [], // optional
-    total: false, // optional
+    total: true, // optional
 );
 ```

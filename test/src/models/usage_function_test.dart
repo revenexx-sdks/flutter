@@ -7,57 +7,57 @@ void main() {
       final model = UsageFunction(
         builds: [],
         buildsFailed: [],
-        buildsFailedTotal: ,
+        buildsFailedTotal: 0,
         buildsMbSeconds: [],
-        buildsMbSecondsTotal: ,
+        buildsMbSecondsTotal: 0,
         buildsStorage: [],
-        buildsStorageTotal: ,
+        buildsStorageTotal: 0,
         buildsSuccess: [],
-        buildsSuccessTotal: ,
+        buildsSuccessTotal: 0,
         buildsTime: [],
-        buildsTimeAverage: ,
-        buildsTimeTotal: ,
-        buildsTotal: ,
+        buildsTimeAverage: 0,
+        buildsTimeTotal: 0,
+        buildsTotal: 0,
         deployments: [],
         deploymentsStorage: [],
-        deploymentsStorageTotal: ,
-        deploymentsTotal: ,
+        deploymentsStorageTotal: 0,
+        deploymentsTotal: 0,
         executions: [],
         executionsMbSeconds: [],
-        executionsMbSecondsTotal: ,
+        executionsMbSecondsTotal: 0,
         executionsTime: [],
-        executionsTimeTotal: ,
-        executionsTotal: ,
+        executionsTimeTotal: 0,
+        executionsTotal: 0,
         range: '',
       );
 
       final map = model.toMap();
       final result = UsageFunction.fromMap(map);
 
-            expect(result.builds, []);
-                  expect(result.buildsFailed, []);
-                  expect(result.buildsFailedTotal, );
-                  expect(result.buildsMbSeconds, []);
-                  expect(result.buildsMbSecondsTotal, );
-                  expect(result.buildsStorage, []);
-                  expect(result.buildsStorageTotal, );
-                  expect(result.buildsSuccess, []);
-                  expect(result.buildsSuccessTotal, );
-                  expect(result.buildsTime, []);
-                  expect(result.buildsTimeAverage, );
-                  expect(result.buildsTimeTotal, );
-                  expect(result.buildsTotal, );
-                  expect(result.deployments, []);
-                  expect(result.deploymentsStorage, []);
-                  expect(result.deploymentsStorageTotal, );
-                  expect(result.deploymentsTotal, );
-                  expect(result.executions, []);
-                  expect(result.executionsMbSeconds, []);
-                  expect(result.executionsMbSecondsTotal, );
-                  expect(result.executionsTime, []);
-                  expect(result.executionsTimeTotal, );
-                  expect(result.executionsTotal, );
-                  expect(result.range, '');
-          });
+      expect(result.builds, []);
+      expect(result.buildsFailed, []);
+      expect(result.buildsFailedTotal, 0);
+      expect(result.buildsMbSeconds, []);
+      expect(result.buildsMbSecondsTotal, 0);
+      expect(result.buildsStorage, []);
+      expect(result.buildsStorageTotal, 0);
+      expect(result.buildsSuccess, []);
+      expect(result.buildsSuccessTotal, 0);
+      expect(result.buildsTime, []);
+      expect(result.buildsTimeAverage, 0);
+      expect(result.buildsTimeTotal, 0);
+      expect(result.buildsTotal, 0);
+      expect(result.deployments, []);
+      expect(result.deploymentsStorage, []);
+      expect(result.deploymentsStorageTotal, 0);
+      expect(result.deploymentsTotal, 0);
+      expect(result.executions, []);
+      expect(result.executionsMbSeconds, []);
+      expect(result.executionsMbSecondsTotal, 0);
+      expect(result.executionsTime, []);
+      expect(result.executionsTimeTotal, 0);
+      expect(result.executionsTotal, 0);
+      expect(result.range, '');
+    });
   });
 }

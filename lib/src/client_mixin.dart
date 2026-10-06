@@ -12,7 +12,6 @@ mixin ClientMixin {
     required Map<String, String> headers,
     required Map<String, dynamic> params,
   }) {
-
     http.BaseRequest request = http.Request(method.name(), uri);
     if (headers['content-type'] == 'multipart/form-data') {
       request = http.MultipartRequest(method.name(), uri);
@@ -87,7 +86,7 @@ mixin ClientMixin {
   Response prepareResponse(http.Response res, {ResponseType? responseType}) {
     responseType ??= ResponseType.json;
 
-    String? warnings = res.headers['x-revenexx api — revenexx-warning'];
+    String? warnings = res.headers['x-revenexx-warning'];
     if (warnings != null) {
       warnings.split(';').forEach((warning) => log('Warning: $warning'));
     }
@@ -95,14 +94,14 @@ mixin ClientMixin {
     if (res.statusCode >= 400) {
       if ((res.headers['content-type'] ?? '').contains('application/json')) {
         final response = json.decode(res.body);
-        throw RevenexxAPIRevenexxException(
+        throw RevenexxException(
           response['message'],
           response['code'],
           response['type'],
           res.body,
         );
       } else {
-        throw RevenexxAPIRevenexxException(res.body, res.statusCode, '', res.body);
+        throw RevenexxException(res.body, res.statusCode, '', res.body);
       }
     }
     dynamic data;
@@ -128,9 +127,13 @@ mixin ClientMixin {
     http.StreamedResponse streamedResponse,
   ) async {
     if (streamedResponse.statusCode == 204) {
-      return http.Response('',
+      return http.Response(
+        '',
         streamedResponse.statusCode,
-        headers: streamedResponse.headers.map((k,v) => k.toLowerCase()=='content-type' ? MapEntry(k, 'text/plain') : MapEntry(k,v)),
+        headers: streamedResponse.headers.map((k, v) =>
+            k.toLowerCase() == 'content-type'
+                ? MapEntry(k, 'text/plain')
+                : MapEntry(k, v)),
         request: streamedResponse.request,
         isRedirect: streamedResponse.isRedirect,
         persistentConnection: streamedResponse.persistentConnection,

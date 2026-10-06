@@ -10,8 +10,8 @@ Avatars avatars = Avatars(client);
 
  result = await avatars.avatarsGetBrowser(
     code: enums.Code.aa,
-    width: 0, // optional
-    height: 0, // optional
-    quality: 0, // optional
+    width: 1, // optional
+    height: 1, // optional
+    quality: 1, // optional
 );
 ```

@@ -2,47 +2,41 @@ part of '../../models.dart';
 
 /// Only safe columns are updatable — status moves through the lifecycle routes.
 class CartUpdateRequest implements Model {
-    /// 
-    final String? channel_id;
+  /// Move the cart to another sales channel.
+  final String? channel_id;
 
-    /// ISO 4217 code.
-    final String? currency;
+  /// ISO 4217 code. Changes what NEW lines inherit; lines already in the cart keep the currency they were added with.
+  final String? currency;
 
-    /// 
-    final String? market_id;
+  /// Free-form data the storefront hangs on the cart. Stored and returned verbatim; no key in here is read by this app, and none is indexed.
+  final Map? metadata;
 
-    /// Free-form metadata.
-    final Map? metadata;
+  /// Rename the cart. Unlike on create, this is written verbatim — `null` and `''` are refused by the database.
+  final String? name;
 
-    /// 
-    final String? name;
+  CartUpdateRequest({
+    this.channel_id,
+    this.currency,
+    this.metadata,
+    this.name,
+  });
 
-    CartUpdateRequest({
-        this.channel_id,
-        this.currency,
-        this.market_id,
-        this.metadata,
-        this.name,
-    });
+  factory CartUpdateRequest.fromMap(Map<String, dynamic> map) {
+    return CartUpdateRequest(
+      channel_id: map['channel_id']?.toString(),
+      currency: map['currency']?.toString(),
+      metadata: map['metadata'],
+      name: map['name']?.toString(),
+    );
+  }
 
-    factory CartUpdateRequest.fromMap(Map<String, dynamic> map) {
-        return CartUpdateRequest(
-            channel_id: map['channel_id']?.toString(),
-            currency: map['currency']?.toString(),
-            market_id: map['market_id']?.toString(),
-            metadata: map['metadata'],
-            name: map['name']?.toString(),
-        );
-    }
-
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-            "channel_id": channel_id,
-            "currency": currency,
-            "market_id": market_id,
-            "metadata": metadata,
-            "name": name,
-        };
-    }
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      "channel_id": channel_id,
+      "currency": currency,
+      "metadata": metadata,
+      "name": name,
+    };
+  }
 }

@@ -1,30 +1,36 @@
 part of '../../models.dart';
 
-/// Uniform gateway error response.
+/// Uniform error response. The same shape is emitted by the gateway and by the apps behind it, so one parser covers the whole API.
 class Error implements Model {
-    /// 
-    final bool error;
+  /// Machine-readable discriminator, e.g. not_found, invalid_value, unique_violation.
+  final String? code;
 
-    /// 
-    final String message;
+  /// Human-readable message. Was a boolean on gateway-emitted errors before; it is a string everywhere now.
+  final String error;
 
-    Error({
-        required this.error,
-        required this.message,
-    });
+  /// Deprecated duplicate of `error`, kept so existing readers keep working. Read `error`.
+  final String? message;
 
-    factory Error.fromMap(Map<String, dynamic> map) {
-        return Error(
-            error: map['error'],
-            message: map['message'].toString(),
-        );
-    }
+  Error({
+    this.code,
+    required this.error,
+    this.message,
+  });
 
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-            "error": error,
-            "message": message,
-        };
-    }
+  factory Error.fromMap(Map<String, dynamic> map) {
+    return Error(
+      code: map['code']?.toString(),
+      error: map['error'].toString(),
+      message: map['message']?.toString(),
+    );
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      "code": code,
+      "error": error,
+      "message": message,
+    };
+  }
 }

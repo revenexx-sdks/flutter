@@ -13,19 +13,19 @@ Site result = await sites.sitesCreate(
     framework: enums.Framework.analog,
     name: '',
     siteId: '',
-    adapter: enums.Adapter.static, // optional
-    buildCommand: '', // optional
-    enabled: false, // optional
-    fallbackFile: '', // optional
-    installCommand: '', // optional
+    adapter: enums.Adapter.xstatic, // optional
+    buildCommand: 'npm run build', // optional
+    enabled: true, // optional
+    fallbackFile: 'index.html', // optional
+    installCommand: 'npm install', // optional
     installationId: '', // optional
-    logging: false, // optional
+    logging: true, // optional
     outputDirectory: '', // optional
-    providerBranch: '', // optional
+    providerBranch: 'main', // optional
     providerRepositoryId: '', // optional
     providerRootDirectory: '', // optional
-    providerSilentMode: false, // optional
-    specification: '', // optional
-    timeout: 0, // optional
+    providerSilentMode: true, // optional
+    specification: 's-1vcpu-512mb', // optional
+    timeout: 1, // optional
 );
 ```

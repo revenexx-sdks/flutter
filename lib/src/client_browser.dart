@@ -40,7 +40,7 @@ class ClientBrowser extends ClientBase with ClientMixin {
       'x-sdk-name': 'Revenexx Flutter',
       'x-sdk-platform': '',
       'x-sdk-language': 'flutter',
-      'x-sdk-version': '0.0.1',
+      'x-sdk-version': '0.0.2',
     };
 
     config = {};
@@ -62,11 +62,13 @@ class ClientBrowser extends ClientBase with ClientMixin {
     addHeader('X-Revenexx-Api-Key', value);
     return this;
   }
+
   /// A Zitadel-issued JWT (Cockpit / interactive callers).
   @override
   ClientBrowser setBearerAuth(value) {
     config['bearerAuth'] = value;
-    addHeader('Authorization', value);
+    addHeader('Authorization',
+        value.toLowerCase().startsWith('bearer ') ? value : 'Bearer $value');
     return this;
   }
 
@@ -79,6 +81,15 @@ class ClientBrowser extends ClientBase with ClientMixin {
     return this;
   }
 
+  /// The market slug to scope requests to, sent as the X-Revenexx-Market
+  /// header. Optional - omit it to see only global rows.
+  @override
+  ClientBrowser setMarket(String value) {
+    config['market'] = value;
+    addHeader('X-Revenexx-Market', value);
+    return this;
+  }
+
   @override
   ClientBrowser setSelfSigned({bool status = true}) {
     return this;
@@ -87,7 +98,7 @@ class ClientBrowser extends ClientBase with ClientMixin {
   @override
   ClientBrowser setEndpoint(String endPoint) {
     if (!endPoint.startsWith('http://') && !endPoint.startsWith('https://')) {
-      throw RevenexxAPIRevenexxException('Invalid endpoint URL: $endPoint');
+      throw RevenexxException('Invalid endpoint URL: $endPoint');
     }
 
     _endPoint = endPoint;
@@ -101,7 +112,7 @@ class ClientBrowser extends ClientBase with ClientMixin {
   @override
   ClientBrowser setEndPointRealtime(String endPoint) {
     if (!endPoint.startsWith('ws://') && !endPoint.startsWith('wss://')) {
-      throw RevenexxAPIRevenexxException('Invalid realtime endpoint URL: $endPoint');
+      throw RevenexxException('Invalid realtime endpoint URL: $endPoint');
     }
 
     _endPointRealtime = endPoint;
@@ -115,12 +126,7 @@ class ClientBrowser extends ClientBase with ClientMixin {
     return this;
   }
 
-  Future init() async {
-    final cookieFallback = web.window.localStorage.getItem('cookieFallback');
-    if (cookieFallback != null) {
-      addHeader('x-fallback-cookies', cookieFallback);
-    }
-  }
+  Future init() async {}
 
   @override
   Future<Response> chunkedUpload({
@@ -133,70 +139,35 @@ class ClientBrowser extends ClientBase with ClientMixin {
   }) async {
     InputFile file = params[paramName];
     if (file.bytes == null) {
-      throw RevenexxAPIRevenexxException("File bytes must be provided for Flutter web");
+      throw RevenexxException("File bytes must be provided for Flutter web");
     }
 
     int size = file.bytes!.length;
 
-    late Response res;
-    if (size <= chunkSize) {
-      params[paramName] = http.MultipartFile.fromBytes(
-        paramName,
-        file.bytes!,
-        filename: file.filename,
-      );
-      return call(
-        HttpMethod.post,
-        path: path,
-        params: params,
-        headers: headers,
-      );
-    }
+    // The API takes one multipart body per upload. It has no chunked or
+    // resumable protocol — no content-range, no upload id, no per-chunk
+    // endpoint — so the whole file always goes in a single request.
+    params[paramName] = http.MultipartFile.fromBytes(
+      paramName,
+      file.bytes!,
+      filename: file.filename,
+    );
 
-    var offset = 0;
-    if (idParamName.isNotEmpty) {
-      //make a request to check if a file already exists
-      try {
-        res = await call(
-          HttpMethod.get,
-          path: '$path/${params[idParamName]}',
-          headers: headers,
-        );
-        final int chunksUploaded = res.data['chunksUploaded'] as int;
-        offset = chunksUploaded * chunkSize;
-      } on RevenexxAPIRevenexxException catch (_) {}
-    }
+    final Response res = await call(
+      HttpMethod.post,
+      path: path,
+      params: params,
+      headers: headers,
+    );
 
-    while (offset < size) {
-      List<int> chunk = [];
-      final end = min(offset + chunkSize, size);
-      chunk = file.bytes!.getRange(offset, end).toList();
-      params[paramName] = http.MultipartFile.fromBytes(
-        paramName,
-        chunk,
-        filename: file.filename,
-      );
-      headers['content-range'] =
-          'bytes $offset-${min<int>((offset + chunkSize - 1), size - 1)}/$size';
-      res = await call(
-        HttpMethod.post,
-        path: path,
-        headers: headers,
-        params: params,
-      );
-      offset += chunkSize;
-      if (offset < size) {
-        headers['x-revenexx api — revenexx-id'] = res.data['\$id'];
-      }
-      final progress = UploadProgress(
-        $id: res.data['\$id'] ?? '',
-        progress: min(offset, size) / size * 100,
-        sizeUploaded: min(offset, size),
-        chunksTotal: res.data['chunksTotal'] ?? 0,
-        chunksUploaded: res.data['chunksUploaded'] ?? 0,
-      );
-      onProgress?.call(progress);
-    }
+    onProgress?.call(UploadProgress(
+      $id: res.data is Map ? (res.data['\$id'] ?? '') : '',
+      progress: 100,
+      sizeUploaded: size,
+      chunksTotal: 1,
+      chunksUploaded: 1,
+    ));
+
     return res;
   }
 
@@ -210,15 +181,9 @@ class ClientBrowser extends ClientBase with ClientMixin {
   }) async {
     await init();
 
-    // Combine headers to check for dev key
     final combinedHeaders = {..._headers!, ...headers};
 
-    // Only include credentials when dev key is not set
-    if (combinedHeaders['X-Revenexx-Dev-Key'] == null) {
-      _httpClient.withCredentials = true;
-    } else {
-      _httpClient.withCredentials = false;
-    }
+    _httpClient.withCredentials = true;
 
     late http.Response res;
     http.BaseRequest request = prepareRequest(
@@ -231,20 +196,12 @@ class ClientBrowser extends ClientBase with ClientMixin {
       final streamedResponse = await _httpClient.send(request);
       res = await toResponse(streamedResponse);
 
-      final cookieFallback = res.headers['x-fallback-cookies'];
-      if (cookieFallback != null) {
-        debugPrint(
-          'RevenexxAPIRevenexx is using localStorage for session management. Increase your security by adding a custom domain as your API endpoint.',
-        );
-        addHeader('X-Fallback-Cookies', cookieFallback);
-        web.window.localStorage.setItem('cookieFallback', cookieFallback);
-      }
       return prepareResponse(res, responseType: responseType);
     } catch (e) {
-      if (e is RevenexxAPIRevenexxException) {
+      if (e is RevenexxException) {
         rethrow;
       }
-      throw RevenexxAPIRevenexxException(e.toString());
+      throw RevenexxException(e.toString());
     }
   }
 
@@ -252,7 +209,7 @@ class ClientBrowser extends ClientBase with ClientMixin {
   Future webAuth(Uri url, {String? callbackUrlScheme}) {
     return FlutterWebAuth2.authenticate(
       url: url.toString(),
-      callbackUrlScheme: "revenexx api — revenexx-callback-${config['project']!}",
+      callbackUrlScheme: "revenexx-callback-${config['tenant']!}",
       options: const FlutterWebAuth2Options(useWebview: false),
     );
   }

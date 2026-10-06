@@ -7,13 +7,13 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
-Template result = await pages.pagesTemplatesUpdate(
+Error result = await pages.pagesTemplatesUpdate(
     id: '',
-    description: '', // optional
-    fieldName: '', // optional
-    isDefault: false, // optional
-    label: '', // optional
-    pageBundle: '', // optional
+    description: 'Full-width hero followed by a two-column teaser row.', // optional
+    fieldName: 'content', // optional
+    isDefault: true, // optional
+    label: 'Hero with two teasers', // optional
+    pageBundle: 'standard', // optional
     tree: [], // optional
 );
 ```

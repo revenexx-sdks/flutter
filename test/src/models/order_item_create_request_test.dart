@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrderItemCreateRequest', () {
     test('model', () {
-      final model = OrderItemCreateRequest(
-      );
+      final model = OrderItemCreateRequest();
 
       final map = model.toMap();
       final result = OrderItemCreateRequest.fromMap(map);
-
     });
   });
 }

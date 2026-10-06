@@ -5,7 +5,7 @@ import 'client_stub.dart'
 import 'response.dart';
 import 'upload_progress.dart';
 
-/// [Client] that handles requests to RevenexxAPIRevenexx.
+/// [Client] that handles requests to Revenexx.
 ///
 /// The [Client] is also responsible for managing user's sessions.
 abstract class Client {
@@ -17,17 +17,18 @@ abstract class Client {
   late String _endPoint;
   late String? _endPointRealtime;
 
-  /// RevenexxAPIRevenexx endpoint.
+  /// Revenexx endpoint.
   String get endPoint => _endPoint;
 
-  /// RevenexxAPIRevenexx realtime endpoint.
+  /// Revenexx realtime endpoint.
   String? get endPointRealtime => _endPointRealtime;
 
   /// Initializes a [Client].
   factory Client({
     String endPoint = 'https://api.revenexx.com',
     bool selfSigned = false,
-  }) => createClient(endPoint: endPoint, selfSigned: selfSigned);
+  }) =>
+      createClient(endPoint: endPoint, selfSigned: selfSigned);
 
   /// Handle OAuth2 session creation.
   Future webAuth(Uri url, {String? callbackUrlScheme});
@@ -45,14 +46,14 @@ abstract class Client {
   /// Set self signed to [status].
   ///
   /// If self signed is true, [Client] will ignore invalid certificates.
-  /// This is helpful in environments where your RevenexxAPIRevenexx
+  /// This is helpful in environments where your Revenexx
   /// instance does not have a valid SSL certificate.
   Client setSelfSigned({bool status = true});
 
-  /// Set the RevenexxAPIRevenexx endpoint.
+  /// Set the Revenexx endpoint.
   Client setEndpoint(String endPoint);
 
-  /// Set the RevenexxAPIRevenexx realtime endpoint.
+  /// Set the Revenexx realtime endpoint.
   Client setEndPointRealtime(String endPoint);
 
   /// Set ApiKeyAuth.

@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = ColumnList(
         columns: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = ColumnList.fromMap(map);
 
-            expect(result.columns, []);
-                  expect(result.total, );
-          });
+      expect(result.columns, []);
+      expect(result.total, 0);
+    });
   });
 }

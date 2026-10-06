@@ -12,8 +12,8 @@ void main() {
       final map = model.toMap();
       final result = AttributesCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.type, '');
-          });
+      expect(result.code, '');
+      expect(result.type, '');
+    });
   });
 }

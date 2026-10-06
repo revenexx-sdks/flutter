@@ -2,41 +2,41 @@ part of '../../models.dart';
 
 /// Partial update — omitted fields keep their current value.
 class MeasurementFamiliesUpdateRequest implements Model {
-    /// 
-    final String? code;
+  /// The measurement family's stable identifier. A `measure` attribute names one and then offers that family's units.
+  final String? code;
 
-    /// 
-    final Map? labels;
+  /// What the measurement family is called, per language tag.
+  final Map? labels;
 
-    /// 
-    final String? standard_unit;
+  /// The unit every value of this family is converted to before it is compared or sorted — the unit each `convert_factor` is relative to.
+  final String? standard_unit;
 
-    /// 
-    final Map? units;
+  /// The units this family offers. `convert_factor` multiplies a value into `standard_unit`, so a gram is 0.001 kilograms; `symbol` is what a form prints next to the number.
+  final Map? units;
 
-    MeasurementFamiliesUpdateRequest({
-        this.code,
-        this.labels,
-        this.standard_unit,
-        this.units,
-    });
+  MeasurementFamiliesUpdateRequest({
+    this.code,
+    this.labels,
+    this.standard_unit,
+    this.units,
+  });
 
-    factory MeasurementFamiliesUpdateRequest.fromMap(Map<String, dynamic> map) {
-        return MeasurementFamiliesUpdateRequest(
-            code: map['code']?.toString(),
-            labels: map['labels'],
-            standard_unit: map['standard_unit']?.toString(),
-            units: map['units'],
-        );
-    }
+  factory MeasurementFamiliesUpdateRequest.fromMap(Map<String, dynamic> map) {
+    return MeasurementFamiliesUpdateRequest(
+      code: map['code']?.toString(),
+      labels: map['labels'],
+      standard_unit: map['standard_unit']?.toString(),
+      units: map['units'],
+    );
+  }
 
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-            "code": code,
-            "labels": labels,
-            "standard_unit": standard_unit,
-            "units": units,
-        };
-    }
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      "code": code,
+      "labels": labels,
+      "standard_unit": standard_unit,
+      "units": units,
+    };
+  }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 /// Realtime Message
 class RealtimeMessage {
   /// All permutations of the system event that triggered this message
-  /// 
+  ///
   /// The first event in the list is the most specfic event without wildcards.
   final List<String> events;
 
@@ -15,7 +15,7 @@ class RealtimeMessage {
   final List<String> channels;
 
   /// ISO 8601 formatted timestamp in UTC timezone in
-  /// which the event was sent from RevenexxAPIRevenexx
+  /// which the event was sent from Revenexx
   final String timestamp;
 
   /// Initializes a [RealtimeMessage]

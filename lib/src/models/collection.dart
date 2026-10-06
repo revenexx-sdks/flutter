@@ -1,90 +1,61 @@
 part of '../../models.dart';
 
-/// Collection
+/// A Typesense collection definition, passed through from Typesense. `name` is rewritten back to the tenant's public collection name.
 class Collection implements Model {
-    /// Collection creation date in ISO 8601 format.
-    final String $createdAt;
+  ///
+  final String? default_sorting_field;
 
-    /// Collection ID.
-    final String $id;
+  ///
+  final bool? enable_nested_fields;
 
-    /// Collection permissions. [Learn more about permissions](https://appwrite.io/docs/permissions).
-    final List<String> $permissions;
+  ///
+  final List<CollectionField>? fields;
 
-    /// Collection update date in ISO 8601 format.
-    final String $updatedAt;
+  /// The public collection name.
+  final String? name;
 
-    /// Collection attributes.
-    final List attributes;
+  /// Documents currently indexed.
+  final int? num_documents;
 
-    /// Maximum document size in bytes. Returns 0 when no limit applies.
-    final int bytesMax;
+  final Map<String, dynamic> data;
 
-    /// Currently used document size in bytes based on defined attributes.
-    final int bytesUsed;
+  Collection({
+    this.default_sorting_field,
+    this.enable_nested_fields,
+    this.fields,
+    this.name,
+    this.num_documents,
+    required this.data,
+  });
 
-    /// Database ID.
-    final String databaseId;
+  factory Collection.fromMap(Map<String, dynamic> map) {
+    return Collection(
+      default_sorting_field: map['default_sorting_field']?.toString(),
+      enable_nested_fields: map['enable_nested_fields'],
+      fields: map['fields'] != null
+          ? List<CollectionField>.from(
+              map['fields'].map((p) => CollectionField.fromMap(p)))
+          : null,
+      name: map['name']?.toString(),
+      num_documents: map['num_documents'],
+      data: map["data"] ?? map,
+    );
+  }
 
-    /// Whether document-level permissions are enabled. [Learn more about permissions](https://appwrite.io/docs/permissions).
-    final bool documentSecurity;
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      "default_sorting_field": default_sorting_field,
+      "enable_nested_fields": enable_nested_fields,
+      "fields": fields?.map((p) => p.toMap()).toList(),
+      "name": name,
+      "num_documents": num_documents,
+      "data": data,
+    };
+  }
 
-    /// Collection enabled. Can be &#039;enabled&#039; or &#039;disabled&#039;. When disabled, the collection is inaccessible to users, but remains accessible to Server SDKs using API keys.
-    final bool enabled;
+  T convertTo<T>(T Function(Map<String, dynamic>) fromJson) => fromJson(data);
 
-    /// Collection indexes.
-    final List<Index> indexes;
-
-    /// Collection name.
-    final String name;
-
-    Collection({
-        required this.$createdAt,
-        required this.$id,
-        required this.$permissions,
-        required this.$updatedAt,
-        required this.attributes,
-        required this.bytesMax,
-        required this.bytesUsed,
-        required this.databaseId,
-        required this.documentSecurity,
-        required this.enabled,
-        required this.indexes,
-        required this.name,
-    });
-
-    factory Collection.fromMap(Map<String, dynamic> map) {
-        return Collection(
-            $createdAt: map['\$createdAt'].toString(),
-            $id: map['\$id'].toString(),
-            $permissions: List.from(map['\$permissions'] ?? []),
-            $updatedAt: map['\$updatedAt'].toString(),
-            attributes: List.from(map['attributes'] ?? []),
-            bytesMax: map['bytesMax'],
-            bytesUsed: map['bytesUsed'],
-            databaseId: map['databaseId'].toString(),
-            documentSecurity: map['documentSecurity'],
-            enabled: map['enabled'],
-            indexes: List<Index>.from(map['indexes'].map((p) => Index.fromMap(p))),
-            name: map['name'].toString(),
-        );
-    }
-
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-            "\$createdAt": $createdAt,
-            "\$id": $id,
-            "\$permissions": $permissions,
-            "\$updatedAt": $updatedAt,
-            "attributes": attributes,
-            "bytesMax": bytesMax,
-            "bytesUsed": bytesUsed,
-            "databaseId": databaseId,
-            "documentSecurity": documentSecurity,
-            "enabled": enabled,
-            "indexes": indexes.map((p) => p.toMap()).toList(),
-            "name": name,
-        };
-    }
+  List<T> convertToFields<T>(T Function(Map) fromJson) =>
+      (fields ?? const []).map((d) => d.convertTo<T>(fromJson)).toList();
 }

@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = DeploymentList(
         deployments: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = DeploymentList.fromMap(map);
 
-            expect(result.deployments, []);
-                  expect(result.total, );
-          });
+      expect(result.deployments, []);
+      expect(result.total, 0);
+    });
   });
 }

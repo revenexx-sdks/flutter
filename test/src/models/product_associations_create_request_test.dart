@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = ProductAssociationsCreateRequest.fromMap(map);
 
-            expect(result.association_type_id, '');
-                  expect(result.product_id, '');
-                  expect(result.target_product_id, '');
-          });
+      expect(result.association_type_id, '');
+      expect(result.product_id, '');
+      expect(result.target_product_id, '');
+    });
   });
 }

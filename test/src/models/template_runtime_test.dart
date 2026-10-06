@@ -14,10 +14,10 @@ void main() {
       final map = model.toMap();
       final result = TemplateRuntime.fromMap(map);
 
-            expect(result.commands, '');
-                  expect(result.entrypoint, '');
-                  expect(result.name, '');
-                  expect(result.providerRootDirectory, '');
-          });
+      expect(result.commands, '');
+      expect(result.entrypoint, '');
+      expect(result.name, '');
+      expect(result.providerRootDirectory, '');
+    });
   });
 }

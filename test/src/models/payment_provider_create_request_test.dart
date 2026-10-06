@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = PaymentProviderCreateRequest.fromMap(map);
 
-            expect(result.provider, '');
-          });
+      expect(result.provider, '');
+    });
   });
 }

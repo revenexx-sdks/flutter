@@ -4,14 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('OrderReturnCreateRequest', () {
     test('model', () {
-      final model = OrderReturnCreateRequest(
-        positions: [],
-      );
+      final model = OrderReturnCreateRequest();
 
       final map = model.toMap();
       final result = OrderReturnCreateRequest.fromMap(map);
-
-            expect(result.positions, []);
-          });
+    });
   });
 }

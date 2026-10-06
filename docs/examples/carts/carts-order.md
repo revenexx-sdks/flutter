@@ -7,8 +7,8 @@ Client client = Client()
 
 Carts carts = Carts(client);
 
-Cart result = await carts.cartsOrder(
+Error result = await carts.cartsOrder(
     id: '',
-    orderRef: '', // optional
+    orderRef: 'SO-10042', // optional
 );
 ```

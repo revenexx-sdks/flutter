@@ -1,96 +1,96 @@
 part of '../../models.dart';
 
-/// An address needs an owner: &#039;organization_id&#039; or &#039;contact_id&#039;.
+/// An address needs an owner: 'organization_id' or 'contact_id'.
 class AddressCreateRequest implements Model {
-    /// 
-    final String city;
+  /// City or town.
+  final String city;
 
-    /// 
-    final String? company;
+  /// Company line on the label. Often the owning organization's name, but not always — a delivery to a construction site carries the site.
+  final String? company;
 
-    /// Owning contact (personal address).
-    final String? contact_id;
+  /// Owning person — a personal address only that contact uses. Exactly one of organization_id / contact_id is set.
+  final String? contact_id;
 
-    /// ISO 3166-1 alpha-2 code.
-    final String country;
+  /// ISO 3166-1 alpha-2 country code, exactly two letters. Uppercase by convention; it is what shipping and tax both key off.
+  final String country;
 
-    /// The default address of its owner and type.
-    final bool? is_default;
+  /// The default address of its owner AND type: one default billing and one default shipping address per owner. Setting it moves the flag off the previous holder. Default false.
+  final bool? is_default;
 
-    /// Recipient name.
-    final String? name;
+  /// Recipient line on the label — the person or department the parcel is addressed to.
+  final String? name;
 
-    /// Owning organization (company address).
-    final String? organization_id;
+  /// Owning company — a company address, shared by everyone in it. Exactly one of organization_id / contact_id is set.
+  final String? organization_id;
 
-    /// 
-    final String? phone;
+  /// Phone number for the carrier to reach at this address — often a different one from the contact's own.
+  final String? phone;
 
-    /// 
-    final String? region;
+  /// State, province or Bundesland. Required by some destinations (US, CA), unused by most European ones.
+  final String? region;
 
-    /// 
-    final String street;
+  /// Street and house number, on one line, as the local post expects it.
+  final String street;
 
-    /// 
-    final String? street2;
+  /// The second address line: building, floor, gate, c/o. Null when there is none.
+  final String? street2;
 
-    /// Default &#039;shipping&#039;.
-    final enums.AddressType? type;
+  /// What the address is FOR — one of the tenant's own address types (GET /customers/address-types), seeded with billing and shipping. A merchant may add their own (a works entrance, a central accounts office) without a release of this app. A create without it gets the type flagged as default; a type the tenant does not keep is a 400.
+  final String? type;
 
-    /// 
-    final String zip;
+  /// Postal code, as text — leading zeros are real in most countries.
+  final String zip;
 
-    AddressCreateRequest({
-        required this.city,
-        this.company,
-        this.contact_id,
-        required this.country,
-        this.is_default,
-        this.name,
-        this.organization_id,
-        this.phone,
-        this.region,
-        required this.street,
-        this.street2,
-        this.type,
-        required this.zip,
-    });
+  AddressCreateRequest({
+    required this.city,
+    this.company,
+    this.contact_id,
+    required this.country,
+    this.is_default,
+    this.name,
+    this.organization_id,
+    this.phone,
+    this.region,
+    required this.street,
+    this.street2,
+    this.type,
+    required this.zip,
+  });
 
-    factory AddressCreateRequest.fromMap(Map<String, dynamic> map) {
-        return AddressCreateRequest(
-            city: map['city'].toString(),
-            company: map['company']?.toString(),
-            contact_id: map['contact_id']?.toString(),
-            country: map['country'].toString(),
-            is_default: map['is_default'],
-            name: map['name']?.toString(),
-            organization_id: map['organization_id']?.toString(),
-            phone: map['phone']?.toString(),
-            region: map['region']?.toString(),
-            street: map['street'].toString(),
-            street2: map['street2']?.toString(),
-            type: map['type'] != null ? enums.AddressType.values.firstWhere((e) => e.value == map['type']) : null,
-            zip: map['zip'].toString(),
-        );
-    }
+  factory AddressCreateRequest.fromMap(Map<String, dynamic> map) {
+    return AddressCreateRequest(
+      city: map['city'].toString(),
+      company: map['company']?.toString(),
+      contact_id: map['contact_id']?.toString(),
+      country: map['country'].toString(),
+      is_default: map['is_default'],
+      name: map['name']?.toString(),
+      organization_id: map['organization_id']?.toString(),
+      phone: map['phone']?.toString(),
+      region: map['region']?.toString(),
+      street: map['street'].toString(),
+      street2: map['street2']?.toString(),
+      type: map['type']?.toString(),
+      zip: map['zip'].toString(),
+    );
+  }
 
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-            "city": city,
-            "company": company,
-            "contact_id": contact_id,
-            "country": country,
-            "is_default": is_default,
-            "name": name,
-            "organization_id": organization_id,
-            "phone": phone,
-            "region": region,
-            "street": street,
-            "street2": street2,
-            "type": type?.value,
-            "zip": zip,
-        };
-    }
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      "city": city,
+      "company": company,
+      "contact_id": contact_id,
+      "country": country,
+      "is_default": is_default,
+      "name": name,
+      "organization_id": organization_id,
+      "phone": phone,
+      "region": region,
+      "street": street,
+      "street2": street2,
+      "type": type,
+      "zip": zip,
+    };
+  }
 }

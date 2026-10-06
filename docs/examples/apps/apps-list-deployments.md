@@ -11,6 +11,6 @@ DeploymentList result = await apps.appsListDeployments(
     functionId: '',
     queries: [], // optional
     search: '', // optional
-    total: false, // optional
+    total: true, // optional
 );
 ```

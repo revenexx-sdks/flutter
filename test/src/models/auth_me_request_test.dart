@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = AuthMeRequest.fromMap(map);
 
-            expect(result.user_id, '');
-          });
+      expect(result.user_id, '');
+    });
   });
 }

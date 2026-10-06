@@ -15,11 +15,11 @@ void main() {
       final map = model.toMap();
       final result = FrameworkAdapter.fromMap(map);
 
-            expect(result.buildCommand, '');
-                  expect(result.fallbackFile, '');
-                  expect(result.installCommand, '');
-                  expect(result.key, '');
-                  expect(result.outputDirectory, '');
-          });
+      expect(result.buildCommand, '');
+      expect(result.fallbackFile, '');
+      expect(result.installCommand, '');
+      expect(result.key, '');
+      expect(result.outputDirectory, '');
+    });
   });
 }

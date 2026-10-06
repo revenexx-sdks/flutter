@@ -9,6 +9,6 @@ Client client = Client()
 Apps apps = Apps(client);
 
 UsageFunctions result = await apps.appsListUsage(
-    range: enums.Range.24h, // optional
+    range: enums.Range.x24h, // optional
 );
 ```

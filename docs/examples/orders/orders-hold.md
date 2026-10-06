@@ -7,8 +7,8 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-Order result = await orders.ordersHold(
+Error result = await orders.ordersHold(
     id: '',
-    reason: '', // optional
+    reason: 'Credit check pending', // optional
 );
 ```

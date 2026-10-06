@@ -14,10 +14,10 @@ void main() {
       final map = model.toMap();
       final result = MfaChallenge.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.expire, '');
-                  expect(result.userId, '');
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.expire, '');
+      expect(result.userId, '');
+    });
   });
 }

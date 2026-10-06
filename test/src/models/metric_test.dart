@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = Metric(
         date: '',
-        value: ,
+        value: 0,
       );
 
       final map = model.toMap();
       final result = Metric.fromMap(map);
 
-            expect(result.date, '');
-                  expect(result.value, );
-          });
+      expect(result.date, '');
+      expect(result.value, 0);
+    });
   });
 }

@@ -7,16 +7,16 @@ void main() {
     test('model', () {
       final model = HealthStatus(
         name: '',
-        ping: ,
+        ping: 0,
         status: HealthStatusStatus.pass,
       );
 
       final map = model.toMap();
       final result = HealthStatus.fromMap(map);
 
-            expect(result.name, '');
-                  expect(result.ping, );
-                  expect(result.status, HealthStatusStatus.pass);
-          });
+      expect(result.name, '');
+      expect(result.ping, 0);
+      expect(result.status, HealthStatusStatus.pass);
+    });
   });
 }

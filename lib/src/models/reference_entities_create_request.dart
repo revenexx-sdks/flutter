@@ -1,36 +1,36 @@
 part of '../../models.dart';
 
-/// 
+///
 class ReferenceEntitiesCreateRequest implements Model {
-    /// 
-    final String code;
+  /// The entity's stable identifier — a domain of records the catalog POINTS AT instead of duplicating, so a brand is edited once and not on nine thousand products. Unique per tenant.
+  final String code;
 
-    /// 
-    final String? image;
+  /// A delivery path or URL for the entity's own icon. Cosmetic — nothing in this app resolves it.
+  final String? image;
 
-    /// 
-    final Map? labels;
+  /// What the entity is called, per language tag — the heading over its record list.
+  final Map? labels;
 
-    ReferenceEntitiesCreateRequest({
-        required this.code,
-        this.image,
-        this.labels,
-    });
+  ReferenceEntitiesCreateRequest({
+    required this.code,
+    this.image,
+    this.labels,
+  });
 
-    factory ReferenceEntitiesCreateRequest.fromMap(Map<String, dynamic> map) {
-        return ReferenceEntitiesCreateRequest(
-            code: map['code'].toString(),
-            image: map['image']?.toString(),
-            labels: map['labels'],
-        );
-    }
+  factory ReferenceEntitiesCreateRequest.fromMap(Map<String, dynamic> map) {
+    return ReferenceEntitiesCreateRequest(
+      code: map['code'].toString(),
+      image: map['image']?.toString(),
+      labels: map['labels'],
+    );
+  }
 
-    @override
-    Map<String, dynamic> toMap() {
-        return {
-            "code": code,
-            "image": image,
-            "labels": labels,
-        };
-    }
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      "code": code,
+      "image": image,
+      "labels": labels,
+    };
+  }
 }

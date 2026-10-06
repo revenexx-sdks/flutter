@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = MutationRequest.fromMap(map);
 
-            expect(result.plugin, '');
-          });
+      expect(result.plugin, '');
+    });
   });
 }

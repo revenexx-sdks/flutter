@@ -7,10 +7,13 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-OrderReturn result = await orders.ordersReturn(
+Error result = await orders.ordersReturn(
     id: '',
-    positions: [],
-    metadata: {}, // optional
-    reason: '', // optional
+    metadata: {
+        "rma_portal_case": "C-2026-0917"
+    }, // optional
+    positions: [], // optional
+    reason: 'Damaged on arrival', // optional
+    restock: true, // optional
 );
 ```

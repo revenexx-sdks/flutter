@@ -7,7 +7,14 @@ Client client = Client()
 
 Pages pages = Pages(client);
 
- result = await pages.pagesPagesRevisions(
+Error result = await pages.pagesPagesRevisions(
     id: '',
+    limit: 1, // optional
+    offset: 1, // optional
+    order: 'created_at.desc', // optional
+    label: 'Autumn campaign', // optional
+    createdBy: '', // optional
+    createdByName: '', // optional
+    createdAt: '', // optional
 );
 ```

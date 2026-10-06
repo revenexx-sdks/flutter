@@ -1,1085 +1,1345 @@
 part of '../revenexx.dart';
 
-  /// Outbound messaging: email/push messages, providers, topics, targets.
+/// Outbound multi-channel messaging (email/SMS/push): templates, event
+/// bindings, sends (the sequencer service).
 class Messaging extends Service {
   /// Initializes a [Messaging] service
   Messaging(super.client);
 
-  /// Get a list of all messages from the current Revenexx project.
-  Future<models.MessageList> messagingListMessages({List<String>? queries, String? search, bool? total}) async {
+  /// Filterable by `resource_type`, `resource_id` and `subject` — the last one
+  /// being the human-readable name a row was recorded under (a template's key,
+  /// a layout's name), which is what an operator has to hand six weeks later
+  /// when the id means nothing to them.
+  ///
+  /// There is no write route and no delete route: an append-only log with an
+  /// editor is a log that says whatever the last editor wanted.
+  Future<models.Error> auditIndex(
+      {enums.ResourceType? resourceType,
+      String? resourceId,
+      String? subject,
+      int? limit}) async {
+    const String apiPath = '/v1/messaging/audit';
+
+    final Map<String, dynamic> apiParams = {
+      if (resourceType != null) 'resource_type': resourceType.value,
+      if (resourceId != null) 'resource_id': resourceId,
+      if (subject != null) 'subject': subject,
+      if (limit != null) 'limit': limit,
+    };
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// `?event_topic=` narrows to one topic, which is the question worth asking
+  /// of this list: "what does this event actually do".
+  Future<models.Error> bindingIndex({String? eventTopic}) async {
+    const String apiPath = '/v1/messaging/bindings';
+
+    final Map<String, dynamic> apiParams = {
+      if (eventTopic != null) 'event_topic': eventTopic,
+    };
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// `recipient` is a template, not an address: `{{ customer.email }}` is
+  /// rendered against the event payload when the event arrives, which is the
+  /// only way one binding can serve every customer. An event that renders it
+  /// empty is skipped and logged rather than sent to nobody.
+  ///
+  /// `locale` is what the OPERATOR said this route speaks, and it outranks the
+  /// tenant's default. Leave it null when nobody has made that decision, so
+  /// that the recipient's own language is still allowed to decide.
+  Future<models.Error> bindingStore(
+      {required String channel,
+      required String eventTopic,
+      required String recipient,
+      required String templateKey,
+      bool? enabled,
+      int? fallbackOrder,
+      String? locale}) async {
+    const String apiPath = '/v1/messaging/bindings';
+
+    final Map<String, dynamic> apiParams = {
+      'channel': channel,
+      if (enabled != null) 'enabled': enabled,
+      'event_topic': eventTopic,
+      if (fallbackOrder != null) 'fallback_order': fallbackOrder,
+      'locale': locale,
+      'recipient': recipient,
+      'template_key': templateKey,
+    };
+
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
+
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// The event it answered goes back to doing nothing. Prefer `enabled: false`
+  /// when the intent is to pause rather than to forget.
+  Future<models.Error> bindingDestroy({required String id}) async {
+    final String apiPath = '/v1/messaging/bindings/{id}'.replaceAll('{id}', id);
+
+    final Map<String, dynamic> apiParams = {};
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// 404 for a binding belonging to another tenant, not 403 — an id that
+  /// answered differently would say whether it exists.
+  Future<models.Error> bindingShow({required String id}) async {
+    final String apiPath = '/v1/messaging/bindings/{id}'.replaceAll('{id}', id);
+
+    final Map<String, dynamic> apiParams = {};
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// Every field is optional; only what is sent is written. `enabled: false`
+  /// is how a binding is taken out of service without losing what it said —
+  /// the alternative is deleting it and typing the payload path back in
+  /// correctly from memory later.
+  ///
+  /// This path answers on `PUT` and `PATCH`, both routed to the same action.
+  Future<models.Error> bindingUpdatePatch(
+      {required String id,
+      String? channel,
+      bool? enabled,
+      String? eventTopic,
+      int? fallbackOrder,
+      String? locale,
+      String? recipient,
+      String? templateKey}) async {
+    final String apiPath = '/v1/messaging/bindings/{id}'.replaceAll('{id}', id);
+
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (enabled != null) 'enabled': enabled,
+      if (eventTopic != null) 'event_topic': eventTopic,
+      if (fallbackOrder != null) 'fallback_order': fallbackOrder,
+      'locale': locale,
+      if (recipient != null) 'recipient': recipient,
+      if (templateKey != null) 'template_key': templateKey,
+    };
+
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
+
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// Every field is optional; only what is sent is written. `enabled: false`
+  /// is how a binding is taken out of service without losing what it said —
+  /// the alternative is deleting it and typing the payload path back in
+  /// correctly from memory later.
+  ///
+  /// This path answers on `PUT` and `PATCH`, both routed to the same action.
+  Future<models.Error> bindingUpdate(
+      {required String id,
+      String? channel,
+      bool? enabled,
+      String? eventTopic,
+      int? fallbackOrder,
+      String? locale,
+      String? recipient,
+      String? templateKey}) async {
+    final String apiPath = '/v1/messaging/bindings/{id}'.replaceAll('{id}', id);
+
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (enabled != null) 'enabled': enabled,
+      if (eventTopic != null) 'event_topic': eventTopic,
+      if (fallbackOrder != null) 'fallback_order': fallbackOrder,
+      'locale': locale,
+      if (recipient != null) 'recipient': recipient,
+      if (templateKey != null) 'template_key': templateKey,
+    };
+
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
+
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// Answers per channel with: which fields the chosen provider wants and
+  /// which of them are SET (never their values — secrets go in and do not come
+  /// back), which markets hold an override, which providers this build offers,
+  /// whether the deployment has the channel switched on at all, the URL to
+  /// paste into the provider's own console so bounces and opens come back, and
+  /// whether callbacks are actually arriving.
+  ///
+  /// Admin tier on the read as well as the write: the identifiers alone —
+  /// which Twilio account, which sender number — are more than a read-only
+  /// operator has reason to see, and the webhook URL served here contains the
+  /// tenant's callback token.
+  Future<models.Error> channelCredentialIndex(
+      {String? market, String? markets}) async {
+    const String apiPath = '/v1/messaging/channel-credentials';
+
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+      if (markets != null) 'markets': markets,
+    };
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// With `?market=`, only that market's override goes and the global
+  /// credentials stand — the market then sends over the global provider again,
+  /// which is what it did before anybody configured it. Without a market the
+  /// channel goes entirely, overrides and all: a caller asking for a channel
+  /// to hold no credentials means all of them.
+  ///
+  /// 204 whether or not anything was there. The caller wants this channel to
+  /// hold no credentials, and it does.
+  Future<models.Error> channelCredentialDestroy(
+      {required String channel, String? market}) async {
+    final String apiPath = '/v1/messaging/channel-credentials/{channel}'
+        .replaceAll('{channel}', channel);
+
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+    };
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// A PATCH in spirit whichever verb is used: only the fields present in the
+  /// body are written, and the answer says which of them actually CHANGED, so
+  /// a form that resent everything it had on screen does not report a change
+  /// that did not happen.
+  ///
+  /// Three refusals, all 422 and all deliberate rather than ignored. A field
+  /// the channel's provider does not have (`unknown_credential_field`) — a
+  /// typo sitting in the bag looking like configuration fails later with a
+  /// message about a MISSING field the operator can see they filled in. A
+  /// field the platform issues (`managed_credential`) — ignoring it would have
+  /// the caller believe they set something. A channel with nothing to
+  /// configure (`channel_not_configurable`), which is push: its VAPID keypair
+  /// is generated at provisioning, and pasting a new one would orphan every
+  /// browser registration the tenant has collected.
+  ///
+  /// Switching provider is `driver`, and the fields in the same request are
+  /// validated against the provider being switched TO — validating Postmark's
+  /// key against Mailgun's field list is how a switch loses everything the
+  /// operator just typed.
+  ///
+  /// This path answers on `PUT` and `PATCH`, both routed to the same action.
+  Future<models.Error> channelCredentialUpdatePatch(
+      {required String channel, String? market, String? driver}) async {
+    final String apiPath = '/v1/messaging/channel-credentials/{channel}'
+        .replaceAll('{channel}', channel);
+
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+      'driver': driver,
+    };
+
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
+
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// A PATCH in spirit whichever verb is used: only the fields present in the
+  /// body are written, and the answer says which of them actually CHANGED, so
+  /// a form that resent everything it had on screen does not report a change
+  /// that did not happen.
+  ///
+  /// Three refusals, all 422 and all deliberate rather than ignored. A field
+  /// the channel's provider does not have (`unknown_credential_field`) — a
+  /// typo sitting in the bag looking like configuration fails later with a
+  /// message about a MISSING field the operator can see they filled in. A
+  /// field the platform issues (`managed_credential`) — ignoring it would have
+  /// the caller believe they set something. A channel with nothing to
+  /// configure (`channel_not_configurable`), which is push: its VAPID keypair
+  /// is generated at provisioning, and pasting a new one would orphan every
+  /// browser registration the tenant has collected.
+  ///
+  /// Switching provider is `driver`, and the fields in the same request are
+  /// validated against the provider being switched TO — validating Postmark's
+  /// key against Mailgun's field list is how a switch loses everything the
+  /// operator just typed.
+  ///
+  /// This path answers on `PUT` and `PATCH`, both routed to the same action.
+  Future<models.Error> channelCredentialUpdate(
+      {required String channel, String? market, String? driver}) async {
+    final String apiPath = '/v1/messaging/channel-credentials/{channel}'
+        .replaceAll('{channel}', channel);
+
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+      'driver': driver,
+    };
+
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
+
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// The one thing that turns this screen from a form into a tool. Credentials
+  /// that only fail at send time cost a customer their first order
+  /// confirmation, and by then nobody connects the failure to the afternoon
+  /// somebody pasted a key with a trailing space.
+  ///
+  /// **Always 200.** The answer is `{ok, message}` in the body, including when
+  /// the credentials are wrong: the REQUEST was fine, the credentials are not,
+  /// and a 4xx here would have the cockpit's own error handling swallow the
+  /// one sentence worth reading. A channel that asks for no credentials at all
+  /// (push, in-app) answers `ok: true` — "nothing to verify" is a finished
+  /// check, not a failed one, and reporting it as an error painted a channel
+  /// that has worked since provisioning in the same red as a wrong token.
+  Future<models.Error> channelCredentialVerify(
+      {required String channel, String? market}) async {
+    final String apiPath = '/v1/messaging/channel-credentials/{channel}/verify'
+        .replaceAll('{channel}', channel);
+
+    final Map<String, dynamic> apiParams = {
+      if (market != null) 'market': market,
+    };
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// Each entry says whether the channel is switched on and which provider
+  /// carries it by default. A channel that is off will refuse a send, so a UI
+  /// that offers a channel picker should build it from this rather than from a
+  /// list of its own — a channel added to the service then appears without a
+  /// release of the client.
+  Future<models.Error> channelIndex() async {
+    const String apiPath = '/v1/messaging/channels';
+
+    final Map<String, dynamic> apiParams = {};
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// A tenant that was never provisioned has no row and still gets an answer:
+  /// an empty shape rather than a 404, so the Cockpit's panels open on
+  /// editable blanks instead of an error.
+  ///
+  /// `meta.push_public_key` is the VAPID public key, and only the public one.
+  /// A storefront cannot call `PushManager.subscribe()` without it, so it has
+  /// to leave the service; the private half and every provider secret stay
+  /// hidden on the model, where they are protected on every route rather than
+  /// on this one.
+  Future<models.Error> configShow() async {
+    const String apiPath = '/v1/messaging/config';
+
+    final Map<String, dynamic> apiParams = {};
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// Reaches every message this tenant sends, including templates saved months
+  /// ago — content placeholders resolve at send time, not at save time —
+  /// which
+  /// is why writing is admin tier while reading is not.
+  ///
+  /// Two refusals worth knowing about. `defaults.brand` is 422, not ignored:
+  /// the letterhead moved to /v1/layouts when a tenant gained more than one of
+  /// them, and a letterhead edit that appears to save and changes nothing is
+  /// the worst of the three possible behaviours. A half-written `quiet_hours`
+  /// is 422 as well — a tenant that typed a start and forgot the end has an
+  /// opinion about when not to message people, and silently sending through
+  /// the night is the one answer that is definitely wrong.
+  ///
+  /// Provider credentials cannot be written here. That path is
+  /// /v1/channel-credentials, so the one route that handles secrets stays the
+  /// one that was built for it.
+  ///
+  /// This path answers on `PUT` and `PATCH`, both routed to the same action.
+  Future<models.Error> configUpdatePatch(
+      {String? defaultLocale,
+      List<String>? defaults,
+      String? product,
+      List<String>? quietHours,
+      String? supportEmail}) async {
+    const String apiPath = '/v1/messaging/config';
+
+    final Map<String, dynamic> apiParams = {
+      'default_locale': defaultLocale,
+      'defaults': defaults,
+      'product': product,
+      'quiet_hours': quietHours,
+      'support_email': supportEmail,
+    };
+
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
+
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// Reaches every message this tenant sends, including templates saved months
+  /// ago — content placeholders resolve at send time, not at save time —
+  /// which
+  /// is why writing is admin tier while reading is not.
+  ///
+  /// Two refusals worth knowing about. `defaults.brand` is 422, not ignored:
+  /// the letterhead moved to /v1/layouts when a tenant gained more than one of
+  /// them, and a letterhead edit that appears to save and changes nothing is
+  /// the worst of the three possible behaviours. A half-written `quiet_hours`
+  /// is 422 as well — a tenant that typed a start and forgot the end has an
+  /// opinion about when not to message people, and silently sending through
+  /// the night is the one answer that is definitely wrong.
+  ///
+  /// Provider credentials cannot be written here. That path is
+  /// /v1/channel-credentials, so the one route that handles secrets stays the
+  /// one that was built for it.
+  ///
+  /// This path answers on `PUT` and `PATCH`, both routed to the same action.
+  Future<models.Error> configUpdate(
+      {String? defaultLocale,
+      List<String>? defaults,
+      String? product,
+      List<String>? quietHours,
+      String? supportEmail}) async {
+    const String apiPath = '/v1/messaging/config';
+
+    final Map<String, dynamic> apiParams = {
+      'default_locale': defaultLocale,
+      'defaults': defaults,
+      'product': product,
+      'quiet_hours': quietHours,
+      'support_email': supportEmail,
+    };
+
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
+
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// The order is the list's purpose: it is a picker, and the entry most
+  /// templates are actually on belongs at the top of it.
+  ///
+  /// Market-scoped as a browsing filter — see the parameters. `GET
+  /// /layouts/{id}`
+  /// deliberately is not: somebody holding an id may read it.
+  Future<models.Error> layoutIndex({String? markets}) async {
+    const String apiPath = '/v1/messaging/layouts';
+
+    final Map<String, dynamic> apiParams = {
+      if (markets != null) 'markets': markets,
+    };
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// A tenant's FIRST layout becomes the default whatever the request says: a
+  /// tenant with no default cannot compile a template that does not name one.
+  ///
+  /// The default may hold neither a validity window nor `enabled: false`, and
+  /// asking for both in one request is refused with 422
+  /// `layout_default_always_in_force`. There is no fallback behind the default
+  /// — every template that names no layout is framed by it — so a window set
+  /// today would take a tenant's whole letterhead away on a morning months
+  /// from now, with nobody left who remembers typing the date.
+  Future<models.Error> layoutStore() async {
+    const String apiPath = '/v1/messaging/layouts';
+
+    final Map<String, dynamic> apiParams = {};
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// Answers 200 with a body rather than the 204 the other resources use: the
+  /// count of reassigned templates is the part an operator needs, and a
+  /// deletion that silently moved eleven templates onto another letterhead is
+  /// one they would only discover from the next mail that went out.
+  Future<models.Error> layoutDestroy({required String id}) async {
+    final String apiPath = '/v1/messaging/layouts/{id}'.replaceAll('{id}', id);
+
+    final Map<String, dynamic> apiParams = {};
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// Not market-filtered, deliberately: market scoping is a browsing concern,
+  /// and somebody holding an id may read the row. A template pinned to a
+  /// layout keeps mailing on it whatever market the reader is looking at.
+  Future<models.Error> layoutShow({required String id}) async {
+    final String apiPath = '/v1/messaging/layouts/{id}'.replaceAll('{id}', id);
+
+    final Map<String, dynamic> apiParams = {};
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// The change reaches every template on this layout, including ones saved
+  /// months ago and never opened since — which is exactly the change nobody
+  /// remembers making when the mails start looking wrong. It is audited for
+  /// that reason, and only when something actually changed: an audit line on
+  /// every save teaches its readers to ignore the log.
+  ///
+  /// Two 422s. Clearing `is_default` on the current default is
+  /// `layout_default_required` — promoting another layout is the operation
+  /// that exists for this, and it clears this one as a side effect, which is
+  /// the only way the count stays at exactly one. Giving the default a
+  /// validity window or switching it off is `layout_default_always_in_force`,
+  /// and the check is made of the OUTCOME, so promoting a layout and dating it
+  /// in the same request is caught.
+  ///
+  /// The structural half of a layout — colours, width, font — is baked into
+  /// each template's compiled body, so templates already on it keep the old
+  /// one until they are recompiled.
+  Future<models.Error> layoutUpdate({required String id}) async {
+    final String apiPath = '/v1/messaging/layouts/{id}'.replaceAll('{id}', id);
+
+    final Map<String, dynamic> apiParams = {};
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// What the Cockpit's "start from a template" gallery is built from. These
+  /// are not the tenant's rows and cannot be edited here: provisioning clones
+  /// them into `/v1/templates`, and it is the clone that a tenant owns.
+  Future<models.Error> libraryIndex({String? channel, String? locale}) async {
+    const String apiPath = '/v1/messaging/library';
+
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (locale != null) 'locale': locale,
+    };
+
+    final Map<String, String> apiHeaders = {};
+
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
+  }
+
+  /// `?channel=` and `?status=` narrow it; `?limit=` is clamped to 200 and
+  /// defaults to 50. `?channel=inapp` is the tenant's in-app inbox — the
+  /// Message row IS the inbox item, so there is no second store for it.
+  ///
+  /// Rows are subject to the deployment's retention window and to erasure
+  /// requests, so this is not an archive.
+  Future<models.Error> messageIndex({String? channel, String? status}) async {
     const String apiPath = '/v1/messaging/messages';
 
-        final Map<String, dynamic> apiParams = {
-            if (queries != null) 'queries': queries,
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (status != null) 'status': status,
+    };
 
-            if (search != null) 'search': search,
+    final Map<String, String> apiHeaders = {};
 
-            if (total != null) 'total': total,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.MessageList.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Create a new email message.
-  Future<models.Message> messagingCreateEmail({required String content, required String messageId, required String subject, List<String>? attachments, List<String>? bcc, List<String>? cc, bool? draft, bool? html, String? scheduledAt, List<String>? targets, List<String>? topics, List<String>? users}) async {
-    const String apiPath = '/v1/messaging/messages/email';
+  /// Carries the render model it was sent with, so "why did this mail say
+  ///      * that" is answerable after the fact. That is also why the row is
+  /// personal
+  /// data and why it can be erased — see POST /v1/privacy/erasures.
+  Future<models.Error> messageShow({required String id}) async {
+    final String apiPath = '/v1/messaging/messages/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (attachments != null) 'attachments': attachments,
+    final Map<String, dynamic> apiParams = {};
 
-            if (bcc != null) 'bcc': bcc,
+    final Map<String, String> apiHeaders = {};
 
-            if (cc != null) 'cc': cc,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'content': content,
-
-            if (draft != null) 'draft': draft,
-
-            if (html != null) 'html': html,
-
-            'messageId': messageId,
-
-            if (scheduledAt != null) 'scheduledAt': scheduledAt,
-
-            'subject': subject,
-
-            if (targets != null) 'targets': targets,
-
-            if (topics != null) 'topics': topics,
-
-            if (users != null) 'users': users,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Message.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Update an email message by its unique ID. This endpoint only works on
-  /// messages that are in draft status. Messages that are already processing,
-  /// sent, or failed cannot be updated.
-  /// 
-  Future<models.Message> messagingUpdateEmail({required String messageId, List<String>? attachments, List<String>? bcc, List<String>? cc, String? content, bool? draft, bool? html, String? scheduledAt, String? subject, List<String>? targets, List<String>? topics, List<String>? users}) async {
-    final String apiPath = '/v1/messaging/messages/email/{messageId}'.replaceAll('{messageId}', messageId);
+  /// Answers with the resolved subject, HTML and text exactly as a real send
+  /// would produce them, so an editor can show a faithful preview without a
+  /// message row, a provider call or a suppression check.
+  ///
+  /// Takes no `market`, deliberately: rendering picks no provider, so there is
+  /// nothing here for a market to change. Nor `send_at`, `draft` or
+  /// `attachments` — all of them are properties of a dispatch, not of a
+  /// render.
+  Future<models.Error> sendPreview(
+      {required String channel,
+      required String template,
+      Map? data,
+      String? locale}) async {
+    const String apiPath = '/v1/messaging/preview';
 
-        final Map<String, dynamic> apiParams = {
-            if (attachments != null) 'attachments': attachments,
+    final Map<String, dynamic> apiParams = {
+      'channel': channel,
+      if (data != null) 'data': data,
+      'locale': locale,
+      'template': template,
+    };
 
-            if (bcc != null) 'bcc': bcc,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (cc != null) 'cc': cc,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (content != null) 'content': content,
-
-            if (draft != null) 'draft': draft,
-
-            if (html != null) 'html': html,
-
-            if (scheduledAt != null) 'scheduledAt': scheduledAt,
-
-            if (subject != null) 'subject': subject,
-
-            if (targets != null) 'targets': targets,
-
-            if (topics != null) 'topics': topics,
-
-            if (users != null) 'users': users,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Message.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Create a new push notification.
-  Future<models.Message> messagingCreatePush({required String messageId, String? action, int? badge, String? body, String? color, bool? contentAvailable, bool? critical, Map? data, bool? draft, String? icon, String? image, enums.Priority? priority, String? scheduledAt, String? sound, String? tag, List<String>? targets, String? title, List<String>? topics, List<String>? users}) async {
-    const String apiPath = '/v1/messaging/messages/push';
+  /// Per (channel, address), because an address is channel-shaped and the rows
+  /// it has to line up with are keyed that way. Matching is done on the
+  /// normalised form on both sides, so a request for `ada@acme.test` finds a
+  /// log written for `Ada@Acme.test` — an erasure that misses on
+  /// capitalisation is an erasure that did not happen and reports success.
+  ///
+  /// Message rows and unsubscribe tokens are DELETED. Suppressions are KEPT
+  /// with the clear-text address nulled: matching runs on a keyed hash, so the
+  /// row can still block and can no longer identify. Deleting it instead is
+  /// the obvious reading of "erase everything about them", and it is the
+  /// reading that mails a dead address again next week — or mails somebody who
+  /// complained, which is how a sending domain gets blocked.
+  ///
+  /// Answers with the counts, `suppressions_kept` among them, so the design is
+  /// stated in the response rather than only in this paragraph.
+  Future<models.Error> erasureStore(
+      {required String address, required String channel}) async {
+    const String apiPath = '/v1/messaging/privacy/erasures';
 
-        final Map<String, dynamic> apiParams = {
-            if (action != null) 'action': action,
+    final Map<String, dynamic> apiParams = {
+      'address': address,
+      'channel': channel,
+    };
 
-            if (badge != null) 'badge': badge,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (body != null) 'body': body,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (color != null) 'color': color,
-
-            if (contentAvailable != null) 'contentAvailable': contentAvailable,
-
-            if (critical != null) 'critical': critical,
-
-            if (data != null) 'data': data,
-
-            if (draft != null) 'draft': draft,
-
-            if (icon != null) 'icon': icon,
-
-            if (image != null) 'image': image,
-
-            'messageId': messageId,
-
-            if (priority != null) 'priority': priority.value,
-
-            if (scheduledAt != null) 'scheduledAt': scheduledAt,
-
-            if (sound != null) 'sound': sound,
-
-            if (tag != null) 'tag': tag,
-
-            if (targets != null) 'targets': targets,
-
-            if (title != null) 'title': title,
-
-            if (topics != null) 'topics': topics,
-
-            if (users != null) 'users': users,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Message.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Update a push notification by its unique ID. This endpoint only works on
-  /// messages that are in draft status. Messages that are already processing,
-  /// sent, or failed cannot be updated.
-  /// 
-  Future<models.Message> messagingUpdatePush({required String messageId, String? action, int? badge, String? body, String? color, bool? contentAvailable, bool? critical, Map? data, bool? draft, String? icon, String? image, enums.Priority? priority, String? scheduledAt, String? sound, String? tag, List<String>? targets, String? title, List<String>? topics, List<String>? users}) async {
-    final String apiPath = '/v1/messaging/messages/push/{messageId}'.replaceAll('{messageId}', messageId);
+  /// By endpoint and not by id, because the browser knows its endpoint and has
+  /// never seen our id — this is called from a service worker reacting to
+  /// `pushsubscriptionchange`, or from a "turn off notifications" button.
+  Future<models.Error> pushSubscriptionDestroy(
+      {required String endpoint}) async {
+    const String apiPath = '/v1/messaging/push/subscriptions';
 
-        final Map<String, dynamic> apiParams = {
-            if (action != null) 'action': action,
+    final Map<String, dynamic> apiParams = {
+      'endpoint': endpoint,
+    };
 
-            if (badge != null) 'badge': badge,
+    final Map<String, String> apiHeaders = {};
 
-            if (body != null) 'body': body,
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (color != null) 'color': color,
-
-            if (contentAvailable != null) 'contentAvailable': contentAvailable,
-
-            if (critical != null) 'critical': critical,
-
-            if (data != null) 'data': data,
-
-            if (draft != null) 'draft': draft,
-
-            if (icon != null) 'icon': icon,
-
-            if (image != null) 'image': image,
-
-            if (priority != null) 'priority': priority.value,
-
-            if (scheduledAt != null) 'scheduledAt': scheduledAt,
-
-            if (sound != null) 'sound': sound,
-
-            if (tag != null) 'tag': tag,
-
-            if (targets != null) 'targets': targets,
-
-            if (title != null) 'title': title,
-
-            if (topics != null) 'topics': topics,
-
-            if (users != null) 'users': users,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Message.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Delete a message. If the message is not a draft or scheduled, but has been
-  /// sent, this will not recall the message.
-  Future messagingDelete({required String messageId}) async {
-    final String apiPath = '/v1/messaging/messages/{messageId}'.replaceAll('{messageId}', messageId);
+  /// `subscriber_id` is required: this is not a list of everybody, and there
+  /// is no route that is. The caller is a storefront acting for one visitor
+  /// and has no business enumerating the rest.
+  ///
+  /// The client key material is never returned — see the `$hidden` list on the
+  /// model. A registration that can be read back is a registration somebody
+  /// else can push with.
+  Future<models.Error> pushSubscriptionIndex(
+      {required String subscriberId}) async {
+    const String apiPath = '/v1/messaging/push/subscriptions';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {
+      'subscriber_id': subscriberId,
+    };
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Get a message by its unique ID.
-  /// 
-  Future<models.Message> messagingGetMessage({required String messageId}) async {
-    final String apiPath = '/v1/messaging/messages/{messageId}'.replaceAll('{messageId}', messageId);
+  /// Send what `PushManager.subscribe()` handed back — the endpoint and the
+  /// two keys — plus the id you know that person by. The VAPID public key the
+  /// browser needs to produce it comes from `GET /v1/config`
+  /// (`meta.push_public_key`).
+  ///
+  /// **Idempotent by endpoint**, and the two statuses say which happened: 201
+  /// for a browser seen for the first time, 200 for one already registered. A
+  /// browser calls `subscribe()` on every page load and hands back the same
+  /// endpoint each time; treating that as a new device would give one laptop a
+  /// thousand rows and push to it a thousand times.
+  Future<models.Error> pushSubscriptionStore(
+      {required String endpoint,
+      required Map keys,
+      required String subscriberId,
+      String? userAgent}) async {
+    const String apiPath = '/v1/messaging/push/subscriptions';
 
-        final Map<String, dynamic> apiParams = {
-        };
+    final Map<String, dynamic> apiParams = {
+      'endpoint': endpoint,
+      'keys': keys,
+      'subscriber_id': subscriberId,
+      'user_agent': userAgent,
+    };
 
-        final Map<String, String> apiHeaders = {
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Message.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Get the message activity logs listed by its unique ID.
-  Future<models.LogList> messagingListMessageLogs({required String messageId, List<String>? queries, bool? total}) async {
-    final String apiPath = '/v1/messaging/messages/{messageId}/logs'.replaceAll('{messageId}', messageId);
+  /// Renders a tenant template and dispatches it — now, at `send_at`, or at
+  /// the end of the tenant's quiet hours.
+  ///
+  /// The first line is deliberately a title, not a sentence about the
+  /// mechanism: Scramble takes it as the operation's `summary`, and a summary
+  /// is what an API explorer prints in its route list. The paragraph that used
+  /// to be here ran to 119 characters across two lines, which the gateway's
+  /// fragment tests reject for exactly that reason.
+  ///
+  /// Retry-safe when the caller sends an `Idempotency-Key` header. The two
+  /// answers are deliberately different:
+  ///
+  ///   201 — a message was created by THIS call
+  ///   200 — this key was already used; here is the message it produced
+  ///
+  /// A caller has to be able to tell those apart. "Your mail went out" and
+  /// "your mail had already gone out" are the same outcome and different
+  /// facts, and a client reconciling its own records needs the second one.
+  /// Same key with a different body is a 422 — see IdempotencyConflict.
+  ///
+  /// A recipient on the tenant's suppression list is not sent to, and that is
+  /// reported as a refusal rather than as a silent success.
+  Future<models.Error> sendSend(
+      {required String channel,
+      required String template,
+      required String to,
+      List<Map>? attachments,
+      Map? data,
+      bool? draft,
+      String? locale,
+      String? market,
+      String? sendAt}) async {
+    const String apiPath = '/v1/messaging/send';
 
-        final Map<String, dynamic> apiParams = {
-            if (queries != null) 'queries': queries,
+    final Map<String, dynamic> apiParams = {
+      if (attachments != null) 'attachments': attachments,
+      'channel': channel,
+      if (data != null) 'data': data,
+      if (draft != null) 'draft': draft,
+      'locale': locale,
+      'market': market,
+      'send_at': sendAt,
+      'template': template,
+      'to': to,
+    };
 
-            if (total != null) 'total': total,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-        };
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.LogList.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Get a list of the targets associated with a message.
-  Future<models.TargetList> messagingListTargets({required String messageId, List<String>? queries, bool? total}) async {
-    final String apiPath = '/v1/messaging/messages/{messageId}/targets'.replaceAll('{messageId}', messageId);
+  /// Either `days` (a window ending now, default 30) or an explicit `from`/`to`
+  /// span. Both ends of the span or neither: `from` alone would be an open
+  /// range and the service would have to guess which end was meant.
+  ///
+  /// Three numbers are deliberately not the naive ones, and the `window` block
+  /// says so rather than leaving a chart to imply otherwise. The window is
+  /// CLAMPED to the tenant's retention, and `clamped_by_retention` says when
+  /// that happened — 90 days on a 30-day retention is 30 days of data wearing
+  /// a 90-day label, and the trend line it draws invents a collapse that never
+  /// happened. Opens are counted only over channels that can report them; SMS
+  /// and push have no such thing, so dividing opens by all messages would
+  /// quietly halve every open rate the moment a tenant adds a second channel.
+  /// The delivery rate is sent ÷ (sent + failed): suppressed is the service
+  /// doing what it was told, and counting it as a failure would punish a
+  /// tenant for having a working unsubscribe list.
+  ///
+  /// `previous` is the same window again immediately before this one, which is
+  /// what turns a figure into a direction. **It is null** whenever the
+  /// preceding window is not entirely inside retention: the query would answer
+  /// zero rather than fail, and zero against 1,337 renders as a triumphant
+  /// +100 % beside every tile on the screen. Show no trend rather than a
+  /// flattering one.
+  ///
+  /// Nothing here names a recipient. That is the delivery log, which is a
+  /// different endpoint with a different question.
+  Future<models.Error> statsIndex({int? days, String? from, String? to}) async {
+    const String apiPath = '/v1/messaging/stats';
 
-        final Map<String, dynamic> apiParams = {
-            if (queries != null) 'queries': queries,
+    final Map<String, dynamic> apiParams = {
+      if (days != null) 'days': days,
+      'from': from,
+      'to': to,
+    };
 
-            if (total != null) 'total': total,
+    final Map<String, String> apiHeaders = {};
 
-        };
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.TargetList.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Get a list of all providers from the current Revenexx project.
-  Future<models.ProviderList> messagingListProviders({List<String>? queries, String? search, bool? total}) async {
-    const String apiPath = '/v1/messaging/providers';
+  /// Filterable by `channel`, `scope`, `reason` and `address`. The address
+  /// filter is looked up by FINGERPRINT rather than against the address
+  /// column, which is what makes "why did this person stop getting our mail"
+  /// answerable for somebody who has since been erased: the row has no
+  /// address left to match on, and the question is still the same question.
+  Future<models.Error> suppressionIndex(
+      {String? channel,
+      enums.Scope? scope,
+      enums.Reason? reason,
+      String? address,
+      int? limit}) async {
+    const String apiPath = '/v1/messaging/suppressions';
 
-        final Map<String, dynamic> apiParams = {
-            if (queries != null) 'queries': queries,
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (scope != null) 'scope': scope.value,
+      if (reason != null) 'reason': reason.value,
+      if (address != null) 'address': address,
+      if (limit != null) 'limit': limit,
+    };
 
-            if (search != null) 'search': search,
+    final Map<String, String> apiHeaders = {};
 
-            if (total != null) 'total': total,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.ProviderList.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Create a new Mailgun provider.
-  Future<models.Provider> messagingCreateMailgunProvider({required String name, required String providerId, String? apiKey, String? domain, bool? enabled, String? fromEmail, String? fromName, bool? isEuRegion, String? replyToEmail, String? replyToName}) async {
-    const String apiPath = '/v1/messaging/providers/mailgun';
+  /// 201 for a row this call created, 200 for an address that was already on
+  /// the list — so a client can tell whether it changed anything.
+  ///
+  /// The `scope` follows from the `reason` for every reason but `manual`, and
+  /// asking for a different one is 422 `suppression_scope_fixed` rather than
+  /// being quietly corrected: a caller who asked for `marketing` on a hard
+  /// bounce has the model wrong, and a silent upgrade to `all` would leave
+  /// them believing transactional mail still flows to an address that does not
+  /// exist.
+  Future<models.Error> suppressionStore(
+      {required String address,
+      required String channel,
+      required enums.Reason reason,
+      String? expiresAt,
+      String? note,
+      enums.Scope? scope}) async {
+    const String apiPath = '/v1/messaging/suppressions';
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {
+      'address': address,
+      'channel': channel,
+      'expires_at': expiresAt,
+      'note': note,
+      'reason': reason.value,
+      if (scope != null) 'scope': scope.value,
+    };
 
-            if (domain != null) 'domain': domain,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (fromEmail != null) 'fromEmail': fromEmail,
-
-            if (fromName != null) 'fromName': fromName,
-
-            if (isEuRegion != null) 'isEuRegion': isEuRegion,
-
-            'name': name,
-
-            'providerId': providerId,
-
-            if (replyToEmail != null) 'replyToEmail': replyToEmail,
-
-            if (replyToName != null) 'replyToName': replyToName,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Update a Mailgun provider by its unique ID.
-  Future<models.Provider> messagingUpdateMailgunProvider({required String providerId, String? apiKey, String? domain, bool? enabled, String? fromEmail, String? fromName, bool? isEuRegion, String? name, String? replyToEmail, String? replyToName}) async {
-    final String apiPath = '/v1/messaging/providers/mailgun/{providerId}'.replaceAll('{providerId}', providerId);
+  /// Audited, unlike most deletes in this service. Removing a row here is the
+  /// one operation that makes the service mail an address something decided
+  /// not to mail — if a complaint turns into a spam report later, "who took
+  ///      * this off the list, and when" is the whole investigation.
+  Future<models.Error> suppressionDestroy({required String id}) async {
+    final String apiPath =
+        '/v1/messaging/suppressions/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {};
 
-            if (domain != null) 'domain': domain,
+    final Map<String, String> apiHeaders = {};
 
-            if (enabled != null) 'enabled': enabled,
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (fromEmail != null) 'fromEmail': fromEmail,
-
-            if (fromName != null) 'fromName': fromName,
-
-            if (isEuRegion != null) 'isEuRegion': isEuRegion,
-
-            if (name != null) 'name': name,
-
-            if (replyToEmail != null) 'replyToEmail': replyToEmail,
-
-            if (replyToName != null) 'replyToName': replyToName,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Create a new MSG91 provider.
-  Future<models.Provider> messagingCreateMsg91Provider({required String name, required String providerId, String? authKey, bool? enabled, String? senderId, String? templateId}) async {
-    const String apiPath = '/v1/messaging/providers/msg91';
+  /// `address` may be null: that is a person who has been erased
+  /// (POST /v1/privacy/erasures). The row survives as a hash, which is the
+  /// point — the clear text is gone and the address is still blocked.
+  Future<models.Error> suppressionShow({required String id}) async {
+    final String apiPath =
+        '/v1/messaging/suppressions/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (authKey != null) 'authKey': authKey,
+    final Map<String, dynamic> apiParams = {};
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {};
 
-            'name': name,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'providerId': providerId,
-
-            if (senderId != null) 'senderId': senderId,
-
-            if (templateId != null) 'templateId': templateId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Update a MSG91 provider by its unique ID.
-  Future<models.Provider> messagingUpdateMsg91Provider({required String providerId, String? authKey, bool? enabled, String? name, String? senderId, String? templateId}) async {
-    final String apiPath = '/v1/messaging/providers/msg91/{providerId}'.replaceAll('{providerId}', providerId);
+  /// `?channel=` narrows to one channel. Market-scoped as a BROWSING filter:
+  /// with `X-Revenexx-Market` the list is the global rows plus that market's,
+  /// without it the global rows only, and `?markets=all` is the unscoped read.
+  /// Never a boundary — the tenant is fixed by the credential and by row-level
+  /// security, and no value of either parameter reaches another tenant's rows.
+  Future<models.Error> templateIndex({String? channel, String? markets}) async {
+    const String apiPath = '/v1/messaging/templates';
 
-        final Map<String, dynamic> apiParams = {
-            if (authKey != null) 'authKey': authKey,
+    final Map<String, dynamic> apiParams = {
+      if (channel != null) 'channel': channel,
+      if (markets != null) 'markets': markets,
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {};
 
-            if (name != null) 'name': name,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (senderId != null) 'senderId': senderId,
-
-            if (templateId != null) 'templateId': templateId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Create a new Resend provider.
-  Future<models.Provider> messagingCreateResendProvider({required String name, required String providerId, String? apiKey, bool? enabled, String? fromEmail, String? fromName, String? replyToEmail, String? replyToName}) async {
-    const String apiPath = '/v1/messaging/providers/resend';
+  /// Send a `design` document and the service compiles it against the
+  /// template's layout — or send `body_html` and `body_text` yourself and skip
+  /// compilation entirely.
+  ///
+  /// A design that the compiler refuses is 422 and NOTHING is written, with
+  /// `error.details` naming the offending block. That order is deliberate: a
+  /// save whose compile failed must leave the row alone, because storing the
+  /// design while keeping a stale body would hand the next send a mail that no
+  /// longer matches the document it claims to be built from, and nothing would
+  /// ever surface it. A sidecar that is down is 503 `mjml_unavailable`, which
+  /// is worth retrying; a rejected design is not.
+  ///
+  /// The row this creates is a DRAFT and sends nothing until it is published.
+  Future<models.Error> templateStore(
+      {required String channel,
+      required String key,
+      String? bodyHtml,
+      String? bodyText,
+      String? contentSid,
+      List<String>? design,
+      bool? enabled,
+      String? layoutId,
+      String? locale,
+      List<String>? markets,
+      enums.MessageClass? messageClass,
+      String? subject,
+      bool? testMode,
+      String? title,
+      String? validFrom,
+      String? validUntil,
+      List<String>? variableDefaults,
+      List<String>? variables,
+      enums.WhatsappCategory? whatsappCategory}) async {
+    const String apiPath = '/v1/messaging/templates';
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {
+      'body_html': bodyHtml,
+      'body_text': bodyText,
+      'channel': channel,
+      'content_sid': contentSid,
+      'design': design,
+      if (enabled != null) 'enabled': enabled,
+      'key': key,
+      'layout_id': layoutId,
+      if (locale != null) 'locale': locale,
+      if (markets != null) 'markets': markets,
+      if (messageClass != null) 'message_class': messageClass.value,
+      'subject': subject,
+      if (testMode != null) 'test_mode': testMode,
+      'title': title,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+      'variable_defaults': variableDefaults,
+      'variables': variables,
+      'whatsapp_category': whatsappCategory?.value,
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (fromEmail != null) 'fromEmail': fromEmail,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (fromName != null) 'fromName': fromName,
-
-            'name': name,
-
-            'providerId': providerId,
-
-            if (replyToEmail != null) 'replyToEmail': replyToEmail,
-
-            if (replyToName != null) 'replyToName': replyToName,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Update a Resend provider by its unique ID.
-  Future<models.Provider> messagingUpdateResendProvider({required String providerId, String? apiKey, bool? enabled, String? fromEmail, String? fromName, String? name, String? replyToEmail, String? replyToName}) async {
-    final String apiPath = '/v1/messaging/providers/resend/{providerId}'.replaceAll('{providerId}', providerId);
+  /// Any binding still naming this template's key will find nothing when its
+  /// event next arrives. Audited under the KEY as well as the id: after the
+  /// delete the id resolves to nothing, and "deleted tmpl_01J…" is not
+  /// something an operator can act on six weeks later.
+  Future<models.Error> templateDestroy({required String id}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {};
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {};
 
-            if (fromEmail != null) 'fromEmail': fromEmail,
+    final res = await client.call(HttpMethod.delete,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (fromName != null) 'fromName': fromName,
-
-            if (name != null) 'name': name,
-
-            if (replyToEmail != null) 'replyToEmail': replyToEmail,
-
-            if (replyToName != null) 'replyToName': replyToName,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Create a new Sendgrid provider.
-  Future<models.Provider> messagingCreateSendgridProvider({required String name, required String providerId, String? apiKey, bool? enabled, String? fromEmail, String? fromName, String? replyToEmail, String? replyToName}) async {
-    const String apiPath = '/v1/messaging/providers/sendgrid';
+  /// What customers are receiving is the published snapshot; see
+  /// `GET /v1/templates/{id}/versions`, whose `meta.has_unpublished_changes`
+  /// says whether the two differ.
+  ///
+  /// Not market-filtered, deliberately: market scoping is a browsing concern
+  /// and somebody holding an id may read the row.
+  Future<models.Error> templateShow({required String id}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {};
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {};
 
-            if (fromEmail != null) 'fromEmail': fromEmail,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (fromName != null) 'fromName': fromName,
-
-            'name': name,
-
-            'providerId': providerId,
-
-            if (replyToEmail != null) 'replyToEmail': replyToEmail,
-
-            if (replyToName != null) 'replyToName': replyToName,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Update a Sendgrid provider by its unique ID.
-  Future<models.Provider> messagingUpdateSendgridProvider({required String providerId, String? apiKey, bool? enabled, String? fromEmail, String? fromName, String? name, String? replyToEmail, String? replyToName}) async {
-    final String apiPath = '/v1/messaging/providers/sendgrid/{providerId}'.replaceAll('{providerId}', providerId);
+  /// Only the fields sent are written, and the change is audited only when
+  /// something actually changed — a PATCH that resent the same values records
+  /// nothing, because an audit line on every save teaches its readers to
+  /// ignore the log.
+  ///
+  /// Moving a template to another layout recompiles it against the NEW one,
+  /// even when nothing else changed: colours, width and font come from the
+  /// layout and are already inlined, so a template that merely changed hands
+  /// would otherwise keep showing the old letterhead until somebody happened
+  /// to press save on it again.
+  ///
+  /// Changes nothing customers receive until the template is published.
+  ///
+  /// This path answers on `PUT` and `PATCH`, both routed to the same action.
+  Future<models.Error> templateUpdatePatch(
+      {required String id,
+      String? bodyHtml,
+      String? bodyText,
+      String? contentSid,
+      List<String>? design,
+      bool? enabled,
+      String? layoutId,
+      List<String>? markets,
+      enums.MessageClass? messageClass,
+      String? subject,
+      bool? testMode,
+      String? title,
+      String? validFrom,
+      String? validUntil,
+      List<String>? variableDefaults,
+      List<String>? variables,
+      enums.WhatsappCategory? whatsappCategory}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {
+      'body_html': bodyHtml,
+      'body_text': bodyText,
+      'content_sid': contentSid,
+      'design': design,
+      if (enabled != null) 'enabled': enabled,
+      'layout_id': layoutId,
+      if (markets != null) 'markets': markets,
+      if (messageClass != null) 'message_class': messageClass.value,
+      'subject': subject,
+      if (testMode != null) 'test_mode': testMode,
+      'title': title,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+      'variable_defaults': variableDefaults,
+      'variables': variables,
+      'whatsapp_category': whatsappCategory?.value,
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (fromEmail != null) 'fromEmail': fromEmail,
+    final res = await client.call(HttpMethod.patch,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (fromName != null) 'fromName': fromName,
-
-            if (name != null) 'name': name,
-
-            if (replyToEmail != null) 'replyToEmail': replyToEmail,
-
-            if (replyToName != null) 'replyToName': replyToName,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Create a new Telesign provider.
-  Future<models.Provider> messagingCreateTelesignProvider({required String name, required String providerId, String? apiKey, String? customerId, bool? enabled, String? from}) async {
-    const String apiPath = '/v1/messaging/providers/telesign';
+  /// Only the fields sent are written, and the change is audited only when
+  /// something actually changed — a PATCH that resent the same values records
+  /// nothing, because an audit line on every save teaches its readers to
+  /// ignore the log.
+  ///
+  /// Moving a template to another layout recompiles it against the NEW one,
+  /// even when nothing else changed: colours, width and font come from the
+  /// layout and are already inlined, so a template that merely changed hands
+  /// would otherwise keep showing the old letterhead until somebody happened
+  /// to press save on it again.
+  ///
+  /// Changes nothing customers receive until the template is published.
+  ///
+  /// This path answers on `PUT` and `PATCH`, both routed to the same action.
+  Future<models.Error> templateUpdate(
+      {required String id,
+      String? bodyHtml,
+      String? bodyText,
+      String? contentSid,
+      List<String>? design,
+      bool? enabled,
+      String? layoutId,
+      List<String>? markets,
+      enums.MessageClass? messageClass,
+      String? subject,
+      bool? testMode,
+      String? title,
+      String? validFrom,
+      String? validUntil,
+      List<String>? variableDefaults,
+      List<String>? variables,
+      enums.WhatsappCategory? whatsappCategory}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{id}'.replaceAll('{id}', id);
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {
+      'body_html': bodyHtml,
+      'body_text': bodyText,
+      'content_sid': contentSid,
+      'design': design,
+      if (enabled != null) 'enabled': enabled,
+      'layout_id': layoutId,
+      if (markets != null) 'markets': markets,
+      if (messageClass != null) 'message_class': messageClass.value,
+      'subject': subject,
+      if (testMode != null) 'test_mode': testMode,
+      'title': title,
+      'valid_from': validFrom,
+      'valid_until': validUntil,
+      'variable_defaults': variableDefaults,
+      'variables': variables,
+      'whatsapp_category': whatsappCategory?.value,
+    };
 
-            if (customerId != null) 'customerId': customerId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final res = await client.call(HttpMethod.put,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (from != null) 'from': from,
-
-            'name': name,
-
-            'providerId': providerId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Update a Telesign provider by its unique ID.
-  Future<models.Provider> messagingUpdateTelesignProvider({required String providerId, String? apiKey, String? customerId, bool? enabled, String? from, String? name}) async {
-    final String apiPath = '/v1/messaging/providers/telesign/{providerId}'.replaceAll('{providerId}', providerId);
+  /// Answers 200 with the version already live when there was nothing to
+  /// publish, and 201 when a new one was written — so a client can tell
+  /// whether its press did anything without diffing the payload.
+  Future<models.Error> templateVersionStore(
+      {required String templateId, String? note}) async {
+    final String apiPath = '/v1/messaging/templates/{templateId}/publish'
+        .replaceAll('{templateId}', templateId);
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {
+      'note': note,
+    };
 
-            if (customerId != null) 'customerId': customerId,
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
 
-            if (enabled != null) 'enabled': enabled,
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (from != null) 'from': from,
-
-            if (name != null) 'name': name,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Create a new Textmagic provider.
-  Future<models.Provider> messagingCreateTextmagicProvider({required String name, required String providerId, String? apiKey, bool? enabled, String? from, String? username}) async {
-    const String apiPath = '/v1/messaging/providers/textmagic';
+  /// Summaries only: version, subject, message class, layout, who published it
+  /// and when, and their note. The BODIES are deliberately absent — a compiled
+  /// `body_html` runs to tens of kilobytes, and a template with forty versions
+  /// would make this a several-megabyte download that nobody scrolls to the
+  /// end of. `GET /v1/templates/{id}/versions/{version}` serves the full
+  /// snapshot for the one somebody actually opened.
+  ///
+  /// `meta.published_version_id` says which of them is live — a property of
+  /// the template, said once, rather than a flag repeated on every row that
+  /// two rows could then claim. `meta.has_unpublished_changes` says whether
+  /// the draft has moved on since.
+  Future<models.Error> templateVersionIndex(
+      {required String templateId}) async {
+    final String apiPath = '/v1/messaging/templates/{templateId}/versions'
+        .replaceAll('{templateId}', templateId);
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {};
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {};
 
-            if (from != null) 'from': from,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            'name': name,
-
-            'providerId': providerId,
-
-            if (username != null) 'username': username,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Update a Textmagic provider by its unique ID.
-  Future<models.Provider> messagingUpdateTextmagicProvider({required String providerId, String? apiKey, bool? enabled, String? from, String? name, String? username}) async {
-    final String apiPath = '/v1/messaging/providers/textmagic/{providerId}'.replaceAll('{providerId}', providerId);
+  /// Addressed by its VERSION NUMBER — the small integer on the history row,
+  /// not the snapshot's id — because that is the number an author has in front
+  /// of them.
+  ///
+  /// This is what sends actually rendered while that version was live, so it
+  /// is the thing to read when the question is "what did the mail we sent in
+  ///      * March say".
+  Future<models.Error> templateVersionShow(
+      {required String templateId, required String version}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{templateId}/versions/{version}'
+            .replaceAll('{templateId}', templateId)
+            .replaceAll('{version}', version);
 
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
+    final Map<String, dynamic> apiParams = {};
 
-            if (enabled != null) 'enabled': enabled,
+    final Map<String, String> apiHeaders = {};
 
-            if (from != null) 'from': from,
+    final res = await client.call(HttpMethod.get,
+        path: apiPath, params: apiParams, headers: apiHeaders);
 
-            if (name != null) 'name': name,
-
-            if (username != null) 'username': username,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
+    return models.Error.fromMap(res.data);
   }
 
-  /// Create a new Twilio provider.
-  Future<models.Provider> messagingCreateTwilioProvider({required String name, required String providerId, String? accountSid, String? authToken, bool? enabled, String? from}) async {
-    const String apiPath = '/v1/messaging/providers/twilio';
-
-        final Map<String, dynamic> apiParams = {
-            if (accountSid != null) 'accountSid': accountSid,
-
-            if (authToken != null) 'authToken': authToken,
-
-            if (enabled != null) 'enabled': enabled,
-
-            if (from != null) 'from': from,
-
-            'name': name,
-
-            'providerId': providerId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
-  }
-
-  /// Update a Twilio provider by its unique ID.
-  Future<models.Provider> messagingUpdateTwilioProvider({required String providerId, String? accountSid, String? authToken, bool? enabled, String? from, String? name}) async {
-    final String apiPath = '/v1/messaging/providers/twilio/{providerId}'.replaceAll('{providerId}', providerId);
-
-        final Map<String, dynamic> apiParams = {
-            if (accountSid != null) 'accountSid': accountSid,
-
-            if (authToken != null) 'authToken': authToken,
-
-            if (enabled != null) 'enabled': enabled,
-
-            if (from != null) 'from': from,
-
-            if (name != null) 'name': name,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
-  }
-
-  /// Create a new Vonage provider.
-  Future<models.Provider> messagingCreateVonageProvider({required String name, required String providerId, String? apiKey, String? apiSecret, bool? enabled, String? from}) async {
-    const String apiPath = '/v1/messaging/providers/vonage';
-
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
-
-            if (apiSecret != null) 'apiSecret': apiSecret,
-
-            if (enabled != null) 'enabled': enabled,
-
-            if (from != null) 'from': from,
-
-            'name': name,
-
-            'providerId': providerId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
-  }
-
-  /// Update a Vonage provider by its unique ID.
-  Future<models.Provider> messagingUpdateVonageProvider({required String providerId, String? apiKey, String? apiSecret, bool? enabled, String? from, String? name}) async {
-    final String apiPath = '/v1/messaging/providers/vonage/{providerId}'.replaceAll('{providerId}', providerId);
-
-        final Map<String, dynamic> apiParams = {
-            if (apiKey != null) 'apiKey': apiKey,
-
-            if (apiSecret != null) 'apiSecret': apiSecret,
-
-            if (enabled != null) 'enabled': enabled,
-
-            if (from != null) 'from': from,
-
-            if (name != null) 'name': name,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
-  }
-
-  /// Delete a provider by its unique ID.
-  Future messagingDeleteProvider({required String providerId}) async {
-    final String apiPath = '/v1/messaging/providers/{providerId}'.replaceAll('{providerId}', providerId);
-
-        final Map<String, dynamic> apiParams = {
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
-  }
-
-  /// Get a provider by its unique ID.
-  /// 
-  Future<models.Provider> messagingGetProvider({required String providerId}) async {
-    final String apiPath = '/v1/messaging/providers/{providerId}'.replaceAll('{providerId}', providerId);
-
-        final Map<String, dynamic> apiParams = {
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Provider.fromMap(res.data);
-
-  }
-
-  /// Get the provider activity logs listed by its unique ID.
-  Future<models.LogList> messagingListProviderLogs({required String providerId, List<String>? queries, bool? total}) async {
-    final String apiPath = '/v1/messaging/providers/{providerId}/logs'.replaceAll('{providerId}', providerId);
-
-        final Map<String, dynamic> apiParams = {
-            if (queries != null) 'queries': queries,
-
-            if (total != null) 'total': total,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.LogList.fromMap(res.data);
-
-  }
-
-  /// Get the subscriber activity logs listed by its unique ID.
-  Future<models.LogList> messagingListSubscriberLogs({required String subscriberId, List<String>? queries, bool? total}) async {
-    final String apiPath = '/v1/messaging/subscribers/{subscriberId}/logs'.replaceAll('{subscriberId}', subscriberId);
-
-        final Map<String, dynamic> apiParams = {
-            if (queries != null) 'queries': queries,
-
-            if (total != null) 'total': total,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.LogList.fromMap(res.data);
-
-  }
-
-  /// Get a list of all topics from the current Revenexx project.
-  Future<models.TopicList> messagingListTopics({List<String>? queries, String? search, bool? total}) async {
-    const String apiPath = '/v1/messaging/topics';
-
-        final Map<String, dynamic> apiParams = {
-            if (queries != null) 'queries': queries,
-
-            if (search != null) 'search': search,
-
-            if (total != null) 'total': total,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.TopicList.fromMap(res.data);
-
-  }
-
-  /// Create a new topic.
-  Future<models.Topic> messagingCreateTopic({required String name, required String topicId, List<String>? subscribe}) async {
-    const String apiPath = '/v1/messaging/topics';
-
-        final Map<String, dynamic> apiParams = {
-            'name': name,
-
-            if (subscribe != null) 'subscribe': subscribe,
-
-            'topicId': topicId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Topic.fromMap(res.data);
-
-  }
-
-  /// Delete a topic by its unique ID.
-  Future messagingDeleteTopic({required String topicId}) async {
-    final String apiPath = '/v1/messaging/topics/{topicId}'.replaceAll('{topicId}', topicId);
-
-        final Map<String, dynamic> apiParams = {
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
-  }
-
-  /// Get a topic by its unique ID.
-  /// 
-  Future<models.Topic> messagingGetTopic({required String topicId}) async {
-    final String apiPath = '/v1/messaging/topics/{topicId}'.replaceAll('{topicId}', topicId);
-
-        final Map<String, dynamic> apiParams = {
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Topic.fromMap(res.data);
-
-  }
-
-  /// Update a topic by its unique ID.
-  /// 
-  Future<models.Topic> messagingUpdateTopic({required String topicId, String? name, List<String>? subscribe}) async {
-    final String apiPath = '/v1/messaging/topics/{topicId}'.replaceAll('{topicId}', topicId);
-
-        final Map<String, dynamic> apiParams = {
-            if (name != null) 'name': name,
-
-            if (subscribe != null) 'subscribe': subscribe,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.patch, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Topic.fromMap(res.data);
-
-  }
-
-  /// Get the topic activity logs listed by its unique ID.
-  Future<models.LogList> messagingListTopicLogs({required String topicId, List<String>? queries, bool? total}) async {
-    final String apiPath = '/v1/messaging/topics/{topicId}/logs'.replaceAll('{topicId}', topicId);
-
-        final Map<String, dynamic> apiParams = {
-            if (queries != null) 'queries': queries,
-
-            if (total != null) 'total': total,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.LogList.fromMap(res.data);
-
-  }
-
-  /// Get a list of all subscribers from the current Revenexx project.
-  Future<models.SubscriberList> messagingListSubscribers({required String topicId, List<String>? queries, String? search, bool? total}) async {
-    final String apiPath = '/v1/messaging/topics/{topicId}/subscribers'.replaceAll('{topicId}', topicId);
-
-        final Map<String, dynamic> apiParams = {
-            if (queries != null) 'queries': queries,
-
-            if (search != null) 'search': search,
-
-            if (total != null) 'total': total,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.SubscriberList.fromMap(res.data);
-
-  }
-
-  /// Create a new subscriber.
-  Future<models.Subscriber> messagingCreateSubscriber({required String topicId, required String subscriberId, required String targetId}) async {
-    final String apiPath = '/v1/messaging/topics/{topicId}/subscribers'.replaceAll('{topicId}', topicId);
-
-        final Map<String, dynamic> apiParams = {
-            'subscriberId': subscriberId,
-
-            'targetId': targetId,
-
-        };
-
-        final Map<String, String> apiHeaders = {
-            'content-type': 'application/json',
-        };
-
-        final res = await client.call(HttpMethod.post, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Subscriber.fromMap(res.data);
-
-  }
-
-  /// Delete a subscriber by its unique ID.
-  Future messagingDeleteSubscriber({required String topicId, required String subscriberId}) async {
-    final String apiPath = '/v1/messaging/topics/{topicId}/subscribers/{subscriberId}'.replaceAll('{topicId}', topicId).replaceAll('{subscriberId}', subscriberId);
-
-        final Map<String, dynamic> apiParams = {
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.delete, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return  res.data;
-
-  }
-
-  /// Get a subscriber by its unique ID.
-  /// 
-  Future<models.Subscriber> messagingGetSubscriber({required String topicId, required String subscriberId}) async {
-    final String apiPath = '/v1/messaging/topics/{topicId}/subscribers/{subscriberId}'.replaceAll('{topicId}', topicId).replaceAll('{subscriberId}', subscriberId);
-
-        final Map<String, dynamic> apiParams = {
-        };
-
-        final Map<String, String> apiHeaders = {
-
-        };
-
-        final res = await client.call(HttpMethod.get, path: apiPath, params: apiParams, headers: apiHeaders);
-
-        return models.Subscriber.fromMap(res.data);
-
+  /// `publish: true` makes it live in the same transaction — see
+  /// TemplatePublisher::restore for why that flag exists rather than asking
+  /// the caller for a second round trip.
+  Future<models.Error> templateVersionRestore(
+      {required String templateId,
+      required String version,
+      bool? publish}) async {
+    final String apiPath =
+        '/v1/messaging/templates/{templateId}/versions/{version}/restore'
+            .replaceAll('{templateId}', templateId)
+            .replaceAll('{version}', version);
+
+    final Map<String, dynamic> apiParams = {
+      if (publish != null) 'publish': publish,
+    };
+
+    final Map<String, String> apiHeaders = {
+      'content-type': 'application/json',
+    };
+
+    final res = await client.call(HttpMethod.post,
+        path: apiPath, params: apiParams, headers: apiHeaders);
+
+    return models.Error.fromMap(res.data);
   }
 }

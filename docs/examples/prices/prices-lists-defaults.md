@@ -7,5 +7,5 @@ Client client = Client()
 
 Prices prices = Prices(client);
 
- result = await prices.pricesListsDefaults();
+PriceListDefaultsResponse result = await prices.pricesListsDefaults();
 ```

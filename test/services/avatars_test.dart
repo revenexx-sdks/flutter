@@ -24,12 +24,11 @@ class MockClient extends Mock implements Client {
 
   @override
   Future webAuth(
-    Uri? url,
-    {
-        String? callbackUrlScheme,
-    }
-  ) async {
-    return super.noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
+    Uri? url, {
+    String? callbackUrlScheme,
+  }) async {
+    return super
+        .noSuchMethod(Invocation.method(#webAuth, [url]), returnValue: 'done');
   }
 
   @override
@@ -41,122 +40,103 @@ class MockClient extends Mock implements Client {
     Map<String, String>? headers,
     Function(UploadProgress)? onProgress,
   }) async {
-    return super.noSuchMethod(Invocation.method(#chunkedUpload, [path, params, paramName, idParamName, headers]), returnValue: Response(data: {}));
+    return super.noSuchMethod(
+        Invocation.method(
+            #chunkedUpload, [path, params, paramName, idParamName, headers]),
+        returnValue: Response(data: {}));
   }
 }
 
 void main() {
-    group('Avatars test', () {
-        late MockClient client;
-        late Avatars avatars;
+  group('Avatars test', () {
+    late MockClient client;
+    late Avatars avatars;
 
-        setUp(() {
-            client = MockClient();
-            avatars = Avatars(client);
-        });
-
-        test('test method avatarsGetBrowser()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await avatars.avatarsGetBrowser(
-                code: enums.Code.aa,
-            );
-        });
-
-        test('test method avatarsGetCreditCard()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await avatars.avatarsGetCreditCard(
-                code: enums.Code.amex,
-            );
-        });
-
-        test('test method avatarsGetFavicon()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await avatars.avatarsGetFavicon(
-                url: '',
-            );
-        });
-
-        test('test method avatarsGetFlag()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await avatars.avatarsGetFlag(
-                code: enums.Code.af,
-            );
-        });
-
-        test('test method avatarsGetImage()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await avatars.avatarsGetImage(
-                url: '',
-            );
-        });
-
-        test('test method avatarsGetInitials()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await avatars.avatarsGetInitials(
-            );
-        });
-
-        test('test method avatarsGetQR()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await avatars.avatarsGetQR(
-                text: '',
-            );
-        });
-
-        test('test method avatarsGetScreenshot()', () async {
-            final data = '';
-
-            when(client.call(
-                HttpMethod.get,
-            )).thenAnswer((_) async => Response(data: data));
-
-
-            final response = await avatars.avatarsGetScreenshot(
-                url: '',
-            );
-        });
-
+    setUp(() {
+      client = MockClient();
+      avatars = Avatars(client);
     });
+
+    test('test method avatarsGetBrowser()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await avatars.avatarsGetBrowser(
+        code: enums.Code.aa,
+      );
+    });
+
+    test('test method avatarsGetCreditCard()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await avatars.avatarsGetCreditCard(
+        code: enums.AvatarsGetCreditCardCode.amex,
+      );
+    });
+
+    test('test method avatarsGetFlag()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await avatars.avatarsGetFlag(
+        code: enums.AvatarsGetFlagCode.af,
+      );
+    });
+
+    test('test method avatarsGetImage()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await avatars.avatarsGetImage(
+        url: 'https://www.revenexx.com/img/hero-revenexx-poster.webp',
+      );
+    });
+
+    test('test method avatarsGetInitials()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await avatars.avatarsGetInitials();
+    });
+
+    test('test method avatarsGetQR()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await avatars.avatarsGetQR(
+        text: '',
+      );
+    });
+
+    test('test method avatarsGetScreenshot()', () async {
+      final data = '';
+
+      when(client.call(
+        HttpMethod.get,
+      )).thenAnswer((_) async => Response(data: data));
+
+      final response = await avatars.avatarsGetScreenshot(
+        url: 'https://example.com',
+      );
+    });
+  });
 }

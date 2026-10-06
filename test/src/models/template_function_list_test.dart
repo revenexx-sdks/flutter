@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = TemplateFunctionList(
         templates: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = TemplateFunctionList.fromMap(map);
 
-            expect(result.templates, []);
-                  expect(result.total, );
-          });
+      expect(result.templates, []);
+      expect(result.total, 0);
+    });
   });
 }

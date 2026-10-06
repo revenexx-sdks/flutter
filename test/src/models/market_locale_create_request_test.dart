@@ -13,9 +13,9 @@ void main() {
       final map = model.toMap();
       final result = MarketLocaleCreateRequest.fromMap(map);
 
-            expect(result.code, '');
-                  expect(result.country, '');
-                  expect(result.language, '');
-          });
+      expect(result.code, '');
+      expect(result.country, '');
+      expect(result.language, '');
+    });
   });
 }

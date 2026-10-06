@@ -9,14 +9,14 @@ Client client = Client()
 Storage storage = Storage(client);
 
  result = await storage.assetStore(
-    file: '',
+    file: InputFile(path: './path-to-files/image.jpg', filename: 'image.jpg'),
     altText: '', // optional
     description: '', // optional
     displayName: '', // optional
     folderId: '', // optional
-    keepArchive: false, // optional
+    keepArchive: true, // optional
     tags: [], // optional
-    unpack: false, // optional
+    unpack: true, // optional
     visibility: enums.Visibility.public, // optional
 );
 ```

@@ -4,14 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('InventoryReceiveRequest', () {
     test('model', () {
-      final model = InventoryReceiveRequest(
-        items: [],
-      );
+      final model = InventoryReceiveRequest();
 
       final map = model.toMap();
       final result = InventoryReceiveRequest.fromMap(map);
-
-            expect(result.items, []);
-          });
+    });
   });
 }

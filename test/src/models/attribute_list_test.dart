@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = AttributeList(
         attributes: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = AttributeList.fromMap(map);
 
-            expect(result.attributes, []);
-                  expect(result.total, );
-          });
+      expect(result.attributes, []);
+      expect(result.total, 0);
+    });
   });
 }

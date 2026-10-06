@@ -18,14 +18,14 @@ void main() {
       final map = model.toMap();
       final result = FolderResource.fromMap(map);
 
-            expect(result.created_at, '');
-                  expect(result.id, '');
-                  expect(result.is_system, true);
-                  expect(result.name, '');
-                  expect(result.parent_id, '');
-                  expect(result.path, '');
-                  expect(result.tenant_id, '');
-                  expect(result.updated_at, '');
-          });
+      expect(result.created_at, '');
+      expect(result.id, '');
+      expect(result.is_system, true);
+      expect(result.name, '');
+      expect(result.parent_id, '');
+      expect(result.path, '');
+      expect(result.tenant_id, '');
+      expect(result.updated_at, '');
+    });
   });
 }

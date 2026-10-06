@@ -4,14 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('InventoryAvailabilityRequest', () {
     test('model', () {
-      final model = InventoryAvailabilityRequest(
-        items: [],
-      );
+      final model = InventoryAvailabilityRequest();
 
       final map = model.toMap();
       final result = InventoryAvailabilityRequest.fromMap(map);
-
-            expect(result.items, []);
-          });
+    });
   });
 }

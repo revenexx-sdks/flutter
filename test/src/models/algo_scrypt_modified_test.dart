@@ -14,10 +14,10 @@ void main() {
       final map = model.toMap();
       final result = AlgoScryptModified.fromMap(map);
 
-            expect(result.salt, '');
-                  expect(result.saltSeparator, '');
-                  expect(result.signerKey, '');
-                  expect(result.type, '');
-          });
+      expect(result.salt, '');
+      expect(result.saltSeparator, '');
+      expect(result.signerKey, '');
+      expect(result.type, '');
+    });
   });
 }

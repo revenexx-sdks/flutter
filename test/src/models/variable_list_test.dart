@@ -5,15 +5,15 @@ void main() {
   group('VariableList', () {
     test('model', () {
       final model = VariableList(
-        total: ,
+        total: 0,
         variables: [],
       );
 
       final map = model.toMap();
       final result = VariableList.fromMap(map);
 
-            expect(result.total, );
-                  expect(result.variables, []);
-          });
+      expect(result.total, 0);
+      expect(result.variables, []);
+    });
   });
 }

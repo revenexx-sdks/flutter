@@ -7,7 +7,7 @@ Client client = Client()
 
 Prices prices = Prices(client);
 
-PriceEntry result = await prices.pricesEntriesGet(
+Error result = await prices.pricesEntriesGet(
     listId: '',
     id: '',
 );

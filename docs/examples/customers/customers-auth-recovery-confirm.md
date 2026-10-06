@@ -7,7 +7,7 @@ Client client = Client()
 
 Customers customers = Customers(client);
 
- result = await customers.customersAuthRecoveryConfirm(
+Error result = await customers.customersAuthRecoveryConfirm(
     password: '',
     secret: '',
     userId: '',

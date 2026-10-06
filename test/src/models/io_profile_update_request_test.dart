@@ -5,12 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('IoProfileUpdateRequest', () {
     test('model', () {
-      final model = IoProfileUpdateRequest(
-      );
+      final model = IoProfileUpdateRequest();
 
       final map = model.toMap();
       final result = IoProfileUpdateRequest.fromMap(map);
-
     });
   });
 }

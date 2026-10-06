@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = HealthStatusList(
         statuses: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = HealthStatusList.fromMap(map);
 
-            expect(result.statuses, []);
-                  expect(result.total, );
-          });
+      expect(result.statuses, []);
+      expect(result.total, 0);
+    });
   });
 }

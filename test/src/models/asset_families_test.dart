@@ -4,12 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('AssetFamilies', () {
     test('model', () {
-      final model = AssetFamilies(
-      );
+      final model = AssetFamilies();
 
       final map = model.toMap();
       final result = AssetFamilies.fromMap(map);
-
     });
   });
 }

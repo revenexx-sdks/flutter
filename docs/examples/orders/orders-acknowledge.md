@@ -7,8 +7,8 @@ Client client = Client()
 
 Orders orders = Orders(client);
 
-Order result = await orders.ordersAcknowledge(
+Error result = await orders.ordersAcknowledge(
     id: '',
-    externalRef: '', // optional
+    externalRef: 'ERP-4711', // optional
 );
 ```

@@ -11,7 +11,7 @@ void main() {
       final map = model.toMap();
       final result = Jwt.fromMap(map);
 
-            expect(result.jwt, '');
-          });
+      expect(result.jwt, '');
+    });
   });
 }

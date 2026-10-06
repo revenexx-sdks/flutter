@@ -15,11 +15,11 @@ void main() {
       final map = model.toMap();
       final result = Framework.fromMap(map);
 
-            expect(result.adapters, []);
-                  expect(result.buildRuntime, '');
-                  expect(result.key, '');
-                  expect(result.name, '');
-                  expect(result.runtimes, []);
-          });
+      expect(result.adapters, []);
+      expect(result.buildRuntime, '');
+      expect(result.key, '');
+      expect(result.name, '');
+      expect(result.runtimes, []);
+    });
   });
 }

@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = MembershipList(
         memberships: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = MembershipList.fromMap(map);
 
-            expect(result.memberships, []);
-                  expect(result.total, );
-          });
+      expect(result.memberships, []);
+      expect(result.total, 0);
+    });
   });
 }

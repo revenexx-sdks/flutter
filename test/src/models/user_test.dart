@@ -26,21 +26,21 @@ void main() {
       final map = model.toMap();
       final result = User.fromMap(map);
 
-            expect(result.$createdAt, '');
-                  expect(result.$id, '');
-                  expect(result.$updatedAt, '');
-                  expect(result.accessedAt, '');
-                  expect(result.email, '');
-                  expect(result.emailVerification, true);
-                  expect(result.labels, []);
-                  expect(result.mfa, true);
-                  expect(result.name, '');
-                  expect(result.passwordUpdate, '');
-                  expect(result.phone, '');
-                  expect(result.phoneVerification, true);
-                        expect(result.registration, '');
-                  expect(result.status, true);
-                  expect(result.targets, []);
-          });
+      expect(result.$createdAt, '');
+      expect(result.$id, '');
+      expect(result.$updatedAt, '');
+      expect(result.accessedAt, '');
+      expect(result.email, '');
+      expect(result.emailVerification, true);
+      expect(result.labels, []);
+      expect(result.mfa, true);
+      expect(result.name, '');
+      expect(result.passwordUpdate, '');
+      expect(result.phone, '');
+      expect(result.phoneVerification, true);
+      expect(result.registration, '');
+      expect(result.status, true);
+      expect(result.targets, []);
+    });
   });
 }

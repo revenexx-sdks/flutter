@@ -7,7 +7,7 @@ void main() {
     test('throws exception when neither path nor bytes are provided', () {
       expect(
         () => InputFile(),
-        throwsA(isA<RevenexxAPIRevenexxException>().having(
+        throwsA(isA<RevenexxException>().having(
           (e) => e.message,
           'message',
           'One of `path` or `bytes` is required',
@@ -18,7 +18,7 @@ void main() {
     test('throws exception when path and bytes are both null', () {
       expect(
         () => InputFile(path: null, bytes: null),
-        throwsA(isA<RevenexxAPIRevenexxException>().having(
+        throwsA(isA<RevenexxException>().having(
           (e) => e.message,
           'message',
           'One of `path` or `bytes` is required',

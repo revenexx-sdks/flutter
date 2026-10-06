@@ -6,14 +6,14 @@ void main() {
     test('model', () {
       final model = LanguageList(
         languages: [],
-        total: ,
+        total: 0,
       );
 
       final map = model.toMap();
       final result = LanguageList.fromMap(map);
 
-            expect(result.languages, []);
-                  expect(result.total, );
-          });
+      expect(result.languages, []);
+      expect(result.total, 0);
+    });
   });
 }

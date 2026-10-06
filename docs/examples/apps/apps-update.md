@@ -11,21 +11,21 @@ Apps apps = Apps(client);
 Func result = await apps.appsUpdate(
     functionId: '',
     name: '',
-    commands: '', // optional
-    enabled: false, // optional
-    entrypoint: '', // optional
+    commands: 'npm install', // optional
+    enabled: true, // optional
+    entrypoint: 'src/main.js', // optional
     events: [], // optional
-    execute: [], // optional
+    execute: ["any"], // optional
     installationId: '', // optional
-    logging: false, // optional
-    providerBranch: '', // optional
+    logging: true, // optional
+    providerBranch: 'main', // optional
     providerRepositoryId: '', // optional
     providerRootDirectory: '', // optional
-    providerSilentMode: false, // optional
+    providerSilentMode: true, // optional
     runtime: enums.Runtime.node180, // optional
-    schedule: '', // optional
+    schedule: '0 3 * * *', // optional
     scopes: [enums.Scopes.sessionsWrite], // optional
-    specification: '', // optional
-    timeout: 0, // optional
+    specification: 's-1vcpu-512mb', // optional
+    timeout: 1, // optional
 );
 ```

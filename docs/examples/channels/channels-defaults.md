@@ -7,5 +7,5 @@ Client client = Client()
 
 Channels channels = Channels(client);
 
-ChannelDefaults result = await channels.channelsDefaults();
+Error result = await channels.channelsDefaults();
 ```

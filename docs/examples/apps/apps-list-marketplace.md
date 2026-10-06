@@ -9,7 +9,7 @@ Apps apps = Apps(client);
 
  result = await apps.appsListMarketplace(
     search: '', // optional
-    perPage: 0, // optional
-    page: 0, // optional
+    perPage: 1, // optional
+    page: 1, // optional
 );
 ```

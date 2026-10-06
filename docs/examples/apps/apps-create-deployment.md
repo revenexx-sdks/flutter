@@ -9,8 +9,8 @@ Apps apps = Apps(client);
 
 Deployment result = await apps.appsCreateDeployment(
     functionId: '',
-    activate: false,
-    code: '',
+    activate: true,
+    code: InputFile(path: './path-to-files/image.jpg', filename: 'image.jpg'),
     commands: '', // optional
     entrypoint: '', // optional
 );

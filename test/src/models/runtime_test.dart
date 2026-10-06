@@ -18,14 +18,14 @@ void main() {
       final map = model.toMap();
       final result = Runtime.fromMap(map);
 
-            expect(result.$id, '');
-                  expect(result.base, '');
-                  expect(result.image, '');
-                  expect(result.key, '');
-                  expect(result.logo, '');
-                  expect(result.name, '');
-                  expect(result.supports, []);
-                  expect(result.version, '');
-          });
+      expect(result.$id, '');
+      expect(result.base, '');
+      expect(result.image, '');
+      expect(result.key, '');
+      expect(result.logo, '');
+      expect(result.name, '');
+      expect(result.supports, []);
+      expect(result.version, '');
+    });
   });
 }
